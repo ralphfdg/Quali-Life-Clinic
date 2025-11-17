@@ -21,28 +21,33 @@ class DoctorScheduleController extends Controller
 
 	/**
 	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
 	 */
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
+			// Allow Admins and Super Admins to manage schedules
+			array('allow',
+				'actions'=>array('index','view','create','update','admin','delete'),
+				'expression'=>'$this->isSuperAdmin() || $this->isAdmin()',
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
+			// Allow Doctors to view their own schedule
+			array('allow',
+				'actions'=>array('index', 'view', 'mySchedule'),
+				'expression'=>array($this, 'isDoctor'),
 			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
+			// Deny everyone else
+			array('deny',
 				'users'=>array('*'),
 			),
 		);
+	}
+	
+	/**
+	 * Custom helper to check if user is Admin or Super Admin
+	 */
+	public function allowAdminAccess()
+	{
+		return $this->isSuperAdmin() || $this->isAdmin();
 	}
 
 	/**
@@ -64,14 +69,11 @@ class DoctorScheduleController extends Controller
 	{
 		$model=new DoctorSchedule;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
 		if(isset($_POST['DoctorSchedule']))
 		{
 			$model->attributes=$_POST['DoctorSchedule'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('admin')); // Redirect to admin grid after create
 		}
 
 		$this->render('create',array(
@@ -88,14 +90,11 @@ class DoctorScheduleController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
 		if(isset($_POST['DoctorSchedule']))
 		{
 			$model->attributes=$_POST['DoctorSchedule'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('admin')); // Redirect to admin grid after update
 		}
 
 		$this->render('update',array(
@@ -115,17 +114,6 @@ class DoctorScheduleController extends Controller
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('DoctorSchedule');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
 	}
 
 	/**

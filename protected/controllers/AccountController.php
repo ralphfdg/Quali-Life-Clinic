@@ -25,16 +25,19 @@ public function filters()
 	public function accessRules()
 	{
 		return array(
-			array('allow', // allow Super Admin to do everything
+			// Allow Super Admins to do everything (Create, List, Delete, etc.)
+			array('allow',
 				'actions'=>array('index','view','create','update','admin','delete'),
-				'expression'=>array($this, 'isSuperAdmin'), // Use our helper function
+				'expression'=>array($this, 'isSuperAdmin'),
 			),
-			array('allow', // allow any logged-in user to update THEIR OWN account
-				'actions'=>array('update'),
+			// Allow authenticated users to edit their OWN account/profile
+			array('allow',
+				'actions'=>array('update', 'view'),
 				'users'=>array('@'),
-				'expression'=>'$user->id == $_GET["id"]', // Check if ID in URL matches logged in user
+				'expression'=>'$user->id == $_GET["id"]', // Only if ID matches logged-in user
 			),
-			array('deny',  // deny all other users
+			// Deny everyone else
+			array('deny',
 				'users'=>array('*'),
 			),
 		);

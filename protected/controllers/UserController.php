@@ -25,11 +25,19 @@ class UserController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow', // allow Super Admin to do everything
+			// Allow Super Admins to do everything (Create, List, Delete, etc.)
+			array('allow',
 				'actions'=>array('index','view','create','update','admin','delete'),
 				'expression'=>array($this, 'isSuperAdmin'),
 			),
-			array('deny',  // deny all users
+			// Allow authenticated users to edit their OWN account/profile
+			array('allow',
+				'actions'=>array('update', 'view'),
+				'users'=>array('@'),
+				'expression'=>'$user->id == $_GET["id"]', // Only if ID matches logged-in user
+			),
+			// Deny everyone else
+			array('deny',
 				'users'=>array('*'),
 			),
 		);
