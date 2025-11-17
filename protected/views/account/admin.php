@@ -47,16 +47,22 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'id',
 		'username',
-		'password',
 		'email_address',
-		'salt',
-		'account_type_id',
-		/*
-		'status_id',
+		// 'password', // Removed for security
+		// 'salt',     // Removed for security
+		array(
+			'name'=>'account_type_id',
+			'header'=>'Account Type',
+			'value'=>'$data->accountType->type', // Uses the relation defined in Account.php
+			'filter'=>CHtml::listData(AccountType::model()->findAll(), 'id', 'type'), // Creates a dropdown filter
+		),
+		array(
+			'name'=>'status_id',
+			'header'=>'Status',
+			'value'=>'$data->status->status', // Uses the relation
+			'filter'=>CHtml::listData(Status::model()->findAll(), 'id', 'status'), // Creates a dropdown filter
+		),
 		'date_created',
-		'date_updated',
-		'expiration_date',
-		*/
 		array(
 			'class'=>'CButtonColumn',
 		),

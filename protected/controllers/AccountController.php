@@ -126,12 +126,17 @@ public function filters()
 	/**
 	 * Manages all models.
 	 */
-	public function actionAdmin()
+public function actionAdmin()
 	{
 		$model=new Account('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Account']))
 			$model->attributes=$_GET['Account'];
+
+		if(isset($_GET['type']))
+		{
+			$model->account_type_id = (int)$_GET['type'];
+		}
 
 		$this->render('admin',array(
 			'model'=>$model,
