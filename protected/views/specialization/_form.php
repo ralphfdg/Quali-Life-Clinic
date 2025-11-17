@@ -36,15 +36,8 @@
 
 <?php $this->endWidget(); ?>
 
-</div>```
+</div>
 
----
-
-### 3. `protected/views/specialization/admin.php`
-
-I've updated the admin grid to show the *name* of the status (e.g., "active") instead of just the ID number.
-
-```php
 <?php
 /* @var $this SpecializationController */
 /* @var $model Specialization */
