@@ -175,8 +175,7 @@ class Account extends CActiveRecord
 				}
 				else
 				{
-					// This prevents saving an empty password on update
-					// We must retrieve the old password and set it
+					//asdjkfhjklasdhfjlad
 					$oldModel = Account::model()->findByPk($this->id);
 					$this->password = $oldModel->password;
 					$this->salt = $oldModel->salt;
