@@ -56,9 +56,9 @@
 		$sidebarMenu = array(
 			array('label'=>'🏥 Super Admin Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
 			array('label'=>'Dashboard', 'url'=>array('/site/index')),
-			array('label'=>'Manage Doctors', 'url'=>array('/user/admin', 'role'=>'doctor')), // We'll customize this later
-			array('label'=>'Manage Admins', 'url'=>array('/user/admin', 'role'=>'admin')), // We'll customize this later
-			array('label'=>'Manage Patients', 'url'=>array('/user/admin', 'role'=>'patient')), // We'll customize this later
+			array('label'=>'Manage Doctors', 'url'=>array('/account/admin', 'type'=>3)),
+			array('label'=>'Manage Admins', 'url'=>array('/account/admin', 'type'=>2)),
+			array('label'=>'Manage Patients', 'url'=>array('/account/admin', 'type'=>4)),
 			array('label'=>'Generate Report', 'url'=>array('/report/index')), // Needs new controller
 			array('label'=>'Audit Log', 'url'=>array('/auditLog/admin')),
 			array('label'=>'My Account', 'url'=>array('/account/update', 'id'=>Yii::app()->user->id)),
