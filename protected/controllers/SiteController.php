@@ -109,6 +109,9 @@ class SiteController extends Controller
 	/**
 	 * Renders the Admin (Secretary) Dashboard
 	 */
+	/**
+	 * Renders the Admin (Secretary) Dashboard
+	 */
 	private function renderDashboardAdmin()
 	{
 		// 1. Patient Queue (Today's Appointments)
@@ -119,7 +122,20 @@ class SiteController extends Controller
 			'criteria' => array(
 				'condition' => 'schedule_datetime BETWEEN :start AND :end',
 				'params' => array(':start' => $todayStart, ':end' => $todayEnd),
-				'with' => array('patientAccount.user', 'doctorAccount.user', 'appointmentStatus'),
+				'with' => array(
+					// We must alias the user tables to avoid "Not unique table/alias: 'user'" error
+					'patientAccount' => array(
+						'with' => array(
+							'user' => array('alias' => 'patientUser')
+						)
+					),
+					'doctorAccount' => array(
+						'with' => array(
+							'user' => array('alias' => 'doctorUser')
+						)
+					),
+					'appointmentStatus'
+				),
 				'order' => 'schedule_datetime ASC',
 			),
 			'pagination' => false,

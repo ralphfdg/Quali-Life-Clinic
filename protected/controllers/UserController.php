@@ -28,7 +28,7 @@ class UserController extends Controller
 			array(
 				'allow',
 				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
-				'expression' => 'Yii::app()->controller->isSuperAdmin()',
+				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
 			),
 			array(
 				'allow',
