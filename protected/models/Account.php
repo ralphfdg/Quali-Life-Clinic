@@ -175,7 +175,7 @@ class Account extends CActiveRecord
 				}
 				else
 				{
-					//asdjkfhjklasdhfjlad
+					
 					$oldModel = Account::model()->findByPk($this->id);
 					$this->password = $oldModel->password;
 					$this->salt = $oldModel->salt;
