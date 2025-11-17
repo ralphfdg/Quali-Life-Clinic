@@ -6,7 +6,7 @@ class DoctorScheduleController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout = '//layouts/column2';
 
 	/**
 	 * @return array action filters
@@ -21,28 +21,35 @@ class DoctorScheduleController extends Controller
 
 	/**
 	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
 	 */
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
+			// Admins & Super Admins: Manage Everything
+			array(
+				'allow',
+				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
+				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()', // FIX
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
+			// Doctors: View Own Schedule
+			array(
+				'allow',
+				'actions' => array('index', 'view', 'mySchedule'),
+				'expression' => 'Yii::app()->controller->isDoctor()', // FIX
 			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
+			array(
+				'deny',
+				'users' => array('*'),
 			),
 		);
+	}
+
+	/**
+	 * Custom helper to check if user is Admin or Super Admin
+	 */
+	public function allowAdminAccess()
+	{
+		return $this->isSuperAdmin() || $this->isAdmin();
 	}
 
 	/**
@@ -51,8 +58,8 @@ class DoctorScheduleController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+		$this->render('view', array(
+			'model' => $this->loadModel($id),
 		));
 	}
 
@@ -62,20 +69,16 @@ class DoctorScheduleController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new DoctorSchedule;
+		$model = new DoctorSchedule;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['DoctorSchedule']))
-		{
-			$model->attributes=$_POST['DoctorSchedule'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+		if (isset($_POST['DoctorSchedule'])) {
+			$model->attributes = $_POST['DoctorSchedule'];
+			if ($model->save())
+				$this->redirect(array('admin')); // Redirect to admin grid after create
 		}
 
-		$this->render('create',array(
-			'model'=>$model,
+		$this->render('create', array(
+			'model' => $model,
 		));
 	}
 
@@ -86,20 +89,16 @@ class DoctorScheduleController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['DoctorSchedule']))
-		{
-			$model->attributes=$_POST['DoctorSchedule'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+		if (isset($_POST['DoctorSchedule'])) {
+			$model->attributes = $_POST['DoctorSchedule'];
+			if ($model->save())
+				$this->redirect(array('admin')); // Redirect to admin grid after update
 		}
 
-		$this->render('update',array(
-			'model'=>$model,
+		$this->render('update', array(
+			'model' => $model,
 		));
 	}
 
@@ -113,19 +112,8 @@ class DoctorScheduleController extends Controller
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
+		if (!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('DoctorSchedule');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
 	}
 
 	/**
@@ -133,13 +121,13 @@ class DoctorScheduleController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new DoctorSchedule('search');
+		$model = new DoctorSchedule('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['DoctorSchedule']))
-			$model->attributes=$_GET['DoctorSchedule'];
+		if (isset($_GET['DoctorSchedule']))
+			$model->attributes = $_GET['DoctorSchedule'];
 
-		$this->render('admin',array(
-			'model'=>$model,
+		$this->render('admin', array(
+			'model' => $model,
 		));
 	}
 
@@ -152,9 +140,9 @@ class DoctorScheduleController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=DoctorSchedule::model()->findByPk($id);
-		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+		$model = DoctorSchedule::model()->findByPk($id);
+		if ($model === null)
+			throw new CHttpException(404, 'The requested page does not exist.');
 		return $model;
 	}
 
@@ -164,8 +152,7 @@ class DoctorScheduleController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='doctor-schedule-form')
-		{
+		if (isset($_POST['ajax']) && $_POST['ajax'] === 'doctor-schedule-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}

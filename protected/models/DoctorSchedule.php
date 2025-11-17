@@ -1,9 +1,8 @@
 <?php
 
 /**
- * This is the model class for table "{{doctor_schedule}}".
+ * This is the model class for table "tbl_doctor_schedule".
  *
- * The followings are the available columns in table '{{doctor_schedule}}':
  * @property integer $id
  * @property integer $doctor_account_id
  * @property integer $day_of_week
@@ -18,11 +17,21 @@
 class DoctorSchedule extends CActiveRecord
 {
 	/**
+	 * Returns the static model of the specified AR class.
+	 * @param string $className active record class name.
+	 * @return DoctorSchedule the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
+
+	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return '{{doctor_schedule}}';
+		return 'tbl_doctor_schedule';
 	}
 
 	/**
@@ -30,13 +39,12 @@ class DoctorSchedule extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
-			array('doctor_account_id, day_of_week, start_time, end_time', 'required'),
+			array('doctor_account_id, day_of_week, start_time, end_time, status_id', 'required'),
 			array('doctor_account_id, day_of_week, status_id', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+			// Validate day is between 0 (Sunday) and 6 (Saturday)
+			array('day_of_week', 'numerical', 'min'=>0, 'max'=>6),
+			// Ensure safe attributes for search
 			array('id, doctor_account_id, day_of_week, start_time, end_time, status_id', 'safe', 'on'=>'search'),
 		);
 	}
@@ -46,8 +54,6 @@ class DoctorSchedule extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'doctorAccount' => array(self::BELONGS_TO, 'Account', 'doctor_account_id'),
 			'status' => array(self::BELONGS_TO, 'Status', 'status_id'),
@@ -61,8 +67,8 @@ class DoctorSchedule extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'doctor_account_id' => 'Doctor Account',
-			'day_of_week' => 'Day Of Week',
+			'doctor_account_id' => 'Doctor',
+			'day_of_week' => 'Day of Week',
 			'start_time' => 'Start Time',
 			'end_time' => 'End Time',
 			'status_id' => 'Status',
@@ -71,20 +77,10 @@ class DoctorSchedule extends CActiveRecord
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
+	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
@@ -98,15 +94,31 @@ class DoctorSchedule extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	// --- HELPER FUNCTIONS ---
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return DoctorSchedule the static model class
+	 * Helper to get day names
 	 */
-	public static function model($className=__CLASS__)
+	public function getDayOptions()
 	{
-		return parent::model($className);
+		return array(
+			0 => 'Sunday',
+			1 => 'Monday',
+			2 => 'Tuesday',
+			3 => 'Wednesday',
+			4 => 'Thursday',
+			5 => 'Friday',
+			6 => 'Saturday',
+		);
+	}
+
+	/**
+	 * Returns the string name of the day for the current record
+	 */
+	public function getDayName()
+	{
+		$options = $this->getDayOptions();
+		return isset($options[$this->day_of_week]) ? $options[$this->day_of_week] : 'Unknown';
 	}
 }
