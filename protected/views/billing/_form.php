@@ -2,16 +2,13 @@
 /* @var $this BillingController */
 /* @var $model Billing */
 /* @var $form CActiveForm */
+/* @var $availableAppointments array */
 ?>
 
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'billing-form',
-	// Please note: When you enable ajax validation, make sure the corresponding
-	// controller action is handling ajax validation correctly.
-	// There is a call to performAjaxValidation() commented in generated controller code.
-	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 )); ?>
 
@@ -21,14 +18,35 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'appointment_id'); ?>
-		<?php echo $form->textField($model,'appointment_id'); ?>
+		<?php 
+		if ($model->isNewRecord) {
+			// Create a user-friendly list for the dropdown
+			$appointmentList = CHtml::listData($availableAppointments, 'id', function($app) {
+				return sprintf('%s - Dr. %s - %s', 
+					date("M j, Y g:i A", strtotime($app->schedule_datetime)),
+					$app->doctorAccount->user->lastname,
+					$app->patientAccount->user->firstname . ' ' . $app->patientAccount->user->lastname
+				);
+			});
+			
+			echo $form->dropDownList($model, 'appointment_id', $appointmentList, 
+				array('prompt'=>'Select a completed appointment...')
+			);
+		} else {
+			// If updating, just show the appointment info as text
+			echo CHtml::textField(
+				'appointment_info', 
+				sprintf('%s - Dr. %s - %s', 
+					date("M j, Y g:i A", strtotime($model->appointment->schedule_datetime)),
+					$model->appointment->doctorAccount->user->lastname,
+					$model->patientAccount->user->firstname . ' ' . $model->patientAccount->user->lastname
+				),
+				array('disabled'=>true, 'style'=>'width: 400px;')
+			);
+			echo $form->hiddenField($model, 'appointment_id');
+		}
+		?>
 		<?php echo $form->error($model,'appointment_id'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'patient_account_id'); ?>
-		<?php echo $form->textField($model,'patient_account_id'); ?>
-		<?php echo $form->error($model,'patient_account_id'); ?>
 	</div>
 
 	<div class="row">
@@ -39,26 +57,10 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'payment_status'); ?>
-		<?php echo $form->textField($model,'payment_status',array('size'=>7,'maxlength'=>7)); ?>
+		<?php echo $form->dropDownList($model, 'payment_status', 
+			array('Pending'=>'Pending', 'Paid'=>'Paid', 'Waived'=>'Waived')
+		); ?>
 		<?php echo $form->error($model,'payment_status'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'date_created'); ?>
-		<?php echo $form->textField($model,'date_created'); ?>
-		<?php echo $form->error($model,'date_created'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'date_paid'); ?>
-		<?php echo $form->textField($model,'date_paid'); ?>
-		<?php echo $form->error($model,'date_paid'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'created_by_account_id'); ?>
-		<?php echo $form->textField($model,'created_by_account_id'); ?>
-		<?php echo $form->error($model,'created_by_account_id'); ?>
 	</div>
 
 	<div class="row">
@@ -67,10 +69,81 @@
 		<?php echo $form->error($model,'notes'); ?>
 	</div>
 
+	<?php if (!$model->isNewRecord): ?>
+	<div class="row">
+		<?php echo $form->labelEx($model,'date_paid'); ?>
+		<?php $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+			'model' => $model,
+			'attribute' => 'date_paid',
+			'options' => array(
+				'dateFormat' => 'yy-mm-dd', // MySQL format
+			),
+			'htmlOptions' => array(
+				'placeholder' => 'YYYY-MM-DD (Set automatically if "Paid")'
+			),
+		)); ?>
+		<?php echo $form->error($model,'date_paid'); ?>
+	</div>
+	<?php endif; ?>
+
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create Bill' : 'Save'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>```
+<hr>
+
+### 4. `protected/views/billing/view.php`
+
+Finally, I've updated the "View" page to show the related names instead of IDs.
+
+```php
+<?php
+/* @var $this BillingController */
+/* @var $model Billing */
+
+$this->breadcrumbs=array(
+	'Billings'=>array('index'),
+	$model->id,
+);
+
+$this->menu=array(
+	array('label'=>'List Billing', 'url'=>array('index')),
+	array('label'=>'Create Billing', 'url'=>array('create')),
+	array('label'=>'Update Billing', 'url'=>array('update', 'id'=>$model->id)),
+	array('label'=>'Delete Billing', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>'Manage Billing', 'url'=>array('admin')),
+);
+?>
+
+<h1>View Billing #<?php echo $model->id; ?></h1>
+
+<?php $this->widget('zii.widgets.CDetailView', array(
+	'data'=>$model,
+	'attributes'=>array(
+		'id',
+		array(
+			'label'=>'Patient',
+			'value'=>$model->patientAccount->user ? $model->patientAccount->user->firstname . " " . $model->patientAccount->user->lastname : "N/A",
+		),
+		array(
+			'label'=>'Appointment',
+			'value'=>$model->appointment ? date("M j, Y g:i A", strtotime($model->appointment->schedule_datetime)) : "N/A",
+		),
+		array(
+			'label'=>'Doctor',
+			'value'=>$model->appointment->doctorAccount->user ? "Dr. " . $model->appointment->doctorAccount->user->lastname : "N/A",
+		),
+		'amount',
+		'payment_status',
+		'date_created',
+		'date_paid',
+		array(
+			'label'=>'Billed By',
+			'value'=>$model->createdByAccount ? $model->createdByAccount->username : "N/A",
+		),
+		'notes',
+	),
+)); ?>
