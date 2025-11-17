@@ -38,24 +38,35 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
 )); ?>
-</div><!-- search-form -->
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+</div><?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'billing-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'appointment_id',
-		'patient_account_id',
+		array(
+			'name'=>'appointment_id',
+			'header'=>'Appointment Date',
+			'value'=>'$data->appointment ? $data->appointment->schedule_datetime : "N/A"',
+		),
+		array(
+			'name'=>'patient_account_id',
+			'header'=>'Patient',
+			'value'=>'$data->patientAccount->user ? $data->patientAccount->user->firstname . " " . $data->patientAccount->user->lastname : "N/A"',
+		),
 		'amount',
-		'payment_status',
-		'date_created',
-		/*
+		array(
+			'name'=>'payment_status',
+			'value'=>'$data->payment_status',
+			'filter'=>array('Pending'=>'Pending', 'Paid'=>'Paid', 'Waived'=>'Waived'),
+		),
 		'date_paid',
-		'created_by_account_id',
-		'notes',
-		*/
+		array(
+			'name'=>'created_by_account_id',
+			'header'=>'Billed By',
+			'value'=>'$data->createdByAccount ? $data->createdByAccount->username : "N/A"',
+		),
+		'date_created',
 		array(
 			'class'=>'CButtonColumn',
 		),

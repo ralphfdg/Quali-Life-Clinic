@@ -6,7 +6,7 @@ class BillingController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout = '//layouts/column2';
+	public $layout='//layouts/column2';
 
 	/**
 	 * @return array action filters
@@ -27,22 +27,12 @@ class BillingController extends Controller
 	public function accessRules()
 	{
 		return array(
-			// Allow Super Admin and Admin
-			array(
-				'allow',
-				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'generateReport'),
-				'expression' => '$this->isSuperAdmin() || $this->isAdmin()',
+			array('allow',  // allow only Super Admin to perform all actions
+				'actions'=>array('index', 'view', 'create', 'update', 'admin', 'delete'),
+				'expression'=>array($this, 'isSuperAdmin'), // Use our helper function
 			),
-			// Patients can only view their own bills (if you add that feature later)
-			array(
-				'allow',
-				'actions' => array('view'),
-				'expression' => array($this, 'isPatient'),
-			),
-			// Deny everyone else
-			array(
-				'deny',
-				'users' => array('*'),
+			array('deny',  // deny all users
+				'users'=>array('*'),
 			),
 		);
 	}
@@ -53,8 +43,8 @@ class BillingController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view', array(
-			'model' => $this->loadModel($id),
+		$this->render('view',array(
+			'model'=>$this->loadModel($id),
 		));
 	}
 
@@ -64,19 +54,56 @@ class BillingController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new Billing;
+		$model=new Billing;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if (isset($_POST['Billing'])) {
-			$model->attributes = $_POST['Billing'];
-			if ($model->save())
-				$this->redirect(array('view', 'id' => $model->id));
+		if(isset($_POST['Billing']))
+		{
+			$model->attributes=$_POST['Billing'];
+			
+			//--- CUSTOM LOGIC ---
+			// 1. Find the appointment to get the patient ID
+			$appointment = Appointment::model()->findByPk($model->appointment_id);
+			if ($appointment) {
+				$model->patient_account_id = $appointment->patient_account_id;
+			}
+			
+			// 2. Set who created this bill
+			$model->created_by_account_id = Yii::app()->user->id;
+			
+			// 3. Set payment date if status is 'Paid'
+			if ($model->payment_status == 'Paid' && empty($model->date_paid)) {
+				$model->date_paid = new CDbExpression('NOW()');
+			}
+			//--- END CUSTOM LOGIC ---
+			
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('create', array(
-			'model' => $model,
+		//--- CUSTOM LOGIC ---
+		// We only want to bill for appointments that are:
+		// 1. Completed (status_id = 4)
+		// 2. Not already billed
+		
+		// Get all appointment IDs that already have a billing record
+		$billed_app_ids = Yii::app()->db->createCommand()
+			->select('appointment_id')
+			->from('{{billing}}')
+			->where('appointment_id IS NOT NULL')
+			->queryColumn();
+
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('appointment_status_id = 4'); // 4 = Completed
+		$criteria->addNotInCondition('id', $billed_app_ids); // Exclude already billed
+		$criteria->with = array('patientAccount.user', 'doctorAccount.user');
+		$criteria->order = 'schedule_datetime DESC';
+		
+		$availableAppointments = Appointment::model()->findAll($criteria);
+		//--- END CUSTOM LOGIC ---
+
+		$this->render('create',array(
+			'model'=>$model,
+			'availableAppointments'=>$availableAppointments, // Pass this to the view
 		));
 	}
 
@@ -87,19 +114,32 @@ class BillingController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model = $this->loadModel($id);
+		$model=$this->loadModel($id);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if (isset($_POST['Billing'])) {
-			$model->attributes = $_POST['Billing'];
-			if ($model->save())
-				$this->redirect(array('view', 'id' => $model->id));
+		if(isset($_POST['Billing']))
+		{
+			$model->attributes=$_POST['Billing'];
+			
+			//--- CUSTOM LOGIC ---
+			// 1. Set payment date if status is 'Paid' and date is not already set
+			if ($model->payment_status == 'Paid' && empty($model->date_paid)) {
+				$model->date_paid = new CDbExpression('NOW()');
+			}
+			// 2. If status is set back to 'Pending', clear the payment date
+			if ($model->payment_status == 'Pending') {
+				$model->date_paid = null;
+			}
+			//--- END CUSTOM LOGIC ---
+			
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update', array(
-			'model' => $model,
+		// On update, we don't need to filter appointments,
+		// as the appointment is already set.
+		$this->render('update',array(
+			'model'=>$model,
+			'availableAppointments'=>array(), // Not needed for update
 		));
 	}
 
@@ -113,7 +153,7 @@ class BillingController extends Controller
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if (!isset($_GET['ajax']))
+		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
@@ -122,9 +162,9 @@ class BillingController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider = new CActiveDataProvider('Billing');
-		$this->render('index', array(
-			'dataProvider' => $dataProvider,
+		$dataProvider=new CActiveDataProvider('Billing');
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
 		));
 	}
 
@@ -133,13 +173,13 @@ class BillingController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model = new Billing('search');
+		$model=new Billing('search');
 		$model->unsetAttributes();  // clear any default values
-		if (isset($_GET['Billing']))
-			$model->attributes = $_GET['Billing'];
+		if(isset($_GET['Billing']))
+			$model->attributes=$_GET['Billing'];
 
-		$this->render('admin', array(
-			'model' => $model,
+		$this->render('admin',array(
+			'model'=>$model,
 		));
 	}
 
@@ -152,9 +192,10 @@ class BillingController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model = Billing::model()->findByPk($id);
-		if ($model === null)
-			throw new CHttpException(404, 'The requested page does not exist.');
+		// Eager load the related data
+		$model=Billing::model()->with('appointment', 'patientAccount.user', 'createdByAccount.user')->findByPk($id);
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
 
@@ -164,7 +205,8 @@ class BillingController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if (isset($_POST['ajax']) && $_POST['ajax'] === 'billing-form') {
+		if(isset($_POST['ajax']) && $_POST['ajax']==='billing-form')
+		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
