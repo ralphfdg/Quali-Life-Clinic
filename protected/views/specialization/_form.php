@@ -8,10 +8,6 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'specialization-form',
-	// Please note: When you enable ajax validation, make sure the corresponding
-	// controller action is handling ajax validation correctly.
-	// There is a call to performAjaxValidation() commented in generated controller code.
-	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 )); ?>
 
@@ -27,7 +23,10 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'status_id'); ?>
-		<?php echo $form->textField($model,'status_id'); ?>
+		<?php echo $form->dropDownList($model, 'status_id',
+			CHtml::listData(Status::model()->findAll(), 'id', 'status'),
+			array('prompt'=>'Select Status')
+		); ?>
 		<?php echo $form->error($model,'status_id'); ?>
 	</div>
 
@@ -37,4 +36,70 @@
 
 <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>```
+
+---
+
+### 3. `protected/views/specialization/admin.php`
+
+I've updated the admin grid to show the *name* of the status (e.g., "active") instead of just the ID number.
+
+```php
+<?php
+/* @var $this SpecializationController */
+/* @var $model Specialization */
+
+$this->breadcrumbs=array(
+	'Specializations'=>array('index'),
+	'Manage',
+);
+
+$this->menu=array(
+	array('label'=>'List Specialization', 'url'=>array('index')),
+	array('label'=>'Create Specialization', 'url'=>array('create')),
+);
+
+Yii::app()->clientScript->registerScript('search', "
+$('.search-button').click(function(){
+	$('.search-form').toggle();
+	return false;
+});
+$('.search-form form').submit(function(){
+	$('#specialization-grid').yiiGridView('update', {
+		data: $(this).serialize()
+	});
+	return false;
+});
+");
+?>
+
+<h1>Manage Specializations</h1>
+
+<p>
+You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
+or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
+</p>
+
+<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+<div class="search-form" style="display:none">
+<?php $this->renderPartial('_search',array(
+	'model'=>$model,
+)); ?>
+</div><?php $this->widget('zii.widgets.grid.CGridView', array(
+	'id'=>'specialization-grid',
+	'dataProvider'=>$model->search(),
+	'filter'=>$model,
+	'columns'=>array(
+		'id',
+		'specialization_name',
+		array(
+			'name'=>'status_id',
+			'header'=>'Status',
+			'value'=>'$data->status->status', // Use the 'status' relation
+			'filter'=>CHtml::listData(Status::model()->findAll(), 'id', 'status'),
+		),
+		array(
+			'class'=>'CButtonColumn',
+		),
+	),
+)); ?>

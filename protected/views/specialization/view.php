@@ -23,6 +23,9 @@ $this->menu=array(
 	'attributes'=>array(
 		'id',
 		'specialization_name',
-		'status_id',
+		array(
+			'label'=>'Status',
+			'value'=>CHtml::encode($model->status->status),
+		),
 	),
 )); ?>
