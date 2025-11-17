@@ -25,20 +25,17 @@ class AuditLogController extends Controller
 	 * @return array access control rules
 	 */
 	public function accessRules()
-	{
-		return array(
-			// Allow Super Admin to VIEW and LIST only. 
-			// We intentionally DO NOT include 'create', 'update', or 'delete' to preserve integrity.
-			array('allow',
-				'actions'=>array('index','view','admin'),
-				'expression'=>array($this, 'isSuperAdmin'),
-			),
-			// Deny everyone else
-			array('deny',
-				'users'=>array('*'),
-			),
-		);
-	}
+{
+    return array(
+        array('allow',
+            'actions'=>array('index','view','admin'),
+            'expression'=>'Yii::app()->controller->isSuperAdmin()', // FIX
+        ),
+        array('deny',
+            'users'=>array('*'),
+        ),
+    );
+}
 
 	/**
 	 * Displays a particular model.

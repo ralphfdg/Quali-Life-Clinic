@@ -23,25 +23,22 @@ public function filters()
 	 * Specifies the access control rules.
 	 */
 	public function accessRules()
-	{
-		return array(
-			// Allow Super Admins to do everything (Create, List, Delete, etc.)
-			array('allow',
-				'actions'=>array('index','view','create','update','admin','delete'),
-				'expression'=>array($this, 'isSuperAdmin'),
-			),
-			// Allow authenticated users to edit their OWN account/profile
-			array('allow',
-				'actions'=>array('update', 'view'),
-				'users'=>array('@'),
-				'expression'=>'$user->id == $_GET["id"]', // Only if ID matches logged-in user
-			),
-			// Deny everyone else
-			array('deny',
-				'users'=>array('*'),
-			),
-		);
-	}
+{
+    return array(
+        array('allow',
+            'actions'=>array('index','view','create','update','admin','delete'),
+            'expression'=>'Yii::app()->controller->isSuperAdmin()', 
+        ),
+        array('allow',
+            'actions'=>array('update', 'view'),
+            'users'=>array('@'),
+            'expression'=>'$user->id == $_GET["id"]',
+        ),
+        array('deny',
+            'users'=>array('*'),
+        ),
+    );
+}
 
 	/**
 	 * Displays a particular model.

@@ -6,7 +6,7 @@ class AppointmentController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout = '//layouts/column2';
 
 	/**
 	 * @return array action filters
@@ -27,24 +27,27 @@ class AppointmentController extends Controller
 	public function accessRules()
 	{
 		return array(
-			// Allow Patients to Book and View specific appointments
-			array('allow',
-				'actions'=>array('book', 'myAppointments', 'view', 'create'), // We will create 'book' and 'myAppointments' later
-				'expression'=>array($this, 'isPatient'),
+			// Patients: Book & View Own
+			array(
+				'allow',
+				'actions' => array('book', 'myAppointments', 'view', 'create'),
+				'expression' => 'Yii::app()->controller->isPatient()', // FIX
 			),
-			// Allow Doctors to View and Update Status
-			array('allow',
-				'actions'=>array('index', 'view', 'updateStatus', 'myQueue'),
-				'expression'=>array($this, 'isDoctor'),
+			// Doctors: View Queue & Update Status
+			array(
+				'allow',
+				'actions' => array('index', 'view', 'updateStatus', 'myQueue'),
+				'expression' => 'Yii::app()->controller->isDoctor()', // FIX
 			),
-			// Allow Admins/Super Admins to do everything
-			array('allow',
-				'actions'=>array('index', 'view', 'create', 'update', 'admin', 'delete', 'calendar', 'cancel'),
-				'expression'=>'$this->isSuperAdmin() || $this->isAdmin()',
+			// Admins & Super Admins: Manage All
+			array(
+				'allow',
+				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'calendar', 'cancel'),
+				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()', // FIX
 			),
-			// Deny everyone else
-			array('deny',
-				'users'=>array('*'),
+			array(
+				'deny',
+				'users' => array('*'),
 			),
 		);
 	}
@@ -55,8 +58,8 @@ class AppointmentController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+		$this->render('view', array(
+			'model' => $this->loadModel($id),
 		));
 	}
 
@@ -66,20 +69,19 @@ class AppointmentController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Appointment;
+		$model = new Appointment;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Appointment']))
-		{
-			$model->attributes=$_POST['Appointment'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+		if (isset($_POST['Appointment'])) {
+			$model->attributes = $_POST['Appointment'];
+			if ($model->save())
+				$this->redirect(array('view', 'id' => $model->id));
 		}
 
-		$this->render('create',array(
-			'model'=>$model,
+		$this->render('create', array(
+			'model' => $model,
 		));
 	}
 
@@ -90,20 +92,19 @@ class AppointmentController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Appointment']))
-		{
-			$model->attributes=$_POST['Appointment'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+		if (isset($_POST['Appointment'])) {
+			$model->attributes = $_POST['Appointment'];
+			if ($model->save())
+				$this->redirect(array('view', 'id' => $model->id));
 		}
 
-		$this->render('update',array(
-			'model'=>$model,
+		$this->render('update', array(
+			'model' => $model,
 		));
 	}
 
@@ -117,7 +118,7 @@ class AppointmentController extends Controller
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
+		if (!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
@@ -126,9 +127,9 @@ class AppointmentController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Appointment');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+		$dataProvider = new CActiveDataProvider('Appointment');
+		$this->render('index', array(
+			'dataProvider' => $dataProvider,
 		));
 	}
 
@@ -137,13 +138,13 @@ class AppointmentController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Appointment('search');
+		$model = new Appointment('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Appointment']))
-			$model->attributes=$_GET['Appointment'];
+		if (isset($_GET['Appointment']))
+			$model->attributes = $_GET['Appointment'];
 
-		$this->render('admin',array(
-			'model'=>$model,
+		$this->render('admin', array(
+			'model' => $model,
 		));
 	}
 
@@ -156,9 +157,9 @@ class AppointmentController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Appointment::model()->findByPk($id);
-		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+		$model = Appointment::model()->findByPk($id);
+		if ($model === null)
+			throw new CHttpException(404, 'The requested page does not exist.');
 		return $model;
 	}
 
@@ -168,8 +169,7 @@ class AppointmentController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='appointment-form')
-		{
+		if (isset($_POST['ajax']) && $_POST['ajax'] === 'appointment-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
