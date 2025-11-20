@@ -67,17 +67,8 @@
 
 <?php $this->endWidget(); ?>
 
-</div>```
+</div>
 
----
-
-### 4. The Admin Grid View: `protected/views/doctorSchedule/admin.php`
-
-Finally, we need a clean grid view so Admins can see the schedules at a glance.
-
-**Replace the entire file content with:**
-
-```php
 <?php
 /* @var $this DoctorScheduleController */
 /* @var $model DoctorSchedule */

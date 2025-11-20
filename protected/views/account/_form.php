@@ -77,16 +77,4 @@
 
 <?php $this->endWidget(); ?>
 
-</div>```
-
----
-
-### Summary of This Step
-
-You now have a functional Yii 1.1 application with:
-* A secure login system that uses your database.
-* Role-based access and navigation.
-* The correct sidebar menu for all 4 user roles.
-* A data-driven, unique dashboard for all 4 user roles.
-
-**Next, we will build the core features one by one, starting with the Admin's "Appointment Calendar".**
+</div>

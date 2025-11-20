@@ -92,14 +92,9 @@
 
 <?php $this->endWidget(); ?>
 
-</div>```
+</div>
 <hr>
 
-### 4. `protected/views/billing/view.php`
-
-Finally, I've updated the "View" page to show the related names instead of IDs.
-
-```php
 <?php
 /* @var $this BillingController */
 /* @var $model Billing */
