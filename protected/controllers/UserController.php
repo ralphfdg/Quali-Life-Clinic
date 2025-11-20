@@ -131,6 +131,15 @@ class UserController extends Controller
 	{
 		$model = new User('search');
 		$model->unsetAttributes();  // clear any default values
+		
+		if (isset($_GET['role'])) {
+			if ($_GET['role'] == 'patient') {
+				$model->account_type_filter = 4; // ID 4 is Patient
+			} elseif ($_GET['role'] == 'doctor') {
+				$model->account_type_filter = 3; // ID 3 is Doctor
+			}
+		}
+
 		if (isset($_GET['User']))
 			$model->attributes = $_GET['User'];
 

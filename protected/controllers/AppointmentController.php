@@ -174,4 +174,23 @@ class AppointmentController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	/**
+	 * Displays the appointment calendar/list.
+	 */
+	public function actionCalendar()
+	{
+		$dataProvider = new CActiveDataProvider('Appointment', array(
+			'criteria'=>array(
+				'order'=>'schedule_datetime ASC',
+			),
+			'pagination'=>array(
+				'pageSize'=>20,
+			),
+		));
+
+		$this->render('calendar', array(
+			'dataProvider' => $dataProvider,
+		));
+	}
 }
