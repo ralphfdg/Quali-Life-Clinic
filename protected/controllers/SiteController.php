@@ -265,10 +265,10 @@ class SiteController extends Controller
 	 * Displays the login page
 	 */
 	public function actionLogin()
-	{
-		$this->layout = '//layouts/column1'; // Use single column layout for login
+	{	
+		$this->layout = '//layouts/guest';
 		$model=new LoginForm;
-
+		
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 		{

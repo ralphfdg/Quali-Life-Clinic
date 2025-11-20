@@ -526,3 +526,12 @@ Stack trace:
 REQUEST_URI=/quali-life_clinic-repo/Quali-Life-Clinic/index.php?r=user/admin&role=patient
 HTTP_REFERER=http://localhost/quali-life_clinic-repo/Quali-Life-Clinic/index.php?r=doctorSchedule/mySchedule
 ---
+2025/11/20 16:55:19 [error] [exception.CHttpException.404] CHttpException: Unable to resolve the request "report/index". in D:\xampp\htdocs\qual\Quali-Life-Clinic\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\xampp\htdocs\qual\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('report/index')
+#1 D:\xampp\htdocs\qual\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#2 D:\xampp\htdocs\qual\Quali-Life-Clinic\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/qual/Quali-Life-Clinic/index.php?r=report/index
+HTTP_REFERER=http://localhost/qual/Quali-Life-Clinic/index.php?r=auditLog/admin
+---
