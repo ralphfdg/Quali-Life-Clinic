@@ -157,4 +157,24 @@ class DoctorScheduleController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	/**
+	 * Lists the schedule for the currently logged-in doctor.
+	 */
+	public function actionMySchedule()
+	{
+		$doctorId = Yii::app()->user->id;
+
+		$dataProvider = new CActiveDataProvider('DoctorSchedule', array(
+			'criteria'=>array(
+				'condition'=>'doctor_account_id=:id',
+				'params'=>array(':id'=>$doctorId),
+				'order'=>'day_of_week ASC, start_time ASC',
+			),
+		));
+
+		$this->render('mySchedule', array(
+			'dataProvider'=>$dataProvider,
+		));
+	}
 }
