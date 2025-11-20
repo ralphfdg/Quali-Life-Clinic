@@ -193,4 +193,67 @@ class AppointmentController extends Controller
 			'dataProvider' => $dataProvider,
 		));
 	}
+
+	/**
+	 * Helper to list Doctors for the dropdown
+	 */
+	protected function getDoctorOptions()
+	{
+		// 3 is the ID for Doctor account type
+		$doctors = Account::model()->with('user')->findAll('account_type_id=:type', array(':type'=>3));
+		return CHtml::listData($doctors, 'id', function($account) {
+			return 'Dr. ' . (isset($account->user) ? $account->user->lastname . ' ' . $account->user->firstname : $account->username);
+		});
+	}
+
+	/**
+	 * Allows patients to book a new appointment.
+	 */
+	public function actionBook()
+	{
+		$model = new Appointment;
+
+		if (isset($_POST['Appointment'])) {
+			$model->attributes = $_POST['Appointment'];
+			
+			// Automatically set the patient and booker to the current user
+			$model->patient_account_id = Yii::app()->user->id;
+			$model->booked_by_account_id = Yii::app()->user->id;
+			
+			// Default status to 1 (assuming 1 is 'Pending' or 'Scheduled')
+			if (empty($model->status_id)) {
+				$model->status_id = 1; 
+			}
+
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Appointment booked successfully!');
+				$this->redirect(array('myAppointments'));
+			}
+		}
+
+		$this->render('book', array(
+			'model' => $model,
+			'doctorList' => $this->getDoctorOptions(),
+		));
+	}
+
+	/**
+	 * Lists appointments for the currently logged-in patient.
+	 */
+	public function actionMyAppointments()
+	{
+		$dataProvider = new CActiveDataProvider('Appointment', array(
+			'criteria'=>array(
+				'condition'=>'patient_account_id=:uid',
+				'params'=>array(':uid'=>Yii::app()->user->id),
+				'order'=>'schedule_datetime ASC',
+			),
+		));
+
+		// This block sends the data to the view. 
+		// Ensure 'dataProvider' matches the variable name in the view.
+		$this->render('myAppointments', array(
+			'dataProvider' => $dataProvider, 
+		));
+	}
 }
