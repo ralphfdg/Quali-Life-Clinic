@@ -30,6 +30,12 @@ class UserController extends Controller
 				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
 				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
 			),
+			// Allow Doctors to access 'admin' (the list) and 'view' (details)
+			array(
+				'allow',
+				'actions' => array('admin', 'view'),
+				'expression' => 'Yii::app()->controller->isDoctor()',
+			),
 			array(
 				'allow',
 				'actions' => array('update', 'view'),
@@ -132,11 +138,16 @@ class UserController extends Controller
 		$model = new User('search');
 		$model->unsetAttributes();  // clear any default values
 		
-		if (isset($_GET['role'])) {
+		// 1. If the user is a Doctor, FORCE them to only see Patients (Account Type 4)
+		if (Yii::app()->controller->isDoctor()) {
+			$model->account_type_filter = 4; 
+		}
+		// 2. If Admin/SuperAdmin, check the URL 'role' parameter
+		else if (isset($_GET['role'])) {
 			if ($_GET['role'] == 'patient') {
-				$model->account_type_filter = 4; // ID 4 is Patient
+				$model->account_type_filter = 4; 
 			} elseif ($_GET['role'] == 'doctor') {
-				$model->account_type_filter = 3; // ID 3 is Doctor
+				$model->account_type_filter = 3; 
 			}
 		}
 
