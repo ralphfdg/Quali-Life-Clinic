@@ -2,6 +2,12 @@
 /* @var $this UserController */
 /* @var $model User */
 
+// Determine the title based on the role
+$pageHeader = 'Manage Users';
+if (isset($_GET['role'])) {
+    $pageHeader = 'Manage ' . ucfirst($_GET['role']) . 's';
+}
+
 $this->breadcrumbs=array(
 	'Users'=>array('index'),
 	'Manage',
@@ -26,7 +32,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Users</h1>
+<h1><?php echo $pageHeader; ?></h1>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -38,39 +44,21 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
 )); ?>
-</div><!-- search-form -->
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+</div><?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'user-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'account_id',
+		// Displaying Account Type for debugging/clarity if needed, otherwise remove
+		// array(
+		// 	'name'=>'account.accountType.type', 
+		// 	'header'=>'Role'
+		// ),
 		'firstname',
-		'middlename',
 		'lastname',
-		'qualifier',
-		/*
 		'dob',
-		'specialization',
-		'specialization_id',
-		'ptr_number',
-		'license_number',
-		'license_expiration',
-		's2_number',
-		's2_expiration',
-		'maxicare_number',
-		'address',
-		'name_of_father',
-		'father_dob',
-		'name_of_mother',
-		'mother_dob',
-		'school',
 		'gender',
-		'mother_contact_number',
-		'father_contact_number',
-		*/
 		array(
 			'class'=>'CButtonColumn',
 		),

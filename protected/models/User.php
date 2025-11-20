@@ -35,6 +35,9 @@
  */
 class User extends CActiveRecord
 {
+
+	public $account_type_filter;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -59,7 +62,7 @@ class User extends CActiveRecord
 			array('license_expiration, s2_expiration, father_dob, mother_dob', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, account_id, firstname, middlename, lastname, qualifier, dob, specialization, specialization_id, ptr_number, license_number, license_expiration, s2_number, s2_expiration, maxicare_number, address, name_of_father, father_dob, name_of_mother, mother_dob, school, gender, mother_contact_number, father_contact_number', 'safe', 'on'=>'search'),
+			array('id, account_id, firstname, middlename, lastname, qualifier, dob, specialization, specialization_id, ptr_number, license_number, license_expiration, s2_number, s2_expiration, maxicare_number, address, name_of_father, father_dob, name_of_mother, mother_dob, school, gender, mother_contact_number, father_contact_number, account_type_filter', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -127,6 +130,8 @@ class User extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->with = array('account');
+
 		$criteria->compare('id',$this->id);
 		$criteria->compare('account_id',$this->account_id);
 		$criteria->compare('firstname',$this->firstname,true);
@@ -151,6 +156,10 @@ class User extends CActiveRecord
 		$criteria->compare('gender',$this->gender);
 		$criteria->compare('mother_contact_number',$this->mother_contact_number,true);
 		$criteria->compare('father_contact_number',$this->father_contact_number,true);
+
+		if(!empty($this->account_type_filter)) {
+			$criteria->compare('account.account_type_id', $this->account_type_filter);
+		}
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

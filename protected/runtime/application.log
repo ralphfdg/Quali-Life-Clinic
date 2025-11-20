@@ -403,3 +403,25 @@ Stack trace:
 REQUEST_URI=/quali-life_clinic-repo/Quali-Life-Clinic/index.php?r=report/index
 HTTP_REFERER=http://localhost/quali-life_clinic-repo/Quali-Life-Clinic/index.php?r=account/admin&type=3
 ---
+2025/11/20 12:36:47 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "calendar". in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\web\CController.php:486
+Stack trace:
+#0 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\web\CController.php(270): CController->missingAction('calendar')
+#1 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('calendar')
+#2 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('appointment/cal...')
+#3 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/quali-life_clinic-repo/Quali-Life-Clinic/index.php?r=appointment/calendar
+HTTP_REFERER=http://localhost/quali-life_clinic-repo/Quali-Life-Clinic/index.php?r=site/index
+---
+2025/11/20 12:40:16 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "calendar". in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\web\CController.php:486
+Stack trace:
+#0 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\web\CController.php(270): CController->missingAction('calendar')
+#1 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('calendar')
+#2 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('appointment/cal...')
+#3 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/quali-life_clinic-repo/Quali-Life-Clinic/index.php?r=appointment/calendar
+HTTP_REFERER=http://localhost/quali-life_clinic-repo/Quali-Life-Clinic/index.php?r=site/index
+---
