@@ -64,49 +64,46 @@ class ConsultationRecordController extends Controller
     {
         $model = new ConsultationRecord;
 
-        // --- 1. PRE-FILL DATA (If coming from the Queue) ---
+        // 1. PRE-FILL DATA (If coming from the Queue)
         if (isset($_GET['appointment_id'])) {
             $apptId = (int)$_GET['appointment_id'];
-            // Load the appointment to get patient/doctor details
             $appointment = Appointment::model()->findByPk($apptId);
 
             if ($appointment) {
                 $model->appointment_id = $apptId;
                 $model->patient_account_id = $appointment->patient_account_id;
                 $model->doctor_account_id = $appointment->doctor_account_id;
-                // Set date to today
                 $model->date_of_consultation = date('Y-m-d');
             }
         }
-        // ---------------------------------------------------
 
         if (isset($_POST['ConsultationRecord'])) {
             $model->attributes = $_POST['ConsultationRecord'];
 
-            // Safety: Ensure Doctor ID is set to the logged-in user if missing
             if(empty($model->doctor_account_id)) {
                 $model->doctor_account_id = Yii::app()->user->id;
             }
 
             if ($model->save()) {
                 
-                // --- 2. CLOSE THE APPOINTMENT LOOP ---
-                // If this SOAP note is linked to an appointment, mark it as 'Completed' (4)
+                // --- CLOSE THE APPOINTMENT LOOP ---
                 if (!empty($model->appointment_id)) {
                     $linkedAppt = Appointment::model()->findByPk($model->appointment_id);
                     if ($linkedAppt) {
                         $linkedAppt->appointment_status_id = 4; // 4 = Completed
                         $linkedAppt->save();
                     }
-                    
-                    Yii::app()->user->setFlash('success', "Consultation saved! Appointment marked as Completed.");
-                    
-                    // Redirect back to the Doctor's Queue instead of the view page
+                }
+
+                // --- NEW LOGIC: Check which button was clicked ---
+                if (isset($_POST['save_and_prescribe'])) {
+                    // Go straight to writing a prescription for this record
+                    $this->redirect(array('prescription/create', 'consultation_id' => $model->id));
+                } else {
+                    // Standard save: Go back to the Queue
+                    Yii::app()->user->setFlash('success', "Consultation completed.");
                     $this->redirect(array('appointment/myQueue'));
                 }
-                // --------------------------------------
-
-                $this->redirect(array('view', 'id' => $model->id));
             }
         }
 

@@ -93,7 +93,24 @@ if ($isQueueBooking && !empty($model->patient_account_id)) {
     </div>
 
     <div class="row buttons" style="margin-top: 20px;">
-        <?php echo CHtml::submitButton($model->isNewRecord ? 'Save Consultation & Finish' : 'Save Changes', array('style'=>'padding: 10px 20px; font-size: 16px; background: #28a745; color: white; border: none; cursor: pointer;')); ?>
+        <?php 
+        // Standard Save Button (Green)
+        echo CHtml::submitButton($model->isNewRecord ? 'Save & Finish' : 'Save Changes', array(
+            'class' => 'btn btn-success',
+            'style' => 'padding: 10px 20px; margin-right: 10px; background: #28a745; color: white; border: none;'
+        )); 
+        ?>
+
+        <?php 
+        // Save & Prescribe Button (Blue) - Only for new records
+        if ($model->isNewRecord) {
+            echo CHtml::submitButton('Save & Write Prescription', array(
+                'name'  => 'save_and_prescribe', // This name tells the Controller what to do
+                'class' => 'btn btn-primary',
+                'style' => 'padding: 10px 20px; background: #007bff; color: white; border: none;'
+            ));
+        }
+        ?>
     </div>
 
 <?php $this->endWidget(); ?>

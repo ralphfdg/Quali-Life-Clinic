@@ -36,6 +36,12 @@ class UserController extends Controller
 				'actions' => array('admin', 'view'),
 				'expression' => 'Yii::app()->controller->isDoctor()',
 			),
+			// FIX: Allow all logged-in users to access 'myProfile'
+			array(
+				'allow',
+				'actions' => array('myProfile'),
+				'users' => array('@'),
+			),
 			array(
 				'allow',
 				'actions' => array('update', 'view'),
@@ -57,6 +63,23 @@ class UserController extends Controller
 	{
 		$this->render('view', array(
 			'model' => $this->loadModel($id),
+		));
+	}
+
+	/**
+	 * FIX: Displays the profile of the currently logged-in user.
+	 */
+	public function actionMyProfile()
+	{
+		// Find the user record where account_id matches the logged-in user's ID
+		$model = User::model()->find('account_id=:account_id', array(':account_id'=>Yii::app()->user->id));
+
+		if($model === null)
+			throw new CHttpException(404,'The requested profile does not exist.');
+
+		// Reuse the existing 'view' template
+		$this->render('view',array(
+			'model'=>$model,
 		));
 	}
 
