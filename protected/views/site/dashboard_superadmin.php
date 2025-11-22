@@ -28,7 +28,7 @@
 
 <div class="row">
 
-    
+
 
     <div class="col-xl-3 col-md-6 mb-4">
 
@@ -156,7 +156,7 @@
 
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Requests</div>
 
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div> 
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
 
                     </div>
 
@@ -182,61 +182,6 @@
 
 
 
-    <div class="col-xl-8 col-lg-7">
-
-        <div class="card shadow mb-4">
-
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-
-                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview (Last 30 Days)</h6>
-
-            </div>
-
-            <div class="card-body">
-
-                
-
-                <?php 
-
-                // KEEPING ORIGINAL BACKEND LOGIC ALIVE: Show raw data inside the chart area
-
-                if (!empty($earningsData)): ?>
-
-                    <div class="chart-area">
-
-                        <canvas id="myAreaChart"></canvas>
-
-                    </div>
-
-                    <div class="mt-4 text-center small text-muted">
-
-                        <ul class="list-unstyled list-inline">
-
-                            <?php foreach($earningsData as $data): ?>
-
-                                <li class="list-inline-item"><?php echo $data['day']; ?>: $<?php echo number_format($data['total'], 2); ?></li>
-
-                            <?php endforeach; ?>
-
-                        </ul>
-
-                    </div>
-
-                <?php else: ?>
-
-                    <p>No earnings data for the last 30 days.</p>
-
-                <?php endif; ?>
-
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-
 
     <div class="col-xl-4 col-lg-5">
 
@@ -252,7 +197,7 @@
 
                 <?php
 
-                if (!empty($specializationTally)): 
+                if (!empty($specializationTally)):
 
                     $progressColors = ['bg-success', 'bg-info', 'bg-warning', 'bg-danger', 'bg-primary'];
 
@@ -260,9 +205,9 @@
 
                     $totalSpecializations = array_sum(array_column($specializationTally, 'count'));
 
-                    
 
-                    foreach($specializationTally as $data):
+
+                    foreach ($specializationTally as $data):
 
                         // Calculate percentage for the progress bar
 
@@ -272,11 +217,11 @@
 
                         $colorIndex++;
 
-                    ?>
+                ?>
 
                         <h4 class="small font-weight-bold">
 
-                            <?php echo CHtml::encode($data['specialization_name']); ?> 
+                            <?php echo CHtml::encode($data['specialization_name']); ?>
 
                             <span class="float-right"><?php echo $percent; ?>% (<?php echo $data['count']; ?>)</span>
 
@@ -284,9 +229,9 @@
 
                         <div class="progress mb-4">
 
-                            <div class="progress-bar <?php echo $colorClass; ?>" role="progressbar" style="width: <?php echo $percent; ?>%" 
+                            <div class="progress-bar <?php echo $colorClass; ?>" role="progressbar" style="width: <?php echo $percent; ?>%"
 
-                                 aria-valuenow="<?php echo $percent; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                aria-valuenow="<?php echo $percent; ?>" aria-valuemin="0" aria-valuemax="100"></div>
 
                         </div>
 
@@ -298,7 +243,7 @@
 
                 <?php endif; ?>
 
-                
+
 
                 <hr class="sidebar-divider">
 

@@ -52,7 +52,6 @@
             array('label'=>'Manage Accounts', 'url'=>array('/account/admin')),
             array('label'=>'Manage Users', 'url'=>array('/user/admin')),
             array('label'=>'Manage Schedules', 'url'=>array('/doctorSchedule/admin')),
-            array('label'=>'Manage Billing', 'url'=>array('/billing/admin')),
             array('label'=>'Manage Specializations', 'url'=>array('/specialization/admin')),
         );
     }
