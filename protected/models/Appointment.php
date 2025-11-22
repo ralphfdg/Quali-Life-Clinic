@@ -42,11 +42,11 @@ class Appointment extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('patient_account_id, doctor_account_id, schedule_datetime, date_booked', 'required'),
+			// REMOVED 'date_booked' from the required list below
+			array('patient_account_id, doctor_account_id, schedule_datetime', 'required'),
 			array('patient_account_id, doctor_account_id, booked_by_account_id, appointment_status_id, sms_reminder_sent, email_reminder_sent', 'numerical', 'integerOnly'=>true),
 			array('notes, cancellation_reason', 'safe'),
 			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
 			array('id, patient_account_id, doctor_account_id, booked_by_account_id, schedule_datetime, appointment_status_id, notes, cancellation_reason, date_booked, sms_reminder_sent, email_reminder_sent', 'safe', 'on'=>'search'),
 		);
 	}
@@ -56,8 +56,6 @@ class Appointment extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'bookedByAccount' => array(self::BELONGS_TO, 'Account', 'booked_by_account_id'),
 			'doctorAccount' => array(self::BELONGS_TO, 'Account', 'doctor_account_id'),
@@ -90,20 +88,9 @@ class Appointment extends CActiveRecord
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
 	 */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
@@ -125,12 +112,29 @@ class Appointment extends CActiveRecord
 
 	/**
 	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Appointment the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+	
+	// --- ADDED THIS FUNCTION TO FIX SAVING ---
+	protected function beforeSave()
+	{
+		if(parent::beforeSave())
+		{
+			if($this->isNewRecord)
+			{
+				// Automatically set the booking date to NOW
+				$this->date_booked = date('Y-m-d H:i:s');
+				
+				// Ensure status is set to 1 (Scheduled) if not provided
+				if(empty($this->appointment_status_id)) {
+					$this->appointment_status_id = 1;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 }
