@@ -32,7 +32,7 @@ class UserIdentity extends CUserIdentity
 			$this->errorCode = self::ERROR_UNKNOWN_IDENTITY;
 			$this->errorMessage = 'This account is inactive.';
 		}
-		else if (!$account->hashPassword($this->password, $account->salt))
+		else if (!$account->validatePassword($this->password))
 		{
 			// Invalid password
 			$this->errorCode = self::ERROR_PASSWORD_INVALID;

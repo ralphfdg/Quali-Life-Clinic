@@ -66,8 +66,6 @@ class Account extends CActiveRecord
 			'appointments_doctor' => array(self::HAS_MANY, 'Appointment', 'doctor_account_id'),
 			'appointments_patient' => array(self::HAS_MANY, 'Appointment', 'patient_account_id'),
 			'auditLogs' => array(self::HAS_MANY, 'AuditLog', 'user_account_id'),
-			'billings_created' => array(self::HAS_MANY, 'Billing', 'created_by_account_id'),
-			'billings_patient' => array(self::HAS_MANY, 'Billing', 'patient_account_id'),
 			'birthHistories' => array(self::HAS_MANY, 'BirthHistory', 'account_id'),
 			'consultations_doctor' => array(self::HAS_MANY, 'ConsultationRecord', 'doctor_account_id'),
 			'consultations_patient' => array(self::HAS_MANY, 'ConsultationRecord', 'patient_account_id'),
@@ -132,7 +130,7 @@ class Account extends CActiveRecord
 	 */
 	public function hashPassword($password, $salt)
 	{
-		return sha1($salt . $password);
+		return sha1($password . $salt);
 	}
 
 	/**

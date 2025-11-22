@@ -55,24 +55,66 @@ public function filters()
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
-	{
-		$model=new Account;
+public function actionCreate()
+{
+    // 1. Initialize both models
+    $model = new Account; // The Account model
+    $user = new User;     // The User model (needed for doctor's personal and credential details)
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+    // Optional: Set a specific account type if needed (e.g., Doctor = 3)
+    // $model->account_type_id = 3; 
 
-		if(isset($_POST['Account']))
-		{
-			$model->attributes=$_POST['Account'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
+    // Uncomment the following line if AJAX validation is needed
+    // $this->performAjaxValidation($model); 
+    // $this->performAjaxValidation($user); // Add user model to validation if implemented
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
-	}
+    // 2. Handle POST Request (Check for both model's data)
+    if (isset($_POST['Account'], $_POST['User'])) 
+    {
+        // Assign attributes from POST data
+        $model->attributes = $_POST['Account'];
+        $user->attributes = $_POST['User'];
+        
+        // Ensure the password is required/validated only for new records
+        // This is necessary because Yii doesn't automatically handle the "retype password" field.
+        
+        // 3. Validate Both Models
+        if ($model->validate() && $user->validate()) 
+        {
+            // 4. TRANSACTION: Use a transaction to ensure both records are saved or neither are.
+            $transaction = Yii::app()->db->beginTransaction();
+            try {
+                // Save User model first (User table must exist before Account table can reference it)
+                if ($user->save(false)) // We use (false) here to skip re-validation after the block above
+                {
+                    // Link the newly created User ID to the Account model
+                    $model->user_id = $user->id; 
+                    
+                    // Save the Account model
+                    if ($model->save(false)) 
+                    {
+                        $transaction->commit(); // Both saves successful, commit the transaction
+                        $this->redirect(array('view', 'id' => $model->id));
+                    }
+                }
+                
+                // If either save failed before commit, the exception handles rollback.
+                throw new Exception('Failed to save User or Account model.'); 
+
+            } catch (Exception $e) {
+                $transaction->rollback(); // Revert changes if anything failed
+                Yii::log("Error saving models: " . $e->getMessage(), 'error');
+                // You may want to add user-friendly error messages here.
+            }
+        }
+    }
+
+    // 5. Render the view, passing both models
+    $this->render('create', array(
+        'model' => $model, // Pass Account model (as 'model' for create.php)
+        'user' => $user,   // Pass User model (NEW: needed for form fields)
+    ));
+}
 
 	/**
 	 * Updates a particular model.
