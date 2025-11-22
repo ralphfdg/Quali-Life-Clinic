@@ -71,7 +71,8 @@
     {
         $sidebarMenu = array(
             array('label'=>'🧑‍⚕️ Doctor Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
-            array('label'=>'Dashboard (My Queue)', 'url'=>array('/site/index')),
+            array('label'=>'Appointments', 'url'=>array('/appointment/myQueue')),
+            array('label'=>'History & Records', 'url'=>array('/appointment/myHistory')),
             array('label'=>'My Schedule', 'url'=>array('/doctorSchedule/mySchedule')), 
             array('label'=>'Patient List', 'url'=>array('/user/admin', 'role'=>'patient')), 
         );

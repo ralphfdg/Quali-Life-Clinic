@@ -38,7 +38,7 @@ class AppointmentController extends Controller
 			array(
 				'allow',
 				// ADDED 'calendarEvents' here
-				'actions' => array('index', 'view', 'updateStatus', 'myQueue', 'calendarEvents'),
+				'actions' => array('index', 'view', 'updateStatus', 'myQueue', 'calendarEvents', 'myHistory'),
 				'expression' => 'Yii::app()->controller->isDoctor()',
 			),
 			// Allow Admins & Super Admins
@@ -471,65 +471,104 @@ class AppointmentController extends Controller
 	}
 
 	/**
-     * Doctor's Dashboard: Shows ONLY today's appointments for the logged-in doctor.
-     */
-    public function actionMyQueue()
-    {
-        $doctorId = Yii::app()->user->id;
-        $today = date('Y-m-d');
+	 * Doctor's Dashboard: Shows ONLY today's appointments for the logged-in doctor.
+	 */
+	public function actionMyQueue()
+	{
+		$doctorId = Yii::app()->user->id;
+		$today = date('Y-m-d');
 
-        $criteria = new CDbCriteria;
-        
-        // 1. Filter by Current Doctor AND Today's Date
-        $criteria->compare('doctor_account_id', $doctorId);
-        $criteria->addCondition("date(t.schedule_datetime) = :today");
-        $criteria->params[':today'] = $today;
+		$criteria = new CDbCriteria;
 
-        // 2. Order by time (earliest first)
-        $criteria->order = 't.schedule_datetime ASC';
+		// 1. Filter by Current Doctor AND Today's Date
+		$criteria->compare('doctor_account_id', $doctorId);
+		//$criteria->addCondition("date(t.schedule_datetime) = :today");
+		//$criteria->params[':today'] = $today;
 
-        // 3. Load Patient info (using the alias fix we learned earlier!)
-        $criteria->with = array(
-            'appointmentStatus',
-            'patientAccount' => array(
-                'with' => array(
-                    'user' => array('alias' => 'patientUser')
-                )
-            )
-        );
+		// 2. Order by time (earliest first)
+		$criteria->order = 't.schedule_datetime ASC';
 
-        $dataProvider = new CActiveDataProvider('Appointment', array(
-            'criteria' => $criteria,
-            'pagination' => array('pageSize' => 50), // Show all patients for the day
-        ));
+		// 3. Load Patient info (using the alias fix we learned earlier!)
+		$criteria->with = array(
+			'appointmentStatus',
+			'patientAccount' => array(
+				'with' => array(
+					'user' => array('alias' => 'patientUser')
+				)
+			)
+		);
 
-        $this->render('myQueue', array(
-            'dataProvider' => $dataProvider,
-        ));
-    }
+		$dataProvider = new CActiveDataProvider('Appointment', array(
+			'criteria' => $criteria,
+			'pagination' => array('pageSize' => 50), // Show all patients for the day
+		));
 
-    /**
-     * Action to change status (e.g., Mark as Arrived, Start Consult, Complete)
-     */
-    public function actionUpdateStatus($id, $status)
-    {
-        $model = $this->loadModel($id);
+		$this->render('myQueue', array(
+			'dataProvider' => $dataProvider,
+		));
+	}
 
-        // Security Check: Ensure this appointment belongs to the logged-in Doctor
-        // (Or allow Admins to force-update)
-        if ($model->doctor_account_id != Yii::app()->user->id && !Yii::app()->user->isAdmin() && !Yii::app()->user->isSuperAdmin()) {
-            throw new CHttpException(403, 'You cannot update appointments that are not assigned to you.');
-        }
+	/**
+	 * Action to change status (e.g., Mark as Arrived, Start Consult, Complete)
+	 */
+	public function actionUpdateStatus($id, $status)
+	{
+		$model = $this->loadModel($id);
 
-        $model->appointment_status_id = (int)$status;
+		// Security Check: Ensure this appointment belongs to the logged-in Doctor
+		if ($model->doctor_account_id != Yii::app()->user->id && !Yii::app()->user->isAdmin() && !Yii::app()->user->isSuperAdmin()) {
+			throw new CHttpException(403, 'You cannot update appointments that are not assigned to you.');
+		}
 
-        if ($model->save()) {
-            Yii::app()->user->setFlash('success', "Status updated successfully.");
-        } else {
-            Yii::app()->user->setFlash('error', "Error updating status.");
-        }
+		$model->appointment_status_id = (int)$status;
 
-        // Redirect back to the Queue
-        $this->redirect(array('myQueue'));
-    }
+		if ($model->save()) {
+
+			// --- NEW LOGIC: Redirect to SOAP Note if "In Consultation" ---
+			if ((int)$status === 3) {
+				// Redirect to the Create Consultation page, passing the Appointment ID
+				$this->redirect(array('consultationRecord/create', 'appointment_id' => $model->id));
+			}
+			// -------------------------------------------------------------
+
+			Yii::app()->user->setFlash('success', "Status updated successfully.");
+		} else {
+			Yii::app()->user->setFlash('error', "Error updating status.");
+		}
+
+		// Redirect back to the Queue
+		$this->redirect(array('myQueue'));
+	}
+
+	/**
+	 * Shows completed appointments and links to their SOAP notes.
+	 */
+	public function actionMyHistory()
+	{
+		$doctorId = Yii::app()->user->id;
+
+		$criteria = new CDbCriteria;
+
+		$criteria->compare('t.doctor_account_id', $doctorId);
+        $criteria->compare('t.appointment_status_id', 4); // 4 = Completed
+
+		// 3. Order by Date (Newest first)
+		$criteria->order = 't.schedule_datetime DESC';
+
+		// 4. Load Relations (Including the Consultation Record!)
+		// Note: We need 'consultationRecords' to find the ID of the SOAP note to view.
+		$criteria->with = array(
+			'patientAccount.user' => array('alias' => 'patientUser'),
+			'consultationRecords'
+		);
+
+		$dataProvider = new CActiveDataProvider('Appointment', array(
+			'criteria' => $criteria,
+			'pagination' => array('pageSize' => 20),
+		));
+
+		$this->render('myHistory', array(
+			'dataProvider' => $dataProvider,
+		));
+	}
 }
