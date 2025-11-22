@@ -61,7 +61,6 @@ class Appointment extends CActiveRecord
 			'doctorAccount' => array(self::BELONGS_TO, 'Account', 'doctor_account_id'),
 			'patientAccount' => array(self::BELONGS_TO, 'Account', 'patient_account_id'),
 			'appointmentStatus' => array(self::BELONGS_TO, 'AppointmentStatus', 'appointment_status_id'),
-			'billings' => array(self::HAS_MANY, 'Billing', 'appointment_id'),
 			'consultationRecords' => array(self::HAS_MANY, 'ConsultationRecord', 'appointment_id'),
 		);
 	}
