@@ -1,64 +1,327 @@
 <?php
+
 /* @var $this SiteController */
+
 /* @var $totalDoctors integer */
+
 /* @var $totalPatients integer */
+
 /* @var $totalAppointmentsMonth integer */
+
 /* @var $earningsData array */
+
 /* @var $specializationTally array */
 
-$this->pageTitle=Yii::app()->name . ' - Super Admin Dashboard';
+
+
+// NOTE: The $this->pageTitle is set in the calling index.php or controller.
+
+// The <h1> and <hr> are removed, as they are now handled by the main.php layout.
+
+
+
+// The $this->pageTitle should be set BEFORE this file is rendered, likely in SiteController::actionIndex()
+
 ?>
 
-<h1>Super Admin Dashboard</h1>
 
-<hr>
-<h3>Key Stats (Month)</h3>
 
-<div style="display: flex; justify-content: space-around;">
-	<div style="text-align: center; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-		<h2><?php echo $totalDoctors; ?></h2>
-		<p>Total Doctors</p>
-	</div>
-	<div style="text-align: center; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-		<h2><?php echo $totalPatients; ?></h2>
-		<p>Total Patients</p>
-	</div>
-	<div style="text-align: center; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-		<h2><?php echo $totalAppointmentsMonth; ?></h2>
-		<p>Total Appointments (This Month)</p>
-	</div>
+<div class="row">
+
+    
+
+    <div class="col-xl-3 col-md-6 mb-4">
+
+        <div class="card border-left-primary shadow h-100 py-2">
+
+            <div class="card-body">
+
+                <div class="row no-gutters align-items-center">
+
+                    <div class="col mr-2">
+
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Doctors</div>
+
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totalDoctors; ?></div>
+
+                    </div>
+
+                    <div class="col-auto">
+
+                        <i class="fas fa-user-md fa-2x text-gray-300"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="col-xl-3 col-md-6 mb-4">
+
+        <div class="card border-left-success shadow h-100 py-2">
+
+            <div class="card-body">
+
+                <div class="row no-gutters align-items-center">
+
+                    <div class="col mr-2">
+
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Patients</div>
+
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totalPatients; ?></div>
+
+                    </div>
+
+                    <div class="col-auto">
+
+                        <i class="fas fa-bed fa-2x text-gray-300"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="col-xl-3 col-md-6 mb-4">
+
+        <div class="card border-left-info shadow h-100 py-2">
+
+            <div class="card-body">
+
+                <div class="row no-gutters align-items-center">
+
+                    <div class="col mr-2">
+
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Appointments (This Month)</div>
+
+                        <div class="row no-gutters align-items-center">
+
+                            <div class="col-auto">
+
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $totalAppointmentsMonth; ?></div>
+
+                            </div>
+
+                            <div class="col">
+
+                                <div class="progress progress-sm mr-2">
+
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-auto">
+
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="col-xl-3 col-md-6 mb-4">
+
+        <div class="card border-left-warning shadow h-100 py-2">
+
+            <div class="card-body">
+
+                <div class="row no-gutters align-items-center">
+
+                    <div class="col mr-2">
+
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Requests</div>
+
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div> 
+
+                    </div>
+
+                    <div class="col-auto">
+
+                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-<hr>
-<h3>Earnings Report (Last 30 Days)</h3>
-<p>
-	<?php
-	// This will render a simple chart.
-	// We are formatting the data for Yii's CChartWidget (you may need to install it)
-	// For simplicity, we'll just show the raw data for now.
-	
-	if (!empty($earningsData)) {
-		echo "<ul>";
-		foreach($earningsData as $data) {
-			echo "<li>" . $data['day'] . ": $" . number_format($data['total'], 2) . "</li>";
-		}
-		echo "</ul>";
-	} else {
-		echo "<p>No earnings data for the last 30 days.</p>";
-	}
-	?>
-</p>
 
-<hr>
-<h3>Doctor Specialization Tally</h3>
-<?php
-if (!empty($specializationTally)) {
-	echo "<ul>";
-	foreach($specializationTally as $data) {
-		echo "<li>" . $data['specialization_name'] . ": " . $data['count'] . "</li>";
-	}
-	echo "</ul>";
-} else {
-	echo "<p>No doctors with specializations found.</p>";
-}
-?>
+
+<div class="row">
+
+
+
+    <div class="col-xl-8 col-lg-7">
+
+        <div class="card shadow mb-4">
+
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+
+                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview (Last 30 Days)</h6>
+
+            </div>
+
+            <div class="card-body">
+
+                
+
+                <?php 
+
+                // KEEPING ORIGINAL BACKEND LOGIC ALIVE: Show raw data inside the chart area
+
+                if (!empty($earningsData)): ?>
+
+                    <div class="chart-area">
+
+                        <canvas id="myAreaChart"></canvas>
+
+                    </div>
+
+                    <div class="mt-4 text-center small text-muted">
+
+                        <ul class="list-unstyled list-inline">
+
+                            <?php foreach($earningsData as $data): ?>
+
+                                <li class="list-inline-item"><?php echo $data['day']; ?>: $<?php echo number_format($data['total'], 2); ?></li>
+
+                            <?php endforeach; ?>
+
+                        </ul>
+
+                    </div>
+
+                <?php else: ?>
+
+                    <p>No earnings data for the last 30 days.</p>
+
+                <?php endif; ?>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="col-xl-4 col-lg-5">
+
+        <div class="card shadow mb-4">
+
+            <div class="card-header py-3">
+
+                <h6 class="m-0 font-weight-bold text-primary">Doctor Specialization Tally</h6>
+
+            </div>
+
+            <div class="card-body">
+
+                <?php
+
+                if (!empty($specializationTally)): 
+
+                    $progressColors = ['bg-success', 'bg-info', 'bg-warning', 'bg-danger', 'bg-primary'];
+
+                    $colorIndex = 0;
+
+                    $totalSpecializations = array_sum(array_column($specializationTally, 'count'));
+
+                    
+
+                    foreach($specializationTally as $data):
+
+                        // Calculate percentage for the progress bar
+
+                        $percent = ($totalSpecializations > 0) ? round(($data['count'] / $totalSpecializations) * 100) : 0;
+
+                        $colorClass = $progressColors[$colorIndex % count($progressColors)];
+
+                        $colorIndex++;
+
+                    ?>
+
+                        <h4 class="small font-weight-bold">
+
+                            <?php echo CHtml::encode($data['specialization_name']); ?> 
+
+                            <span class="float-right"><?php echo $percent; ?>% (<?php echo $data['count']; ?>)</span>
+
+                        </h4>
+
+                        <div class="progress mb-4">
+
+                            <div class="progress-bar <?php echo $colorClass; ?>" role="progressbar" style="width: <?php echo $percent; ?>%" 
+
+                                 aria-valuenow="<?php echo $percent; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+
+                        </div>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <p>No doctors with specializations found.</p>
+
+                <?php endif; ?>
+
+                
+
+                <hr class="sidebar-divider">
+
+                <h6 class="font-weight-bold text-primary mb-3">Projects</h6>
+
+                <h4 class="small font-weight-bold">Server Migration <span class="float-right">20%</span></h4>
+
+                <div class="progress progress-sm mb-2">
+
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/demo/chart-area-demo.js"></script>
+
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/demo/chart-pie-demo.js"></script>
