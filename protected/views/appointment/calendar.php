@@ -1,6 +1,5 @@
 <?php
 /* @var $this AppointmentController */
-/* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
 	'Appointments'=>array('index'),
@@ -16,33 +15,47 @@ $this->menu=array(
 
 <h1>Appointment Calendar</h1>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'appointment-calendar-grid',
-	'dataProvider'=>$dataProvider,
-	'columns'=>array(
-		array(
-			'name'=>'schedule_datetime',
-			'header'=>'Date & Time',
-			'value'=>'date("F j, Y, g:i A", strtotime($data->schedule_datetime))',
-		),
-		array(
-			'header'=>'Patient',
-			'name'=>'patient_id', 
-			'value'=>'$data->patientAccount && $data->patientAccount->user ? $data->patientAccount->user->firstname . " " . $data->patientAccount->user->lastname : "Unknown"',
-		),
-		array(
-			'header'=>'Doctor',
-			'name'=>'doctor_id',
-			'value'=>'$data->doctorAccount && $data->doctorAccount->user ? "Dr. " . $data->doctorAccount->user->lastname : "Unassigned"',
-		),
-		array(
-			'header'=>'Status',
-			'name'=>'status_id',
-			'value'=>'$data->appointmentStatus ? $data->appointmentStatus->status_name : "N/A"',
-		),
-		array(
-			'class'=>'CButtonColumn',
-			'template'=>'{view} {update}',
-		),
-	),
-)); ?>
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+
+<div id="calendar" style="margin-top: 20px;"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	var calendarEl = document.getElementById('calendar');
+
+	var calendar = new FullCalendar.Calendar(calendarEl, {
+		initialView: 'dayGridMonth',
+		headerToolbar: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'dayGridMonth,timeGridWeek,timeGridDay'
+		},
+		height: 650,
+		events: '<?php echo $this->createUrl("appointment/calendarEvents"); ?>', // Fetch JSON data
+		
+		// When hovering over an event
+		eventMouseEnter: function(info) {
+			var props = info.event.extendedProps;
+			var content = 'Status: ' + props.status + '\nPatient: ' + props.patientName;
+			info.el.setAttribute('title', content);
+		},
+		
+		// When clicking an event (optional override, otherwise it follows the URL)
+		eventClick: function(info) {
+			// You can prevent default and open a modal here if you want
+			// info.jsEvent.preventDefault(); 
+		}
+	});
+
+	calendar.render();
+});
+</script>
+
+<style>
+	/* Fix for buttons in some Yii themes */
+	.fc-button {
+		background-image: none;
+	}
+</style>

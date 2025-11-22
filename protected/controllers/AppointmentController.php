@@ -27,26 +27,29 @@ class AppointmentController extends Controller
 	public function accessRules()
 	{
 		return array(
-			// Allow Patients to Book, View Own, AND fetch Doctors
-			array('allow',
-				// Added 'getAvailableSlots' to the list
-				'actions'=>array('book', 'myAppointments', 'view', 'create', 'dynamicDoctors', 'getAvailableSlots', 'cancel'),
-				'expression'=>'Yii::app()->controller->isPatient()',
+			// Allow Patients
+			array(
+				'allow',
+				// ADDED 'calendarEvents' here
+				'actions' => array('book', 'myAppointments', 'view', 'create', 'dynamicDoctors', 'getAvailableSlots', 'cancel', 'calendarEvents'),
+				'expression' => 'Yii::app()->controller->isPatient()',
 			),
 			// Allow Doctors
-			array('allow',
-				'actions'=>array('index', 'view', 'updateStatus', 'myQueue'),
-				'expression'=>'Yii::app()->controller->isDoctor()',
+			array(
+				'allow',
+				// ADDED 'calendarEvents' here
+				'actions' => array('index', 'view', 'updateStatus', 'myQueue', 'calendarEvents'),
+				'expression' => 'Yii::app()->controller->isDoctor()',
 			),
 			// Allow Admins & Super Admins
-			array('allow',
-				// ADD 'dynamicDoctors' HERE TOO:
-				'actions'=>array('index', 'view', 'create', 'update', 'admin', 'delete', 'calendar', 'cancel', 'dynamicDoctors'),
-				'expression'=>'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
+			array(
+				'allow',
+				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'calendar', 'cancel', 'dynamicDoctors', 'calendarEvents'),
+				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
 			),
-			// Deny everyone else
-			array('deny',
-				'users'=>array('*'),
+			array(
+				'deny',
+				'users' => array('*'),
 			),
 		);
 	}
@@ -180,11 +183,11 @@ class AppointmentController extends Controller
 	public function actionCalendar()
 	{
 		$dataProvider = new CActiveDataProvider('Appointment', array(
-			'criteria'=>array(
-				'order'=>'schedule_datetime ASC',
+			'criteria' => array(
+				'order' => 'schedule_datetime ASC',
 			),
-			'pagination'=>array(
-				'pageSize'=>20,
+			'pagination' => array(
+				'pageSize' => 20,
 			),
 		));
 
@@ -193,49 +196,42 @@ class AppointmentController extends Controller
 		));
 	}
 
-	/**
-	 * Step 1 & 2: Patient Booking Page
-	 */
-	/**
-     * Step 1 & 2: Patient Booking Page
-     */
-    public function actionBook()
-    {
-        $model = new Appointment;
+	public function actionBook()
+	{
+		$model = new Appointment;
 
-        // --- ADDED THIS BLOCK TO HANDLE SAVING ---
-        if(isset($_POST['Appointment']))
-        {
-            $model->attributes = $_POST['Appointment'];
-            
-            // We have the Date in $model->schedule_datetime (from the date picker)
-            // We have the Time in $_POST['selected_time'] (from the hidden field)
-            
-            if (isset($_POST['selected_time']) && !empty($_POST['selected_time'])) {
-                // Combine Date and Time: "2025-11-23" + " " + "09:30"
-                $fullDateTime = $model->schedule_datetime . ' ' . $_POST['selected_time'];
-                $model->schedule_datetime = $fullDateTime;
-                
-                // Set auto-fields
-                $model->patient_account_id = Yii::app()->user->id;
-                $model->booked_by_account_id = Yii::app()->user->id;
-                $model->appointment_status_id = 1; // Scheduled
-                // $model->clinic_id = 1; // Uncomment if you use clinic_id
-                
-                if($model->save()) {
-                    Yii::app()->user->setFlash('success', "Appointment successfully booked!");
-                    $this->redirect(array('site/index'));
-                }
-            } else {
-                $model->addError('schedule_datetime', 'Please select a valid time slot.');
-            }
-        }
-        // -----------------------------------------
+		// --- ADDED THIS BLOCK TO HANDLE SAVING ---
+		if (isset($_POST['Appointment'])) {
+			$model->attributes = $_POST['Appointment'];
 
-        $this->render('book',array(
-            'model'=>$model,
-        ));
-    }
+			// We have the Date in $model->schedule_datetime (from the date picker)
+			// We have the Time in $_POST['selected_time'] (from the hidden field)
+
+			if (isset($_POST['selected_time']) && !empty($_POST['selected_time'])) {
+				// Combine Date and Time: "2025-11-23" + " " + "09:30"
+				$fullDateTime = $model->schedule_datetime . ' ' . $_POST['selected_time'];
+				$model->schedule_datetime = $fullDateTime;
+
+				// Set auto-fields
+				$model->patient_account_id = Yii::app()->user->id;
+				$model->booked_by_account_id = Yii::app()->user->id;
+				$model->appointment_status_id = 1; // Scheduled
+				// $model->clinic_id = 1; // Uncomment if you use clinic_id
+
+				if ($model->save()) {
+					Yii::app()->user->setFlash('success', "Appointment successfully booked!");
+					$this->redirect(array('site/index'));
+				}
+			} else {
+				$model->addError('schedule_datetime', 'Please select a valid time slot.');
+			}
+		}
+		// -----------------------------------------
+
+		$this->render('book', array(
+			'model' => $model,
+		));
+	}
 
 	/**
 	 * AJAX Helper: Returns <option> tags for doctors based on specialization_id
@@ -244,22 +240,21 @@ class AppointmentController extends Controller
 	{
 		// The dropdown name in the view will generate a POST variable named 'specialization_id'
 		// But since we are using a custom CHtml::dropDownList, we check the POST data directly.
-		
+
 		$spec_id = (int) $_POST['specialization_id'];
 
 		$data = Account::model()->with('user')->findAll(array(
 			'condition' => 'account_type_id=3 AND status_id=1 AND user.specialization_id=:spec_id',
-			'params'    => array(':spec_id'=>$spec_id),
+			'params'    => array(':spec_id' => $spec_id),
 		));
 
-		$data = CHtml::listData($data, 'id', function($account) {
+		$data = CHtml::listData($data, 'id', function ($account) {
 			return 'Dr. ' . $account->user->firstname . ' ' . $account->user->lastname;
 		});
 
-		echo CHtml::tag('option', array('value'=>''), 'Select a Doctor', true);
-		foreach($data as $value=>$name)
-		{
-			echo CHtml::tag('option', array('value'=>$value), CHtml::encode($name), true);
+		echo CHtml::tag('option', array('value' => ''), 'Select a Doctor', true);
+		foreach ($data as $value => $name) {
+			echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
 		}
 	}
 
@@ -272,7 +267,7 @@ class AppointmentController extends Controller
 
 		$doctorId = (int)$_POST['doctor_id'];
 		$date = $_POST['date'];
-		
+
 		// 1. Determine Day of Week (0 = Sunday, etc.)
 		$timestamp = strtotime($date);
 		$dayOfWeek = date('w', $timestamp);
@@ -280,7 +275,7 @@ class AppointmentController extends Controller
 		// 2. Check Doctor's Schedule for this day
 		$schedule = DoctorSchedule::model()->find(
 			'doctor_account_id=:docId AND day_of_week=:day AND status_id=1',
-			array(':docId'=>$doctorId, ':day'=>$dayOfWeek)
+			array(':docId' => $doctorId, ':day' => $dayOfWeek)
 		);
 
 		if (!$schedule) {
@@ -291,12 +286,12 @@ class AppointmentController extends Controller
 		// 3. Get all existing appointments for this doctor on this specific date
 		$bookedAppointments = Appointment::model()->findAll(
 			'doctor_account_id=:docId AND date(schedule_datetime)=:date AND appointment_status_id != 5', // 5 = Canceled
-			array(':docId'=>$doctorId, ':date'=>$date)
+			array(':docId' => $doctorId, ':date' => $date)
 		);
 
 		// Store booked times in a simple array (e.g., '09:00', '10:30')
 		$bookedTimes = array();
-		foreach($bookedAppointments as $appt) {
+		foreach ($bookedAppointments as $appt) {
 			$bookedTimes[] = date('H:i', strtotime($appt->schedule_datetime));
 		}
 
@@ -306,8 +301,8 @@ class AppointmentController extends Controller
 		$interval = 30 * 60; // 30 minutes in seconds
 
 		echo "<div class='time-slots'>";
-		echo "<p>Available slots for <strong>".date('F j, Y', $timestamp)."</strong>:</p>";
-		
+		echo "<p>Available slots for <strong>" . date('F j, Y', $timestamp) . "</strong>:</p>";
+
 		$slotsFound = false;
 
 		for ($time = $startTime; $time < $endTime; $time += $interval) {
@@ -327,11 +322,11 @@ class AppointmentController extends Controller
 				$slotsFound = true;
 			}
 		}
-		
+
 		if (!$slotsFound) {
 			echo "<p>No slots available.</p>";
 		}
-		
+
 		echo "</div>";
 	}
 
@@ -343,19 +338,19 @@ class AppointmentController extends Controller
 		$patientId = Yii::app()->user->id;
 
 		$dataProvider = new CActiveDataProvider('Appointment', array(
-			'criteria'=>array(
-				'condition'=>'patient_account_id = :pid',
-				'params'=>array(':pid'=>$patientId),
-				'with'=>array('doctorAccount.user', 'appointmentStatus'),
-				'order'=>'schedule_datetime ASC', // Upcoming first
+			'criteria' => array(
+				'condition' => 'patient_account_id = :pid',
+				'params' => array(':pid' => $patientId),
+				'with' => array('doctorAccount.user', 'appointmentStatus'),
+				'order' => 'schedule_datetime ASC', // Upcoming first
 			),
-			'pagination'=>array(
-				'pageSize'=>10,
+			'pagination' => array(
+				'pageSize' => 10,
 			),
 		));
 
 		$this->render('myAppointments', array(
-			'dataProvider'=>$dataProvider,
+			'dataProvider' => $dataProvider,
 		));
 	}
 
@@ -367,16 +362,16 @@ class AppointmentController extends Controller
 		$model = $this->loadModel($id);
 
 		// Security Check: Ensure the logged-in user owns this appointment
-		if($model->patient_account_id != Yii::app()->user->id && !$this->isAdmin() && !$this->isSuperAdmin()) {
+		if ($model->patient_account_id != Yii::app()->user->id && !$this->isAdmin() && !$this->isSuperAdmin()) {
 			throw new CHttpException(403, 'You are not authorized to cancel this appointment.');
 		}
 
 		// Only allow canceling if it's 'Scheduled' (1) or 'Arrived' (2)
-		if($model->appointment_status_id == 1 || $model->appointment_status_id == 2) {
+		if ($model->appointment_status_id == 1 || $model->appointment_status_id == 2) {
 			$model->appointment_status_id = 5; // 5 = Canceled
 			$model->cancellation_reason = "Canceled by Patient";
-			
-			if($model->save()) {
+
+			if ($model->save()) {
 				Yii::app()->user->setFlash('success', "Appointment #$id has been canceled.");
 			} else {
 				Yii::app()->user->setFlash('error', "Could not cancel appointment.");
@@ -386,9 +381,155 @@ class AppointmentController extends Controller
 		}
 
 		// Redirect back to the list
-		if(!isset($_GET['ajax']))
+		if (!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('myAppointments'));
 	}
 
-	
+	public function actionCalendarEvents()
+	{
+		// 1. Safer Date Handling
+		$startParam = isset($_GET['start']) ? $_GET['start'] : date('Y-m-01');
+		$endParam   = isset($_GET['end'])   ? $_GET['end']   : date('Y-m-t');
+
+		// Convert FullCalendar timestamps to MySQL format
+		if (ctype_digit((string)$startParam)) {
+			$start = date('Y-m-d H:i:s', $startParam);
+			$end   = date('Y-m-d H:i:s', $endParam);
+		} else {
+			$start = date('Y-m-d H:i:s', strtotime($startParam));
+			$end   = date('Y-m-d H:i:s', strtotime($endParam));
+		}
+
+		$criteria = new CDbCriteria;
+
+		// 't' refers to tbl_appointment
+		$criteria->addBetweenCondition('t.schedule_datetime', $start, $end);
+		$criteria->compare('t.appointment_status_id', '<>5'); // 5 = Canceled
+
+		// Eager load the relations we fixed in Step 1 and 2
+		$criteria->with = array(
+			'appointmentStatus',
+			'patientAccount' => array(
+				'with' => array(
+					'user' => array('alias' => 'patientUser')
+				)
+			),
+			'doctorAccount' => array(
+				'with' => array(
+					'user' => array('alias' => 'doctorUser')
+				)
+			),
+		);
+
+		$appointments = Appointment::model()->findAll($criteria);
+
+		$events = array();
+
+		foreach ($appointments as $appt) {
+			// --- SAFE DATA LOADING ---
+
+			// 1. Get Patient Name
+			$patientName = "Unknown";
+			if (isset($appt->patientAccount) && isset($appt->patientAccount->user)) {
+				$patientName = $appt->patientAccount->user->firstname . ' ' . $appt->patientAccount->user->lastname;
+			}
+
+			// 2. Get Doctor Name
+			$doctorName = "Unknown";
+			if (isset($appt->doctorAccount) && isset($appt->doctorAccount->user)) {
+				$doctorName = $appt->doctorAccount->user->lastname;
+			}
+
+			// 3. Get Status
+			$statusName = "Unknown";
+			if (isset($appt->appointmentStatus)) {
+				$statusName = $appt->appointmentStatus->status_name;
+			}
+
+			// 4. Color Logic
+			$color = '#3788d8'; // Scheduled
+			if ($appt->appointment_status_id == 2) $color = '#28a745'; // Arrived
+			if ($appt->appointment_status_id == 3) $color = '#e0a800'; // In Consultation
+			if ($appt->appointment_status_id == 4) $color = '#6c757d'; // Completed
+
+			$events[] = array(
+				'id'    => $appt->id,
+				'title' => "Dr. " . $doctorName . " - " . $patientName,
+				'start' => date('Y-m-d\TH:i:s', strtotime($appt->schedule_datetime)),
+				'color' => $color,
+				'extendedProps' => array(
+					'patientName' => $patientName,
+					'status'      => $statusName
+				),
+				'url'   => $this->createUrl('view', array('id' => $appt->id)),
+			);
+		}
+
+		header('Content-type: application/json');
+		echo CJSON::encode($events);
+		Yii::app()->end();
+	}
+
+	/**
+     * Doctor's Dashboard: Shows ONLY today's appointments for the logged-in doctor.
+     */
+    public function actionMyQueue()
+    {
+        $doctorId = Yii::app()->user->id;
+        $today = date('Y-m-d');
+
+        $criteria = new CDbCriteria;
+        
+        // 1. Filter by Current Doctor AND Today's Date
+        $criteria->compare('doctor_account_id', $doctorId);
+        $criteria->addCondition("date(t.schedule_datetime) = :today");
+        $criteria->params[':today'] = $today;
+
+        // 2. Order by time (earliest first)
+        $criteria->order = 't.schedule_datetime ASC';
+
+        // 3. Load Patient info (using the alias fix we learned earlier!)
+        $criteria->with = array(
+            'appointmentStatus',
+            'patientAccount' => array(
+                'with' => array(
+                    'user' => array('alias' => 'patientUser')
+                )
+            )
+        );
+
+        $dataProvider = new CActiveDataProvider('Appointment', array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => 50), // Show all patients for the day
+        ));
+
+        $this->render('myQueue', array(
+            'dataProvider' => $dataProvider,
+        ));
+    }
+
+    /**
+     * Action to change status (e.g., Mark as Arrived, Start Consult, Complete)
+     */
+    public function actionUpdateStatus($id, $status)
+    {
+        $model = $this->loadModel($id);
+
+        // Security Check: Ensure this appointment belongs to the logged-in Doctor
+        // (Or allow Admins to force-update)
+        if ($model->doctor_account_id != Yii::app()->user->id && !Yii::app()->user->isAdmin() && !Yii::app()->user->isSuperAdmin()) {
+            throw new CHttpException(403, 'You cannot update appointments that are not assigned to you.');
+        }
+
+        $model->appointment_status_id = (int)$status;
+
+        if ($model->save()) {
+            Yii::app()->user->setFlash('success', "Status updated successfully.");
+        } else {
+            Yii::app()->user->setFlash('error', "Error updating status.");
+        }
+
+        // Redirect back to the Queue
+        $this->redirect(array('myQueue'));
+    }
 }
