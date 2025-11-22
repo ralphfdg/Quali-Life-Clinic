@@ -123,20 +123,44 @@ public function actionCreate()
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id); // Load Account
+        
+        // Load the associated User model
+        $user = $model->user;
+        
+        // Fallback: If no user profile exists for this account, create a new instance to avoid errors
+        if($user === null) {
+            $user = new User;
+            $user->account_id = $model->id;
+        }
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Account']))
+		if(isset($_POST['Account'], $_POST['User']))
 		{
-			$model->attributes=$_POST['Account'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->attributes = $_POST['Account'];
+            $user->attributes = $_POST['User'];
+            
+            // Use transaction to ensure consistency
+            $transaction = Yii::app()->db->beginTransaction();
+            try {
+                // We can save valid models. Note: validate() is called implicitly by save() usually,
+                // but calling save(true) on both ensures validation.
+                $valid = $model->validate();
+                $valid = $user->validate() && $valid;
+
+                if($valid) {
+                    if($model->save(false) && $user->save(false)) {
+                        $transaction->commit();
+                        $this->redirect(array('view','id'=>$model->id));
+                    }
+                }
+            } catch(Exception $e) {
+                $transaction->rollback();
+            }
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
+            'user'=>$user, // Pass the user model to the view
 		));
 	}
 
