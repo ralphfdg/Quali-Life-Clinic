@@ -132,7 +132,7 @@ class Account extends CActiveRecord
 	 */
 	public function hashPassword($password, $salt)
 	{
-		return sha1($salt . $password);
+		return sha1($password . $salt);
 	}
 
 	/**
