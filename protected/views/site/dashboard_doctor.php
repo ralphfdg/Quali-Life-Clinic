@@ -1,71 +1,65 @@
 <?php
 /* @var $this SiteController */
-/* @var $myPatientQueue CActiveDataProvider */
-/* @var $totalAppointmentsToday integer */
-/* @var $patientsWaiting integer */
-
-$this->pageTitle=Yii::app()->name . ' - Doctor Dashboard';
+$this->pageTitle = 'Doctor Dashboard';
 ?>
 
-<h1>My Patient Queue</h1>
+<h1 class="h3 mb-4 text-gray-800">My Dashboard</h1>
 
-<hr>
-<h3>My Quick Stats (Today)</h3>
-
-<div style="display: flex; justify-content: space-around;">
-	<div style="text-align: center; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-		<h2><?php echo $totalAppointmentsToday; ?></h2>
-		<p>My Appointments Today</p>
+<div class="row">
+	<div class="col-xl-6 col-md-6 mb-4">
+		<div class="card border-left-info shadow h-100 py-2">
+			<div class="card-body">
+				<div class="text-xs font-weight-bold text-info text-uppercase mb-1">My Appointments (Today)</div>
+				<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $myTotal; ?></div>
+			</div>
+		</div>
 	</div>
-	<div style="text-align: center; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-		<h2><?php echo $patientsWaiting; ?></h2>
-		<p>My Patients Waiting</p>
+	<div class="col-xl-6 col-md-6 mb-4">
+		<div class="card border-left-success shadow h-100 py-2">
+			<div class="card-body">
+				<div class="text-xs font-weight-bold text-success text-uppercase mb-1">Waiting Room</div>
+				<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $myWaiting; ?></div>
+			</div>
+		</div>
 	</div>
 </div>
 
-<hr>
-<h3>My Patient List</h3>
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'my-patient-queue-grid',
-	'dataProvider'=>$myPatientQueue,
-	'columns'=>array(
-		array(
-			'name'=>'schedule_datetime',
-			'header'=>'Time',
-			'value'=>'date("g:i A", strtotime($data->schedule_datetime))',
-		),
-		array(
-			'name'=>'patientAccount.user.firstname',
-			'header'=>'Patient Name',
-			'value'=>'$data->patientAccount->user->firstname . " " . $data->patientAccount->user->lastname',
-		),
-		array(
-			'name'=>'appointmentStatus.status_name',
-			'header'=>'Status',
-			'value'=>'$data->appointmentStatus->status_name',
-		),
-		array(
-			'class'=>'CButtonColumn',
-			'template'=>'{view} {start} {complete}', // Custom buttons
-			'buttons'=>array(
-				'view' => array(
-					'label'=>'View Patient Record',
-					'url'=>'Yii::app()->createUrl("user/view", array("id"=>$data->patientAccount->user->id))', // Links to patient profile
+<div class="card shadow mb-4">
+	<div class="card-header py-3">
+		<h6 class="m-0 font-weight-bold text-primary">My Patient Queue</h6>
+	</div>
+	<div class="card-body">
+		<?php $this->widget('zii.widgets.grid.CGridView', array(
+			'dataProvider' => $dataProvider,
+			'itemsCssClass' => 'table table-bordered table-striped',
+			'columns' => array(
+				array(
+					'header' => 'Time',
+					'value' => 'date("g:i A", strtotime($data->schedule_datetime))',
 				),
-				'start' => array(
-					'label'=>'Start Consultation',
-					'url'=>'Yii::app()->createUrl("appointment/updateStatus", array("id"=>$data->id, "status"=>3))', // 3 = In Consultation
-					'visible'=>'$data->appointment_status_id == 2', // Only show if status is 'Arrived' (2)
-					'options' => array('class' => 'start-consult'),
+				array(
+					'header' => 'Patient',
+					'value' => '$data->patientAccount->user->firstname . " " . $data->patientAccount->user->lastname',
 				),
-				'complete' => array(
-					'label'=>'Complete Consultation',
-					'url'=>'Yii::app()->createUrl("appointment/updateStatus", array("id"=>$data->id, "status"=>4))', // 4 = Completed
-					'visible'=>'$data->appointment_status_id == 3', // Only show if 'In Consultation' (3)
-					'options' => array('class' => 'complete-consult'),
+				array(
+					'header' => 'Status',
+					'name' => 'appointmentStatus.status_name',
+				),
+				// Quick Actions Link
+				array(
+					'header' => 'Action',
+					'type' => 'raw',
+					'value' => function ($data) {
+						if ($data->appointment_status_id == 2) { // Arrived
+							return CHtml::link("Start Consult", array("appointment/updateStatus", "id" => $data->id, "status" => 3), array("class" => "btn btn-sm btn-warning"));
+						}
+						if ($data->appointment_status_id == 3) { // In Consult
+							return CHtml::link("Continue", array("consultationRecord/create", "appointment_id" => $data->id), array("class" => "btn btn-sm btn-primary"));
+						}
+						return "";
+					}
 				),
 			),
-		),
-	),
-)); ?>
+		)); ?>
+	</div>
+</div>

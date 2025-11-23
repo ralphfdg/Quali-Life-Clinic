@@ -8,15 +8,12 @@ class SiteController extends Controller
 	public function actions()
 	{
 		return array(
-			// captcha action renders the CAPTCHA image displayed on the contact page
-			'captcha'=>array(
-				'class'=>'CCaptchaAction',
-				'backColor'=>0xFFFFFF,
+			'captcha' => array(
+				'class' => 'CCaptchaAction',
+				'backColor' => 0xFFFFFF,
 			),
-			// page action renders "static" pages stored under 'protected/views/site/pages'
-			// They can be accessed via: index.php?r=site/page&view=FileName
-			'page'=>array(
-				'class'=>'CViewAction',
+			'page' => array(
+				'class' => 'CViewAction',
 			),
 		);
 	}
@@ -24,211 +21,200 @@ class SiteController extends Controller
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
-	 * * This action now routes to the correct dashboard based on user role.
 	 */
 	public function actionIndex()
 	{
-		if (Yii::app()->user->isGuest)
-		{
-			// Render the public guest homepage
-			$this->layout = '//layouts/column1'; // Use a single column for guest page
+		// 1. Guest -> Landing Page
+		if (Yii::app()->user->isGuest) {
+			$this->layout = '//layouts/column1';
 			$this->render('index_guest');
-		}
-		else
-		{
-			// User is logged in, determine which dashboard to show
-			$this->layout = '//layouts/main'; // Ensure the main layout with sidebar is used
-			$role = Yii::app()->user->getState("role");
-
-			switch ($role)
-			{
-				case 'super admin':
-					$this->renderDashboardSuperAdmin();
-					break;
-				case 'admin':
-					$this->renderDashboardAdmin();
-					break;
-				case 'doctor':
-					$this->renderDashboardDoctor();
-					break;
-				case 'patient':
-					$this->renderDashboardPatient();
-					break;
-				default:
-					// Fallback for any other case
-					$this->render('index_guest');
+		} else {
+			// 2. Route based on Role
+			if (Yii::app()->controller->isSuperAdmin()) {
+				$this->renderSuperAdminDashboard();
+			} elseif (Yii::app()->controller->isAdmin()) {
+				$this->renderAdminDashboard();
+			} elseif (Yii::app()->controller->isDoctor()) {
+				$this->renderDoctorDashboard();
+			} elseif (Yii::app()->controller->isPatient()) {
+				$this->renderPatientDashboard();
+			} else {
+				$this->render('index'); // Fallback
 			}
 		}
 	}
 
 	/**
-	 * Renders the Super Admin Dashboard
+	 * 🏥 SUPER ADMIN: High-level stats & charts
 	 */
-	private function renderDashboardSuperAdmin()
+	protected function renderSuperAdminDashboard()
 	{
-		// 1. Key Stats
-		$totalDoctors = Account::model()->count('account_type_id=3'); // 3 = doctor
-		$totalPatients = Account::model()->count('account_type_id=4'); // 4 = patient
-		
-		// Total Appointments (Month)
-		$monthStart = date('Y-m-01 00:00:00');
-		$monthEnd = date('Y-m-t 23:59:59');
-		$totalAppointmentsMonth = Appointment::model()->count(
-			'schedule_datetime BETWEEN :start AND :end',
-			array(':start' => $monthStart, ':end' => $monthEnd)
+		// Simple Counters
+		$totalDoctors = Account::model()->count('account_type_id=3 AND status_id=1');
+		$totalPatients = Account::model()->count('account_type_id=4 AND status_id=1');
+
+		// Appts this month
+		$startMonth = date('Y-m-01');
+		$endMonth = date('Y-m-t');
+		$totalApptMonth = Appointment::model()->count(
+			'schedule_datetime BETWEEN :start AND :end AND appointment_status_id != 5',
+			array(':start' => $startMonth, ':end' => $endMonth)
 		);
-		
-		// 2. Earnings Report (Last 30 days)
-		$earningsData = Yii::app()->db->createCommand()
-			->select('DATE(date_paid) as day, SUM(amount) as total')
-			->from('tbl_billing')
-			->where('date_paid >= CURDATE() - INTERVAL 30 DAY')
-			->group('DATE(date_paid)')
-			->order('day ASC')
-			->queryAll();
-		
-		// 3. Doctor Specialization Tally
-		$specializationTally = Yii::app()->db->createCommand()
+
+		// Appts Today
+		$today = date('Y-m-d');
+		$totalApptToday = Appointment::model()->count(
+			'date(schedule_datetime) = :today AND appointment_status_id != 5',
+			array(':today' => $today)
+		);
+
+		// CHART DATA: Activity (Last 30 Days)
+		$chartLabels = array();
+		$chartData = array();
+		for ($i = 29; $i >= 0; $i--) {
+			$d = date('Y-m-d', strtotime("-$i days"));
+			$displayDate = date('M j', strtotime($d));
+			$count = Appointment::model()->count('date(schedule_datetime)=:d AND appointment_status_id!=5', array(':d' => $d));
+
+			$chartLabels[] = $displayDate;
+			$chartData[] = (int)$count;
+		}
+
+		// PIE CHART: Doctor Specializations
+		$specs = Yii::app()->db->createCommand()
 			->select('s.specialization_name, COUNT(u.id) as count')
 			->from('tbl_user u')
 			->join('tbl_specialization s', 'u.specialization_id = s.id')
 			->join('tbl_account a', 'u.account_id = a.id')
-			->where('a.account_type_id = 3') // 3 = doctor
+			->where('a.account_type_id=3 AND a.status_id=1')
 			->group('s.specialization_name')
 			->queryAll();
+
+		$pieLabels = array();
+		$pieData = array();
+		foreach ($specs as $row) {
+			$pieLabels[] = $row['specialization_name'];
+			$pieData[] = (int)$row['count'];
+		}
 
 		$this->render('dashboard_superadmin', array(
 			'totalDoctors' => $totalDoctors,
 			'totalPatients' => $totalPatients,
-			'totalAppointmentsMonth' => $totalAppointmentsMonth,
-			'earningsData' => $earningsData,
-			'specializationTally' => $specializationTally,
+			'totalApptMonth' => $totalApptMonth,
+			'totalApptToday' => $totalApptToday,
+			'chartLabels' => CJSON::encode($chartLabels),
+			'chartData' => CJSON::encode($chartData),
+			'pieLabels' => CJSON::encode($pieLabels),
+			'pieData' => CJSON::encode($pieData),
 		));
 	}
 
 	/**
-	 * Renders the Admin (Secretary) Dashboard
+	 * 📋 ADMIN (Secretary): Live Queue Management
 	 */
-	/**
-	 * Renders the Admin (Secretary) Dashboard
-	 */
-	private function renderDashboardAdmin()
+	protected function renderAdminDashboard()
 	{
-		// 1. Patient Queue (Today's Appointments)
-		$todayStart = date('Y-m-d 00:00:00');
-		$todayEnd = date('Y-m-d 23:59:59');
-		
-		$patientQueue = new CActiveDataProvider('Appointment', array(
-			'criteria' => array(
-				'condition' => 'schedule_datetime BETWEEN :start AND :end',
-				'params' => array(':start' => $todayStart, ':end' => $todayEnd),
+		$today = date('Y-m-d');
+
+		// Get Today's Appointments for the Grid
+		$criteria = new CDbCriteria;
+		$criteria->addCondition("date(t.schedule_datetime) = :today");
+		$criteria->compare('t.appointment_status_id', '<>5'); // Not canceled
+		$criteria->params[':today'] = $today;
+		$criteria->order = 't.schedule_datetime ASC';
+
+		// --- FIX STARTS HERE: Explicit Aliases for User Tables ---
+		$criteria->with = array(
+			'appointmentStatus',
+			'patientAccount' => array(
 				'with' => array(
-					// We must alias the user tables to avoid "Not unique table/alias: 'user'" error
-					'patientAccount' => array(
-						'with' => array(
-							'user' => array('alias' => 'patientUser')
-						)
-					),
-					'doctorAccount' => array(
-						'with' => array(
-							'user' => array('alias' => 'doctorUser')
-						)
-					),
-					'appointmentStatus'
-				),
-				'order' => 'schedule_datetime ASC',
+					'user' => array('alias' => 'patientUser')
+				)
 			),
-			'pagination' => false,
+			'doctorAccount' => array(
+				'with' => array(
+					'user' => array('alias' => 'doctorUser')
+				)
+			),
+		);
+
+		$dataProvider = new CActiveDataProvider('Appointment', array(
+			'criteria' => $criteria,
+			'pagination' => array('pageSize' => 20),
 		));
 
-		// 2. Quick Stats
-		$totalAppointmentsToday = $patientQueue->getTotalItemCount();
-		
-		// 2 = Arrived, 3 = In Consultation
-		$patientsWaiting = Appointment::model()->count(
-			'schedule_datetime BETWEEN :start AND :end AND appointment_status_id IN (2, 3)',
-			array(':start' => $todayStart, ':end' => $todayEnd)
-		);
-		
+		// Quick Stats
+		$countTotal = Appointment::model()->count('date(schedule_datetime)=:t AND appointment_status_id!=5', array(':t' => $today));
+		$countWaiting = Appointment::model()->count('date(schedule_datetime)=:t AND appointment_status_id=2', array(':t' => $today)); // 2 = Arrived
+
 		$this->render('dashboard_admin', array(
-			'patientQueue' => $patientQueue,
-			'totalAppointmentsToday' => $totalAppointmentsToday,
-			'patientsWaiting' => $patientsWaiting,
+			'dataProvider' => $dataProvider,
+			'countTotal' => $countTotal,
+			'countWaiting' => $countWaiting,
 		));
 	}
 
 	/**
-	 * Renders the Doctor Dashboard
+	 * 🧑‍⚕️ DOCTOR: My Personal Queue
 	 */
-	private function renderDashboardDoctor()
+	protected function renderDoctorDashboard()
 	{
 		$doctorId = Yii::app()->user->id;
-		
-		// 1. My Patient Queue
-		$todayStart = date('Y-m-d 00:00:00');
-		$todayEnd = date('Y-m-d 23:59:59');
+		$today = date('Y-m-d');
 
-		$myPatientQueue = new CActiveDataProvider('Appointment', array(
-			'criteria' => array(
-				'condition' => 'doctor_account_id = :docId AND schedule_datetime BETWEEN :start AND :end',
-				'params' => array(
-					':docId' => $doctorId,
-					':start' => $todayStart, 
-					':end' => $todayEnd
-				),
-				'with' => array('patientAccount.user', 'appointmentStatus'),
-				'order' => 'schedule_datetime ASC',
-			),
-			'pagination' => false,
+		// Grid: My Appointments Today
+		$criteria = new CDbCriteria;
+		$criteria->compare('doctor_account_id', $doctorId);
+		$criteria->addCondition("date(t.schedule_datetime) = :today");
+		$criteria->compare('t.appointment_status_id', '<>5');
+		$criteria->params[':today'] = $today;
+		$criteria->order = 't.schedule_datetime ASC';
+		$criteria->with = array('patientAccount.user', 'appointmentStatus');
+
+		$dataProvider = new CActiveDataProvider('Appointment', array(
+			'criteria' => $criteria,
+			'pagination' => array('pageSize' => 20),
 		));
 
-		// 2. Quick Stats
-		$totalAppointmentsToday = $myPatientQueue->getTotalItemCount();
-		
-		// 2 = Arrived, 3 = In Consultation
-		$patientsWaiting = Appointment::model()->count(
-			'doctor_account_id = :docId AND schedule_datetime BETWEEN :start AND :end AND appointment_status_id IN (2, 3)',
-			array(
-				':docId' => $doctorId,
-				':start' => $todayStart, 
-				':end' => $todayEnd
-			)
-		);
-		
+		// Quick Stats
+		$myTotal = Appointment::model()->count('doctor_account_id=:d AND date(schedule_datetime)=:t AND appointment_status_id!=5', array(':d' => $doctorId, ':t' => $today));
+		$myWaiting = Appointment::model()->count('doctor_account_id=:d AND date(schedule_datetime)=:t AND appointment_status_id=2', array(':d' => $doctorId, ':t' => $today));
+
 		$this->render('dashboard_doctor', array(
-			'myPatientQueue' => $myPatientQueue,
-			'totalAppointmentsToday' => $totalAppointmentsToday,
-			'patientsWaiting' => $patientsWaiting,
+			'dataProvider' => $dataProvider,
+			'myTotal' => $myTotal,
+			'myWaiting' => $myWaiting,
 		));
 	}
 
 	/**
-	 * Renders the Patient Dashboard
+	 * 👤 PATIENT: Next Appointment Card
 	 */
-	private function renderDashboardPatient()
+	protected function renderPatientDashboard()
 	{
 		$patientId = Yii::app()->user->id;
-		
-		// 1. Upcoming Appointment
-		$upcomingAppointment = Appointment::model()->with('doctorAccount.user')->find(
-			'patient_account_id = :patientId AND schedule_datetime > NOW() AND appointment_status_id = 1', // 1 = Scheduled
-			array(':patientId' => $patientId),
-			array('order' => 'schedule_datetime ASC')
-		);
-		
+
+		// Find NEXT Upcoming Appointment
+		$nextAppt = Appointment::model()->find(array(
+			'condition' => 'patient_account_id=:pid AND schedule_datetime > NOW() AND appointment_status_id!=5',
+			'params' => array(':pid' => $patientId),
+			'order' => 'schedule_datetime ASC',
+			'limit' => 1,
+			'with' => array('doctorAccount.user')
+		));
+
 		$this->render('dashboard_patient', array(
-			'upcomingAppointment' => $upcomingAppointment,
+			'nextAppt' => $nextAppt,
 		));
 	}
 
 	/**
-	 * This is the action to handle external exceptions.
+	 * Standard Error Handling
 	 */
 	public function actionError()
 	{
-		if($error=Yii::app()->errorHandler->error)
-		{
-			if(Yii::app()->request->isAjaxRequest)
+		if ($error = Yii::app()->errorHandler->error) {
+			if (Yii::app()->request->isAjaxRequest)
 				echo $error['message'];
 			else
 				$this->render('error', $error);
@@ -236,60 +222,31 @@ class SiteController extends Controller
 	}
 
 	/**
-	 * Displays the contact page
-	 */
-	public function actionContact()
-	{
-		$model=new ContactForm;
-		if(isset($_POST['ContactForm']))
-		{
-			$model->attributes=$_POST['ContactForm'];
-			if($model->validate())
-			{
-				$name='=?UTF-8?B?'.base64_encode($model->name).'?=';
-				$subject='=?UTF-8?B?'.base64_encode($model->subject).'?=';
-				$headers="From: $name <{$model->email}>\r\n".
-					"Reply-To: {$model->email}\r\n".
-					"MIME-Version: 1.0\r\n".
-					"Content-Type: text/plain; charset=UTF-8";
-
-				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);
-				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
-				$this->refresh();
-			}
-		}
-		$this->render('contact',array('model'=>$model));
-	}
-
-	/**
-	 * Displays the login page
+	 * Login Action
 	 */
 	public function actionLogin()
 	{
-		$this->layout = '//layouts/column1'; // Use single column layout for login
-		$model=new LoginForm;
+		$model = new LoginForm;
 
 		// if it is ajax validation request
-		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
-		{
+		if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 
 		// collect user input data
-		if(isset($_POST['LoginForm']))
-		{
-			$model->attributes=$_POST['LoginForm'];
-			// validate user input and redirect to the dashboard
-			if($model->validate() && $model->login())
-				$this->redirect(array('/site/index')); // Redirect to main index, which will route to dashboard
+		if (isset($_POST['LoginForm'])) {
+			$model->attributes = $_POST['LoginForm'];
+			// validate user input and redirect to the previous page if valid
+			if ($model->validate() && $model->login())
+				$this->redirect(Yii::app()->user->returnUrl);
 		}
 		// display the login form
-		$this->render('login',array('model'=>$model));
+		$this->render('login', array('model' => $model));
 	}
 
 	/**
-	 * Logs out the current user and redirect to homepage.
+	 * Logout Action
 	 */
 	public function actionLogout()
 	{
