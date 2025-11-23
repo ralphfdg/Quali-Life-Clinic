@@ -2,10 +2,12 @@
 
 class Account extends CActiveRecord
 {
-	// Added properties for password handling
+	// Virtual attributes for forms
 	public $retypepassword;
 	public $oldpassword;
 	public $newpassword;
+
+	public $oldAttributes = array();
 
 	public function tableName()
 	{
@@ -15,40 +17,94 @@ class Account extends CActiveRecord
 	public function rules()
 	{
 		return array(
-			// --- STANDARD REQUIRED FIELDS (Everyone) ---
-			array('firstname, lastname, dob, gender, mobile_number', 'required'),
+			// 1. REQUIRED FIELDS
+			array('username, account_type_id, status_id, email_address', 'required'),
 
-			// --- DOCTOR SPECIFIC RULES (Enforced via Scenarios) ---
-			// These are only required if we are creating/updating a Doctor
-			array('specialization_id, license_number, ptr_number', 'required', 'on' => 'createNewDoctor, updateDoctor'),
+			// 2. PASSWORD SECURITY
+			// Required on insert
+			array('password, retypepassword', 'required', 'on' => 'insert'),
+			// Match retype
+			array('retypepassword', 'compare', 'compareAttribute' => 'password', 'on' => 'insert', 'message' => 'Passwords do not match.'),
 
-			// --- DATA TYPES & LENGTHS ---
-			array('account_id, specialization_id, gender', 'numerical', 'integerOnly' => true),
-			array('firstname, middlename, lastname, qualifier, ptr_number, license_number, s2_number, maxicare_number, name_of_father, name_of_mother, school', 'length', 'max' => 128),
-			array('specialization, address', 'length', 'max' => 255),
-			array('mother_contact_number, father_contact_number', 'length', 'max' => 11),
+			// --- NEW: STRONG PASSWORD RULES ---
+			// Minimum 8 characters
+			array('password', 'length', 'min' => 8, 'allowEmpty' => true, 'message' => 'Password must be at least 8 characters.'),
+			// Must contain at least one Letter AND one Number
+			array('password', 'match', 'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/', 'message' => 'Password must contain at least 1 letter and 1 number.'),
 
-			// Dates
-			array('license_expiration, s2_expiration, father_dob, mother_dob', 'safe'),
+			// 3. EMAIL VALIDATION (Real Domain Check)
+			array('email_address', 'email', 'checkMX' => true, 'message' => 'Please enter a valid email address.'),
 
-			// Mobile Number Validation
-			array('mobile_number', 'match', 'pattern' => '/^[0-9\+\-]+$/', 'message' => 'Invalid Phone Number'),
+			// 4. UNIQUE CHECKS
+			array('username', 'unique', 'message' => 'This username is taken.'),
+			array('email_address', 'unique', 'message' => 'This email is already registered.'),
 
-			// Search
-			array('id, firstname, lastname, mobile_number', 'safe', 'on' => 'search'),
+			// 5. DATA TYPES
+			array('account_type_id, status_id', 'numerical', 'integerOnly' => true),
+			array('username, email_address', 'length', 'max' => 128),
+
+			// 6. SEARCH
+			array('id, username, email_address, account_type_id, status_id', 'safe', 'on' => 'search'),
 		);
 	}
 
-	// ... (Keep relations, attributeLabels, search, model methods SAME as before) ...
+	/**
+	 * @return array relational rules.
+	 */
 	public function relations()
 	{
 		return array(
+			// Links Account -> Account Type (e.g., "Doctor", "Patient")
 			'accountType' => array(self::BELONGS_TO, 'AccountType', 'account_type_id'),
+
+			// Links Account -> Status (e.g., "Active", "Inactive")
 			'status' => array(self::BELONGS_TO, 'Status', 'status_id'),
+
+			// CRITICAL: Links Account -> User Profile (Firstname, Address, Specialization)
 			'user' => array(self::HAS_ONE, 'User', 'account_id'),
-			// ... add other relations if needed ...
 		);
 	}
+
+	// --- PASSWORD HASHING LOGIC ---
+	public function hashPassword($password, $salt)
+	{
+		return sha1($password . $salt);
+	}
+
+	public function validatePassword($password)
+	{
+		return $this->password === $this->hashPassword($password, $this->salt);
+	}
+
+	protected function beforeSave()
+    {
+        if (parent::beforeSave()) {
+            if ($this->isNewRecord) {
+                // ... (creation logic) ...
+                $this->date_created = new CDbExpression('NOW()');
+                $this->date_updated = new CDbExpression('NOW()');
+                $this->salt = time();
+                $this->password = $this->hashPassword($this->password, $this->salt);
+            } else {
+                $this->date_updated = new CDbExpression('NOW()');
+                
+                // FIX: Check if password field is not empty AND different from old password
+                if (!empty($this->password) && $this->password !== $this->oldAttributes['password']) {
+                    $this->salt = time();
+                    $this->password = $this->hashPassword($this->password, $this->salt);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+	protected function afterFind()
+    {
+        parent::afterFind();
+        // Store the current attributes as "old"
+        $this->oldAttributes = $this->attributes;
+    }
 
 	public function attributeLabels()
 	{
@@ -56,7 +112,7 @@ class Account extends CActiveRecord
 			'id' => 'ID',
 			'username' => 'Username',
 			'password' => 'Password',
-			'retypepassword' => 'Retype Password', // Added Label
+			'retypepassword' => 'Retype Password',
 			'email_address' => 'Email Address',
 			'account_type_id' => 'Account Type',
 			'status_id' => 'Status',
@@ -77,58 +133,5 @@ class Account extends CActiveRecord
 	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
-	}
-
-	// --- CUSTOM VALIDATION FUNCTIONS ---
-
-	public function validateNewUsername($attribute, $params)
-	{
-		if (!$this->hasErrors()) {
-			$account = Account::model()->find('username=?', array($this->username));
-			if ($account !== null)
-				$this->addError('username', 'Username entered is already in use.');
-		}
-	}
-
-	public function validateNewEmailAddress($attribute, $params)
-	{
-		if (!$this->hasErrors() && !empty($this->email_address)) {
-			$account = Account::model()->find('email_address=?', array($this->email_address));
-			if ($account !== null)
-				$this->addError('email_address', 'Email address entered is already in use.');
-		}
-	}
-
-	// --- PASSWORD HASHING ---
-
-	public function hashPassword($password, $salt)
-	{
-		return sha1($password . $salt);
-	}
-
-	public function validatePassword($password)
-	{
-		return $this->password === $this->hashPassword($password, $this->salt);
-	}
-
-	protected function beforeSave()
-	{
-		if (parent::beforeSave()) {
-			if ($this->isNewRecord) {
-				$this->date_created = new CDbExpression('NOW()');
-				$this->date_updated = new CDbExpression('NOW()');
-				$this->salt = time();
-				$this->password = $this->hashPassword($this->password, $this->salt);
-			} else {
-				$this->date_updated = new CDbExpression('NOW()');
-				// Only update password if user typed something new
-				if (!empty($this->password) && $this->password !== $this->oldAttributes['password']) {
-					$this->salt = time();
-					$this->password = $this->hashPassword($this->password, $this->salt);
-				}
-			}
-			return true;
-		}
-		return false;
 	}
 }

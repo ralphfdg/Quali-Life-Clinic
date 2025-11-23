@@ -12,15 +12,9 @@ if ($typeId == 3) $typeName = 'Doctor';
 if ($typeId == 4) $typeName = 'Patient';
 if ($typeId == 2) $typeName = 'Secretary';
 
-// --- DEBUG TRAP ---
-// This will print what class the $user variable actually is.
-echo "<h3>DEBUGGING:</h3>";
-echo "The variable $user is a class of: " . get_class($user) . "<br>";
-echo "The variable $model is a class of: " . get_class($model) . "<br>";
-// ------------------
-
 // Set it back to model so validation passes
 $model->account_type_id = $typeId;
+
 ?>
 
 
@@ -94,7 +88,7 @@ $model->account_type_id = $typeId;
         <div class="col-lg-8">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-success">Personal Information</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Personal Information</h6>
                 </div>
                 <div class="card-body">
 

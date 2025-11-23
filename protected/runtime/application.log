@@ -3041,3 +3041,425 @@ Stack trace:
 REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/update&id=1
 HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/admin&type=3
 ---
+2025/11/23 16:47:44 [error] [exception.Error] Error: Object of class User could not be converted to string in C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\_form.php:18
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#3 C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\create.php(25): CController->renderPartial('_form', Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('create', Array, true)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(108): CController->render('create', Array)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionCreate()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#19 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/create')
+#20 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#21 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/create&type=3
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php
+---
+2025/11/23 16:48:33 [error] [exception.Error] Error: Object of class User could not be converted to string in C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\_form.php:10
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#3 C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\create.php(25): CController->renderPartial('_form', Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('create', Array, true)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(108): CController->render('create', Array)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionCreate()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#19 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/create')
+#20 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#21 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/create&type=3
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php
+---
+2025/11/23 16:48:36 [error] [exception.Error] Error: Object of class User could not be converted to string in C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\_form.php:10
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#3 C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\create.php(25): CController->renderPartial('_form', Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('create', Array, true)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(108): CController->render('create', Array)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionCreate()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#19 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/create')
+#20 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#21 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/create&type=3
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php
+---
+2025/11/23 16:48:36 [error] [exception.Error] Error: Object of class User could not be converted to string in C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\_form.php:10
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#3 C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\create.php(25): CController->renderPartial('_form', Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('create', Array, true)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(108): CController->render('create', Array)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionCreate()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#19 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/create')
+#20 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#21 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/create&type=3
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php
+---
+2025/11/23 16:48:56 [error] [exception.Error] Error: Object of class User could not be converted to string in C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\_form.php:21
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#3 C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\create.php(25): CController->renderPartial('_form', Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('create', Array, true)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(108): CController->render('create', Array)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionCreate()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#19 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/create')
+#20 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#21 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/create&type=3
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php
+---
+2025/11/23 16:56:20 [error] [exception.Error] Error: Object of class User could not be converted to string in C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\_form.php:21
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#3 C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\create.php(25): CController->renderPartial('_form', Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('create', Array, true)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(108): CController->render('create', Array)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionCreate()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#19 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/create')
+#20 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#21 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/create&type=3
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php
+---
+2025/11/23 17:03:05 [warning] [application] Failed to set unsafe attribute "account_type_id" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:03:05 [warning] [application] Failed to set unsafe attribute "username" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:03:05 [warning] [application] Failed to set unsafe attribute "password" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:03:05 [warning] [application] Failed to set unsafe attribute "retypepassword" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:03:05 [warning] [application] Failed to set unsafe attribute "email_address" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:03:05 [warning] [application] Failed to set unsafe attribute "status_id" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:03:05 [error] [exception.CException] CException: Property "Account.firstname" is not defined. in C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\db\ar\CActiveRecord.php(145): CComponent->__get('firstname')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\validators\CRequiredValidator.php(58): CActiveRecord->__get('firstname')
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\validators\CValidator.php(201): CRequiredValidator->validateAttribute(Object(Account), 'firstname')
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CModel.php(159): CValidator->validate(Object(Account), Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(72): CModel->validate()
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionCreate()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#15 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/create')
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#17 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/create&type=3
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/create&type=3
+---
+2025/11/23 17:08:08 [warning] [application] Failed to set unsafe attribute "retypepassword" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:08:29 [warning] [application] Failed to set unsafe attribute "retypepassword" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:10:51 [warning] [application] Failed to set unsafe attribute "retypepassword" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:10:51 [error] [php] include(AuditHelper.php): Failed to open stream: No such file or directory (C:\xampp\htdocs\Quali-Life-Clinic\framework\YiiBase.php:463)
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\YiiBase.php(463): include()
+#1 unknown(0): autoload()
+#2 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(89): class_exists()
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionCreate()
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): AccountController->runAction()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CAccessControlFilter->filter()
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): AccountController->filterAccessControl()
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): AccountController->runActionWithFilters()
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): AccountController->run()
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CWebApplication->run()
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/create&type=3
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (89)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:12:18 [warning] [application] Failed to set unsafe attribute "retypepassword" of "Account".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php (63)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 17:40:37 [error] [exception.CException] CException: Property "Account.accountType" is not defined. in C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\db\ar\CActiveRecord.php(145): CComponent->__get('accountType')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php(612) : eval()'d code(1): CActiveRecord->__get('accountType')
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php(612): eval()
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CDataColumn.php(148): CComponent->evaluateExpression('$data->accountT...', Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridColumn.php(237): CDataColumn->getDataCellContent(0)
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridColumn.php(160): CGridColumn->renderDataCellContent(0, Object(Account))
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(655): CGridColumn->renderDataCell(0)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(639): CGridView->renderDataCell(Object(CDataColumn), 0)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(595): CGridView->renderTableRow(0)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(505): CGridView->renderTableBody()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\CBaseListView.php(181): CGridView->renderItems()
+#11 [internal function]: CBaseListView->renderSection(Array)
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\CBaseListView.php(164): preg_replace_callback('/{(\\w+)}/', Array, '{summary}\n{item...')
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\CBaseListView.php(149): CBaseListView->renderContent()
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(182): CBaseListView->run()
+#15 C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\admin.php(1): CBaseController->widget('zii.widgets.gri...', Array)
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#19 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('admin', Array, true)
+#20 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(136): CController->render('admin', Array)
+#21 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionAdmin()
+#22 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#23 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#24 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#25 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#26 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#27 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#28 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#29 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#30 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('admin')
+#31 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/admin')
+#32 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#33 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#34 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/admin&type=3
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/create&type=3
+---
+2025/11/23 17:45:13 [error] [exception.CException] CException: Property "Account.accountType" is not defined. in C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\db\ar\CActiveRecord.php(145): CComponent->__get('accountType')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php(612) : eval()'d code(1): CActiveRecord->__get('accountType')
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php(612): eval()
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CDataColumn.php(148): CComponent->evaluateExpression('$data->accountT...', Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridColumn.php(237): CDataColumn->getDataCellContent(0)
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridColumn.php(160): CGridColumn->renderDataCellContent(0, Object(Account))
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(655): CGridColumn->renderDataCell(0)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(639): CGridView->renderDataCell(Object(CDataColumn), 0)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(595): CGridView->renderTableRow(0)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(505): CGridView->renderTableBody()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\CBaseListView.php(181): CGridView->renderItems()
+#11 [internal function]: CBaseListView->renderSection(Array)
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\CBaseListView.php(164): preg_replace_callback('/{(\\w+)}/', Array, '{summary}\n{item...')
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\CBaseListView.php(149): CBaseListView->renderContent()
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(182): CBaseListView->run()
+#15 C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\admin.php(1): CBaseController->widget('zii.widgets.gri...', Array)
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#19 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('admin', Array, true)
+#20 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(136): CController->render('admin', Array)
+#21 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionAdmin()
+#22 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#23 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#24 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#25 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#26 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#27 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#28 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#29 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#30 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('admin')
+#31 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/admin')
+#32 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#33 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#34 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/admin&type=2
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/create&type=3
+---
+2025/11/23 17:49:29 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "view". in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php:486
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(270): CController->missingAction('view')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('view')
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/view')
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/view&id=18
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/create&type=3
+---
+2025/11/23 17:59:42 [error] [exception.CException] CException: Property "Account.accountType" is not defined. in C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\db\ar\CActiveRecord.php(145): CComponent->__get('accountType')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php(612) : eval()'d code(1): CActiveRecord->__get('accountType')
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php(612): eval()
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CDataColumn.php(148): CComponent->evaluateExpression('$data->accountT...', Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridColumn.php(237): CDataColumn->getDataCellContent(0)
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridColumn.php(160): CGridColumn->renderDataCellContent(0, Object(Account))
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(655): CGridColumn->renderDataCell(0)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(639): CGridView->renderDataCell(Object(CDataColumn), 0)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(595): CGridView->renderTableRow(0)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\grid\CGridView.php(505): CGridView->renderTableBody()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\CBaseListView.php(181): CGridView->renderItems()
+#11 [internal function]: CBaseListView->renderSection(Array)
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\CBaseListView.php(164): preg_replace_callback('/{(\\w+)}/', Array, '{summary}\n{item...')
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\zii\widgets\CBaseListView.php(149): CBaseListView->renderContent()
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(182): CBaseListView->run()
+#15 C:\xampp\htdocs\Quali-Life-Clinic\protected\views\account\admin.php(1): CBaseController->widget('zii.widgets.gri...', Array)
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(872): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#19 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('admin', Array, true)
+#20 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(136): CController->render('admin', Array)
+#21 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): AccountController->actionAdmin()
+#22 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#23 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#24 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#25 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#26 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#27 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#28 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#29 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#30 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('admin')
+#31 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/admin')
+#32 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#33 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#34 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/admin
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/view&id=19
+---
+2025/11/23 18:09:40 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "index". in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php:486
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(270): CController->missingAction('index')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('index')
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/index')
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/index
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/view&id=19
+---
+2025/11/23 18:25:49 [error] [exception.CException] CException: Property "Account.oldAttributes" is not defined. in C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\db\ar\CActiveRecord.php(145): CComponent->__get('oldAttributes')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\protected\models\Account.php(90): CActiveRecord->__get('oldAttributes')
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\db\ar\CActiveRecord.php(1125): Account->beforeSave()
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\db\ar\CActiveRecord.php(811): CActiveRecord->update(NULL)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\AccountController.php(114): CActiveRecord->save(false)
+#5 [internal function]: AccountController->actionUpdate('4')
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CAction.php(114): ReflectionMethod->invokeArgs(Object(AccountController), Array)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(AccountController), Object(ReflectionMethod), Array)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#14 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#15 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('update')
+#17 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/update')
+#18 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#20 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/update&id=4
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/update&id=4
+---
+2025/11/23 18:31:07 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "index". in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php:486
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(270): CController->missingAction('index')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('index')
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('account/index')
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/index
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/create&type=4
+---

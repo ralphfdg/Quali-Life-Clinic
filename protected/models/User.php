@@ -17,9 +17,7 @@ class User extends CActiveRecord
 	public function rules()
 	{
 		return array(
-			// --- FIX IS HERE ---
-			// I moved ', mobile_number' INSIDE the quote string.
-			array('account_id, firstname, lastname, dob, gender, mobile_number', 'required'),
+			array('firstname, lastname, dob, gender, mobile_number', 'required'),
 
 			array('account_id, specialization_id, gender', 'numerical', 'integerOnly' => true),
 			array('firstname, middlename, lastname, qualifier, ptr_number, license_number, s2_number, maxicare_number, name_of_father, name_of_mother, school', 'length', 'max' => 128),
@@ -39,7 +37,8 @@ class User extends CActiveRecord
 	{
 		return array(
 			'account' => array(self::BELONGS_TO, 'Account', 'account_id'),
-			'specialization' => array(self::BELONGS_TO, 'Specialization', 'specialization_id'),
+			
+            'specializationInfo' => array(self::BELONGS_TO, 'Specialization', 'specialization_id'),
 		);
 	}
 
