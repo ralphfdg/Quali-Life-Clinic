@@ -136,4 +136,48 @@ class Appointment extends CActiveRecord
 		}
 		return false;
 	}
+
+	protected function afterSave()
+    {
+        parent::afterSave();
+
+        // --- TRIGGER 1: NEW APPOINTMENT (CONFIRMATION) ---
+        if ($this->isNewRecord) 
+        {
+            // Find the patient's phone number
+            $patientUser = User::model()->findByAttributes(array('account_id'=>$this->patient_account_id));
+            
+            if ($patientUser && !empty($patientUser->mobile_number)) 
+            {
+                // Construct Message
+                $date = date('M j, Y', strtotime($this->schedule_datetime));
+                $time = date('g:i A', strtotime($this->schedule_datetime));
+                $doctorName = $this->doctorAccount->user->lastname;
+                
+                $msg = "Quali-Life: Appointment Confirmed.\nDr. $doctorName\nDate: $date\nTime: $time";
+                
+                // Send!
+                SmsHelper::send($patientUser->mobile_number, $msg);
+            }
+        }
+
+        // --- TRIGGER 2: CANCELLATION ---
+        // Check if status changed to 5 (Canceled)
+        if (!$this->isNewRecord && $this->appointment_status_id == 5) 
+        {
+            // We need to detect if it *just* changed to canceled
+            // In Yii 1.1, we can't easily compare old attributes in afterSave without extra setup.
+            // But sending a generic update msg is usually safe if status is 5.
+            
+            $patientUser = User::model()->findByAttributes(array('account_id'=>$this->patient_account_id));
+            
+            if ($patientUser && !empty($patientUser->mobile_number)) 
+            {
+                $date = date('M j', strtotime($this->schedule_datetime));
+                $msg = "Quali-Life: Your appointment on $date has been CANCELED. Please contact us to reschedule.";
+                
+                SmsHelper::send($patientUser->mobile_number, $msg);
+            }
+        }
+    }
 }

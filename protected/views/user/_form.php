@@ -110,6 +110,12 @@
 	</div>
 
 	<div class="row">
+    <?php echo $form->labelEx($model,'mobile_number'); ?> 
+    <?php echo $form->textField($model,'mobile_number',array('size'=>11,'maxlength'=>11, 'placeholder'=>'09...')); ?>
+    <?php echo $form->error($model,'mobile_number'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'name_of_father'); ?>
 		<?php echo $form->textField($model,'name_of_father',array('size'=>60,'maxlength'=>128)); ?>
 		<?php echo $form->error($model,'name_of_father'); ?>
