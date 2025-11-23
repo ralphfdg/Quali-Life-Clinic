@@ -79,16 +79,21 @@ class Account extends CActiveRecord
 	protected function beforeSave()
     {
         if (parent::beforeSave()) {
+            
+            // --- 1. NORMALIZE USERNAME (New) ---
+            // Always force username to lowercase to avoid case-sensitivity issues
+            $this->username = strtolower($this->username);
+            
             if ($this->isNewRecord) {
-                // ... (creation logic) ...
                 $this->date_created = new CDbExpression('NOW()');
                 $this->date_updated = new CDbExpression('NOW()');
                 $this->salt = time();
                 $this->password = $this->hashPassword($this->password, $this->salt);
+                // Set default expiration
+                $this->expiration_date = date('Y-m-d H:i:s', strtotime('+1 year'));
             } else {
                 $this->date_updated = new CDbExpression('NOW()');
-                
-                // FIX: Check if password field is not empty AND different from old password
+                // Only re-hash if password isn't empty and changed
                 if (!empty($this->password) && $this->password !== $this->oldAttributes['password']) {
                     $this->salt = time();
                     $this->password = $this->hashPassword($this->password, $this->salt);

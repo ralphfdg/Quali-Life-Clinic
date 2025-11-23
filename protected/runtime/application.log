@@ -3463,3 +3463,21 @@ Stack trace:
 REQUEST_URI=/Quali-Life-Clinic/index.php?r=account/index
 HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/create&type=4
 ---
+2025/11/23 19:22:13 [error] [exception.CHttpException.404] CHttpException: Unable to resolve the request "clinic/admin". in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('clinic/admin')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=clinic/admin
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=account/admin&type=4
+---
+2025/11/23 19:22:22 [error] [exception.CHttpException.404] CHttpException: Unable to resolve the request "clinic/admin". in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('clinic/admin')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=clinic/admin
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=auditlog/admin
+---

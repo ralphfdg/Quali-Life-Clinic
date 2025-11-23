@@ -207,73 +207,86 @@
 <body id="page-top">
 
     <?php
-    // --- DYNAMIC SIDEBAR LOGIC ---
-    // This section defines the structure for the SB Admin 2 sidebar links.
-    // NOTE: Keep all your existing methods (isSuperAdmin, isAdmin, etc.) defined in your Controller.
-
+    // --- DYNAMIC SIDEBAR LOGIC WITH ICONS ---
     $sidebarMenu = array();
 
+    // 1. SUPER ADMIN MENU
     if ($this->isSuperAdmin()) {
         $sidebarMenu = array(
-
-            array('label' => 'Manage Secretaries', 'url' => array('/account/admin', 'type' => 2)),
-            
-            'Manage Doctors' => array(
-                array('label' => 'Add Doctor', 'url' => array('/account/create', 'type' => 3)),
-                array('label' => 'List Doctors', 'url' => array('/account/admin', 'type' => 3)),
+            'Manage Secretaries' => array(
+                'icon' => 'fa-user-nurse', // Nurse/Admin Icon
+                'items' => array(
+                    array('label' => 'Add Secretary', 'url' => array('/account/create', 'type' => 2)),
+                    array('label' => 'List Secretaries', 'url' => array('/account/admin', 'type' => 2)),
+                )
             ),
+
+            'Manage Doctors' => array(
+                'icon' => 'fa-user-md', // Doctor Icon
+                'items' => array(
+                    array('label' => 'Add Doctor', 'url' => array('/account/create', 'type' => 3)),
+                    array('label' => 'List Doctors', 'url' => array('/account/admin', 'type' => 3)),
+                )
+            ),
+
 
             'Manage Patients' => array(
-                array('label' => 'Add Patient', 'url' => array('/account/create', 'type' => 4)),
-                array('label' => 'List Patients', 'url' => array('/account/admin', 'type' => 4)),
+                'icon' => 'fa-users', // Users Group Icon
+                'items' => array(
+                    array('label' => 'Add Patient', 'url' => array('/account/create', 'type' => 4)),
+                    array('label' => 'List Patients', 'url' => array('/account/admin', 'type' => 4)),
+                )
             ),
-            array('label' => 'Generate Report', 'url' => array('/clinic/admin')),
-            array('label' => 'Audit Log', 'url' => array('/auditlog/admin')),
 
-            // Add a divider visual break
+            array('label' => 'Generate Report', 'icon' => 'fa-chart-line', 'url' => array('/clinic/admin')),
+            array('label' => 'Audit Log', 'icon' => 'fa-clipboard-list', 'url' => array('/auditlog/admin')),
+
+            // Settings
             array('label' => 'Settings', 'divider' => true),
+            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
 
-            array('label' => 'My Account', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
-
-            // Developer/System Settings
+            // Config
             array('label' => 'System Config', 'itemOptions' => array('class' => 'sidebar-header'), 'url' => false),
-
-            // REMOVED: 'Manage Accounts' and 'Manage Users' 
-
-            // KEPT: These are still useful for setup
-            array('label' => 'Manage Schedules', 'url' => array('/doctorSchedule/admin')),
-            array('label' => 'Manage Specializations', 'url' => array('/specialization/admin')),
-        );
-    } else if ($this->isAdmin()) {
-        $sidebarMenu = array(
-            array('label' => '📋 Secretary Menu', 'itemOptions' => array('class' => 'sidebar-header')),
-            array('label' => 'Dashboard (Patient Queue)', 'url' => array('/site/index')),
-            array('label' => 'Appointment Calendar', 'url' => array('/appointment/calendar')),
-            array('label' => 'Manage Patients', 'url' => array('/user/admin', 'role' => 'patient')),
-            array('label' => 'View Doctors', 'url' => array('/user/admin', 'role' => 'doctor', 'viewOnly' => true)),
-            array('label' => 'My Account', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
-        );
-    } else if ($this->isDoctor()) {
-        $sidebarMenu = array(
-            array('label' => 'Doctor Menu', 'itemOptions' => array('class' => 'sidebar-header')),
-            array('label' => 'Appointments', 'url' => array('/appointment/myQueue')),
-            array('label' => 'History & Records', 'url' => array('/appointment/myHistory')),
-            array('label' => 'My Schedule', 'url' => array('/doctorSchedule/mySchedule')),
-            array('label' => 'Patient List', 'url' => array('/user/admin', 'role' => 'patient')),
-        );
-    } else if ($this->isPatient()) {
-        $sidebarMenu = array(
-            array('label' => 'Patient Menu', 'itemOptions' => array('class' => 'sidebar-header')),
-            array('label' => 'Dashboard', 'url' => array('/site/index')),
-            array('label' => 'Book Appointment', 'url' => array('/appointment/book')),
-            array('label' => 'My Appointments', 'url' => array('/appointment/myAppointments')),
-            array('label' => 'My Prescriptions', 'url' => array('/prescription/myPrescriptions')),
-            array('label' => 'My Profile', 'url' => array('/user/myProfile')),
+            array('label' => 'Manage Schedules', 'icon' => 'fa-calendar-alt', 'url' => array('/doctorSchedule/admin')),
+            array('label' => 'Specializations', 'icon' => 'fa-stethoscope', 'url' => array('/specialization/admin')),
         );
     }
-    // --- END DYNAMIC SIDEBAR LOGIC ---
 
-    // The full SB Admin 2 layout is only applied for logged-in users with a sidebar menu
+    // 2. ADMIN (SECRETARY) MENU
+    else if ($this->isAdmin()) {
+        $sidebarMenu = array(
+            array('label' => 'Secretary Menu', 'itemOptions' => array('class' => 'sidebar-header')),
+            array('label' => 'Dashboard', 'icon' => 'fa-tachometer-alt', 'url' => array('/site/index')),
+            array('label' => 'Calendar', 'icon' => 'fa-calendar-check', 'url' => array('/appointment/calendar')),
+            array('label' => 'Manage Patients', 'icon' => 'fa-users', 'url' => array('/user/admin', 'role' => 'patient')),
+            array('label' => 'View Doctors', 'icon' => 'fa-user-md', 'url' => array('/user/admin', 'role' => 'doctor', 'viewOnly' => true)),
+            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
+        );
+    }
+
+    // 3. DOCTOR MENU
+    else if ($this->isDoctor()) {
+        $sidebarMenu = array(
+            array('label' => 'Doctor Menu', 'itemOptions' => array('class' => 'sidebar-header')),
+            array('label' => 'Appointments', 'icon' => 'fa-list-alt', 'url' => array('/appointment/myQueue')),
+            array('label' => 'History', 'icon' => 'fa-history', 'url' => array('/appointment/myHistory')),
+            array('label' => 'My Schedule', 'icon' => 'fa-clock', 'url' => array('/doctorSchedule/mySchedule')),
+            array('label' => 'Patient List', 'icon' => 'fa-users', 'url' => array('/user/admin', 'role' => 'patient')),
+        );
+    }
+
+    // 4. PATIENT MENU
+    else if ($this->isPatient()) {
+        $sidebarMenu = array(
+            array('label' => 'Patient Menu', 'itemOptions' => array('class' => 'sidebar-header')),
+            array('label' => 'Dashboard', 'icon' => 'fa-home', 'url' => array('/site/index')),
+            array('label' => 'Book Now', 'icon' => 'fa-calendar-plus', 'url' => array('/appointment/book')),
+            array('label' => 'My Appointments', 'icon' => 'fa-calendar-alt', 'url' => array('/appointment/myAppointments')),
+            array('label' => 'Prescriptions', 'icon' => 'fa-file-prescription', 'url' => array('/prescription/myPrescriptions')),
+            array('label' => 'My Profile', 'icon' => 'fa-user', 'url' => array('/user/myProfile')),
+        );
+    }
+
     if (!Yii::app()->user->isGuest && !empty($sidebarMenu)):
     ?>
 
@@ -283,12 +296,9 @@
 
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php">
                     <div class="sidebar-brand-icon">
-                        <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo.png"
-                            style="height: 50px; width: 50px; margin-right: 0px; border-radius: 50%;"
-                            alt="Quali-Life Logo">
+                        <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo.png" style="height: 40px; width: 40px; border-radius:50%; background:white;">
                     </div>
-
-                    <div class="sidebar-brand-text mx-3">Quali-Life-Clinic</div>
+                    <div class="sidebar-brand-text mx-3">Quali-Life</div>
                 </a>
 
                 <hr class="sidebar-divider my-0">
@@ -302,56 +312,56 @@
 
                 <hr class="sidebar-divider">
 
-                <div class="sidebar-heading">
-                    <?php echo ($this->isSuperAdmin()) ? 'SUPER ADMIN CONTROLS' : 'MAIN MENU'; ?>
-                </div>
-
                 <?php
-                $navId = 0; // Unique ID counter for collapses
-                foreach ($sidebarMenu as $label => $item):
+                $navId = 0;
+                foreach ($sidebarMenu as $key => $item):
                     $navId++;
 
-                    // 1. If the item is a collapsible sub-menu (like Manage Doctors)
-                    if (is_array($item) && isset($item[0]) && is_array($item[0])) {
-                        // Start of Collapsible Item
+                    // --- CASE A: COLLAPSIBLE MENU (e.g. Manage Doctors) ---
+                    // We check if it has an 'items' key
+                    if (is_array($item) && isset($item['items'])) {
+                        $label = $key;
+                        $icon = isset($item['icon']) ? $item['icon'] : 'fa-folder'; // Default icon if missing
+
                         echo '<li class="nav-item">';
-                        echo CHtml::link('<span>' . $label . '</span>', '#collapse' . $navId, array(
+                        echo CHtml::link('<i class="fas fa-fw ' . $icon . '"></i> <span>' . $label . '</span>', '#collapse' . $navId, array(
                             'class' => 'nav-link collapsed',
                             'data-toggle' => 'collapse',
                             'data-target' => '#collapse' . $navId,
                             'aria-expanded' => 'true',
                             'aria-controls' => 'collapse' . $navId,
                         ));
-                        // Start of Sub-Menu Div
-                        echo '<div id="collapse' . $navId . '" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">';
+
+                        echo '<div id="collapse' . $navId . '" class="collapse" data-parent="#accordionSidebar">';
                         echo '<div class="bg-white py-2 collapse-inner rounded">';
 
-                        // Add Sub-Menu Items
-                        foreach ($item as $subItem) {
+                        foreach ($item['items'] as $subItem) {
                             $url = is_array($subItem['url']) ? $this->createUrl($subItem['url'][0], array_slice($subItem['url'], 1)) : $subItem['url'];
                             echo CHtml::link($subItem['label'], $url, array('class' => 'collapse-item'));
                         }
 
                         echo '</div></div></li>';
                     }
-                    // 2. If the item is a single-level link or has a special class
-                    else if (is_array($item) && isset($item['url']) || isset($item['itemOptions'])) {
 
-                        // Check for divider/heading flags
-                        if (isset($item['divider']) && $item['divider']) {
+                    // --- CASE B: HEADERS & DIVIDERS ---
+                    else if (is_array($item) && (isset($item['divider']) || isset($item['itemOptions']))) {
+                        if (isset($item['divider'])) {
                             echo '<hr class="sidebar-divider">';
-                            echo '<div class="sidebar-heading">Settings</div>';
-                        } else if (isset($item['itemOptions']['class']) && $item['itemOptions']['class'] == 'sidebar-header') {
+                            echo '<div class="sidebar-heading">' . $item['label'] . '</div>';
+                        } else {
                             echo '<hr class="sidebar-divider">';
                             echo '<div class="sidebar-heading">' . strip_tags($item['label']) . '</div>';
-                        } else if ($item['url'] !== false) {
-                            $url = is_array($item['url']) ? $this->createUrl($item['url'][0], array_slice($item['url'], 1)) : $item['url'];
-
-                            // Regular single link item
-                            echo '<li class="nav-item">';
-                            echo CHtml::link('<i class="fas fa-fw fa-cog"></i> <span>' . $item['label'] . '</span>', $url, array('class' => 'nav-link'));
-                            echo '</li>';
                         }
+                    }
+
+                    // --- CASE C: STANDARD SINGLE LINK ---
+                    else if (isset($item['url']) && $item['url'] !== false) {
+                        $icon = isset($item['icon']) ? $item['icon'] : 'fa-circle'; // Default icon
+                        $url = is_array($item['url']) ? $this->createUrl($item['url'][0], array_slice($item['url'], 1)) : $item['url'];
+
+                        echo '<li class="nav-item">';
+                        echo CHtml::link('<i class="fas fa-fw ' . $icon . '"></i> <span>' . $item['label'] . '</span>', $url, array('class' => 'nav-link'));
+                        echo '</li>';
                     }
                 endforeach;
                 ?>
@@ -364,30 +374,14 @@
 
             </ul>
             <div id="content-wrapper" class="d-flex flex-column">
-
                 <div id="content">
-
                     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
                         </button>
 
-                        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fas fa-search fa-sm"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
                         <ul class="navbar-nav ml-auto">
-
                             <div class="topbar-divider d-none d-sm-block"></div>
-
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo Yii::app()->user->getState('displayName'); ?></span>
@@ -395,49 +389,36 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                     <?php
-                                    // Simplified Top Menu items integrated here
                                     echo CHtml::link('<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> My Account', array('/account/update', 'id' => Yii::app()->user->id), array('class' => 'dropdown-item'));
-                                    // Separator
                                     echo '<div class="dropdown-divider"></div>';
-                                    // Logout link triggers the modal
                                     echo CHtml::link('<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout', '#logoutModal', array('class' => 'dropdown-item', 'data-toggle' => 'modal', 'data-target' => '#logoutModal'));
                                     ?>
                                 </div>
                             </li>
-
                         </ul>
-
                     </nav>
                     <div class="container-fluid">
+                        
 
-                        <?php if (isset($this->breadcrumbs)): ?>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h1 class="h3 mb-4 text-gray-800"><?php echo CHtml::encode($this->pageTitle); ?></h1>
-                                    <?php $this->widget('zii.widgets.CBreadcrumbs', array(
-                                        'links' => $this->breadcrumbs,
-                                        'htmlOptions' => array('class' => 'breadcrumb'), // Use Bootstrap class
-                                    )); ?>
-                                </div>
-                            </div>
-                        <?php endif ?>
+                        <?php
+                        foreach (Yii::app()->user->getFlashes() as $key => $message) {
+                            echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+                        }
+                        ?>
 
                         <?php echo $content; ?>
-
                     </div>
                 </div>
+
                 <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; <?php echo date('Y'); ?> by QualiLife. All Rights Reserved. <?php echo Yii::powered(); ?></span>
+                            <span>Copyright &copy; <?php echo date('Y'); ?> Quali-Life. All Rights Reserved.</span>
                         </div>
                     </div>
                 </footer>
             </div>
         </div>
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
 
         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -457,27 +438,17 @@
             </div>
         </div>
 
-    <?php else: // Fallback for Guest/Login page that doesn't use the full layout 
-    ?>
-
+    <?php else: ?>
         <div class="container" id="page">
             <?php echo $content; ?>
-            <div class="clear"></div>
-            <div id="footer">
-                <p class="text-center small text-muted mt-5">Copyright &copy; <?php echo date('Y'); ?> by QualiLife. All Rights Reserved. <?php echo Yii::powered(); ?></p>
-            </div>
         </div>
-
     <?php endif; ?>
 
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/vendor/jquery/jquery.min.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/sb-admin-2.min.js"></script>
-
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/vendor/chart.js/Chart.min.js"></script>
-    <script src="<?php echo Yii::app()->request->baseUrl; ?>/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="<?php echo Yii::app()->request->baseUrl; ?>/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 </body>
 

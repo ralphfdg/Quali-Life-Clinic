@@ -118,4 +118,37 @@ class User extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	/**
+     * Normalize Name Capitalization before saving to DB
+     */
+   /**
+     * Normalize Name Capitalization before saving to DB
+     */
+    protected function beforeSave()
+    {
+        if(parent::beforeSave())
+        {
+            // 1. Standardize User's Name (e.g. "john doe" -> "John Doe")
+            $this->firstname = ucwords(strtolower($this->firstname));
+            $this->lastname = ucwords(strtolower($this->lastname));
+            $this->middlename = ucwords(strtolower($this->middlename));
+            
+            // 2. Standardize Qualifier (e.g. "jr." -> "Jr.")
+            if(!empty($this->qualifier)) {
+                $this->qualifier = ucfirst(strtolower($this->qualifier));
+            }
+
+            // 3. Standardize Parents' Names (NEW)
+            if(!empty($this->name_of_father)) {
+                $this->name_of_father = ucwords(strtolower($this->name_of_father));
+            }
+            if(!empty($this->name_of_mother)) {
+                $this->name_of_mother = ucwords(strtolower($this->name_of_mother));
+            }
+            
+            return true;
+        }
+        return false;
+    }
 }
