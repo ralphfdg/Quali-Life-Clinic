@@ -10,7 +10,6 @@
     'filterCssClass'=>'filter-class', 
 
     'columns'=>array(
-        'id',
         'username',
         'email_address',
         array(

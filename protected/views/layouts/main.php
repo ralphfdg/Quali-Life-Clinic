@@ -61,8 +61,14 @@
             array('label'=>'📋 Secretary Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
             array('label'=>'Dashboard (Patient Queue)', 'url'=>array('/site/index')),
             array('label'=>'Appointment Calendar', 'url'=>array('/appointment/calendar')), 
-            array('label'=>'Manage Patients', 'url'=>array('/user/admin', 'role'=>'patient')), 
-            array('label'=>'View Doctors', 'url'=>array('/user/admin', 'role'=>'doctor', 'viewOnly'=>true)), 
+            'Manage Patients' => array(
+                array('label'=>'Add Patient', 'url'=>array('/account/create', 'type'=>4)), 
+                array('label'=>'List Patients', 'url'=>array('/account/admin', 'type'=>4)),
+            ), 
+            'Manage Doctors' => array(
+                array('label'=>'Add Doctor', 'url'=>array('/account/create', 'type'=>3)), 
+                array('label'=>'List Doctors', 'url'=>array('/account/admin', 'type'=>3)),
+            ),
             array('label'=>'My Account', 'url'=>array('/account/update', 'id'=>Yii::app()->user->id)),
          );
     }
