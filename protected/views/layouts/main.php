@@ -34,7 +34,7 @@
                 array('label'=>'Add Doctor', 'url'=>array('/account/create', 'type'=>3)), 
                 array('label'=>'List Doctors', 'url'=>array('/account/admin', 'type'=>3)),
             ),
-            array('label'=>'Manage Admins', 'url'=>array('/account/admin', 'type'=>2)),
+           array('label'=>'Manage Secretaries', 'url'=>array('/account/admin', 'type'=>2)),
             'Manage Patients' => array(
                 array('label'=>'Add Patient', 'url'=>array('/account/create', 'type'=>4)), 
                 array('label'=>'List Patients', 'url'=>array('/account/admin', 'type'=>4)),
@@ -58,7 +58,7 @@
     else if ($this->isAdmin())
     {
          $sidebarMenu = array(
-            array('label'=>'📋 Admin Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
+            array('label'=>'📋 Secretary Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
             array('label'=>'Dashboard (Patient Queue)', 'url'=>array('/site/index')),
             array('label'=>'Appointment Calendar', 'url'=>array('/appointment/calendar')), 
             array('label'=>'Manage Patients', 'url'=>array('/user/admin', 'role'=>'patient')), 
@@ -69,7 +69,7 @@
     else if ($this->isDoctor())
     {
         $sidebarMenu = array(
-            array('label'=>'🧑‍⚕️ Doctor Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
+            array('label'=>'Doctor Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
             array('label'=>'Appointments', 'url'=>array('/appointment/myQueue')),
             array('label'=>'History & Records', 'url'=>array('/appointment/myHistory')),
             array('label'=>'My Schedule', 'url'=>array('/doctorSchedule/mySchedule')), 
@@ -79,7 +79,7 @@
     else if ($this->isPatient())
     {
         $sidebarMenu = array(
-            array('label'=>'👤 Patient Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
+            array('label'=>'Patient Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
             array('label'=>'Dashboard', 'url'=>array('/site/index')),
             array('label'=>'Book Appointment', 'url'=>array('/appointment/book')), 
             array('label'=>'My Appointments', 'url'=>array('/appointment/myAppointments')), 
