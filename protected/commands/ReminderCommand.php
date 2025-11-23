@@ -5,46 +5,70 @@ class ReminderCommand extends CConsoleCommand
     public function run($args)
     {
         echo "--- Starting Appointment Reminder Job ---\n";
-        
+
         // 1. Calculate "Tomorrow"
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
+        $displayDate = date('F j, Y', strtotime('+1 day')); // e.g. "November 25, 2025"
+
         echo "Checking appointments for date: $tomorrow\n";
 
-        // 2. Find appointments for tomorrow that haven't been reminded yet
+        // 2. Find appointments
         $criteria = new CDbCriteria;
         $criteria->addCondition("date(t.schedule_datetime) = :tomorrow");
-        $criteria->compare('t.appointment_status_id', 1); // Only 'Scheduled' status
-        $criteria->compare('t.sms_reminder_sent', 0); // Only if not sent yet
+        $criteria->compare('t.appointment_status_id', 1); // Scheduled
+        $criteria->compare('t.sms_reminder_sent', 0);     // Not sent yet
         $criteria->params[':tomorrow'] = $tomorrow;
 
-        // We need patient details to send the SMS
-        $appointments = Appointment::model()->with('patientAccount.user')->findAll($criteria);
+        // LOAD BOTH PATIENT AND DOCTOR DATA WITH ALIASES
+        $appointments = Appointment::model()->with(array(
+            'patientAccount' => array(
+                'with' => array(
+                    'user' => array('alias' => 'pUser')
+                )
+            ),
+            'doctorAccount' => array(
+                'with' => array(
+                    'user' => array('alias' => 'dUser')
+                )
+            )
+        ))->findAll($criteria);
 
         $count = 0;
 
-        foreach($appointments as $appt) {
-            // Safety Check: Ensure patient user data exists
-            if (isset($appt->patientAccount) && isset($appt->patientAccount->user)) {
-                $user = $appt->patientAccount->user;
-                
-                if (!empty($user->mobile_number)) {
-                    // 3. Construct Message
+        foreach ($appointments as $appt) {
+
+            // Safety Check
+            if (isset($appt->patientAccount->user) && isset($appt->doctorAccount->user)) {
+
+                $patientUser = $appt->patientAccount->user;
+                $doctorUser = $appt->doctorAccount->user;
+
+                if (!empty($patientUser->mobile_number)) {
+
+                    // 3. Construct Professional Message
                     $time = date('g:i A', strtotime($appt->schedule_datetime));
-                    $msg = "Reminder: You have an appointment at Quali-Life Clinic tomorrow ($tomorrow) at $time. See you!";
+                    $drName = $doctorUser->lastname;
+                    $patientName = ucfirst($patientUser->firstname); // Capitalize first letter
+
+                    // TEMPLATE:
+                    // Quali-Life: Dear [Name], reminder for your appointment tomorrow.
+                    // Doc: Dr. [Name]
+                    // Time: [Time]
+                    $msg = "Quali-Life: Dear $patientName, this is a reminder for your appointment tomorrow ($displayDate).\n\n"
+                        . "Dr. $drName\n"
+                        . "Time: $time\n\n"
+                        . "Please arrive 10 mins early.";
 
                     // 4. Send SMS
-                    if (SmsHelper::send($user->mobile_number, $msg)) {
-                        echo " [OK] Sent to {$user->firstname} ({$user->mobile_number})\n";
-                        
-                        // 5. Mark as Sent in DB so we don't spam them
+                    if (SmsHelper::send($patientUser->mobile_number, $msg)) {
+                        echo " [OK] Sent to {$patientUser->firstname}\n";
+
                         $appt->sms_reminder_sent = 1;
-                        $appt->save(false); // save(false) skips validation for speed
+                        $appt->save(false);
                         $count++;
                     } else {
-                        echo " [ERR] Failed to send to {$user->firstname}\n";
+                        echo " [ERR] Failed to send to {$patientUser->firstname}\n";
                     }
-                } else {
-                    echo " [SKIP] Patient {$user->firstname} has no mobile number.\n";
                 }
             }
         }
