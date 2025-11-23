@@ -37,6 +37,7 @@ class User extends CActiveRecord
 {
 
 	public $account_type_filter;
+	 public $globalSearch;
 
 	/**
 	 * @return string the associated database table name
@@ -54,12 +55,13 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('account_id, firstname, lastname, dob, gender', 'required'),
+			array('account_id, firstname, lastname, dob, gender', 'mobile_number', 'required'),
 			array('account_id, specialization_id, gender', 'numerical', 'integerOnly'=>true),
 			array('firstname, middlename, lastname, qualifier, ptr_number, license_number, s2_number, maxicare_number, name_of_father, name_of_mother, school', 'length', 'max'=>128),
 			array('specialization, address', 'length', 'max'=>255),
 			array('mother_contact_number, father_contact_number', 'length', 'max'=>11),
 			array('license_expiration, s2_expiration, father_dob, mother_dob', 'safe'),
+			array('mobile_number', 'match', 'pattern'=>'/^[0-9\+\-]+$/', 'message'=>'Invalid Phone Number'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, account_id, firstname, middlename, lastname, qualifier, dob, specialization, specialization_id, ptr_number, license_number, license_expiration, s2_number, s2_expiration, maxicare_number, address, name_of_father, father_dob, name_of_mother, mother_dob, school, gender, mother_contact_number, father_contact_number, account_type_filter', 'safe', 'on'=>'search'),
@@ -79,6 +81,8 @@ class User extends CActiveRecord
 		);
 	}
 
+
+	
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */

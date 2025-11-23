@@ -15,4 +15,4 @@ $this->menu=array(
 
 <h1>Create Account</h1>
 
-<?php $this->renderPartial('_form', array('account'=>$model, 'user'=>$user));?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'user'=>$user));?>

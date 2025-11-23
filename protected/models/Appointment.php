@@ -44,10 +44,10 @@ class Appointment extends CActiveRecord
 		return array(
 			// REMOVED 'date_booked' from the required list below
 			array('patient_account_id, doctor_account_id, schedule_datetime', 'required'),
-			array('patient_account_id, doctor_account_id, booked_by_account_id, appointment_status_id, sms_reminder_sent, email_reminder_sent', 'numerical', 'integerOnly'=>true),
+			array('patient_account_id, doctor_account_id, booked_by_account_id, appointment_status_id, sms_reminder_sent, email_reminder_sent', 'numerical', 'integerOnly' => true),
 			array('notes, cancellation_reason', 'safe'),
 			// The following rule is used by search().
-			array('id, patient_account_id, doctor_account_id, booked_by_account_id, schedule_datetime, appointment_status_id, notes, cancellation_reason, date_booked, sms_reminder_sent, email_reminder_sent', 'safe', 'on'=>'search'),
+			array('id, patient_account_id, doctor_account_id, booked_by_account_id, schedule_datetime, appointment_status_id, notes, cancellation_reason, date_booked, sms_reminder_sent, email_reminder_sent', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -90,45 +90,43 @@ class Appointment extends CActiveRecord
 	 */
 	public function search()
 	{
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('patient_account_id',$this->patient_account_id);
-		$criteria->compare('doctor_account_id',$this->doctor_account_id);
-		$criteria->compare('booked_by_account_id',$this->booked_by_account_id);
-		$criteria->compare('schedule_datetime',$this->schedule_datetime,true);
-		$criteria->compare('appointment_status_id',$this->appointment_status_id);
-		$criteria->compare('notes',$this->notes,true);
-		$criteria->compare('cancellation_reason',$this->cancellation_reason,true);
-		$criteria->compare('date_booked',$this->date_booked,true);
-		$criteria->compare('sms_reminder_sent',$this->sms_reminder_sent);
-		$criteria->compare('email_reminder_sent',$this->email_reminder_sent);
+		$criteria->compare('id', $this->id);
+		$criteria->compare('patient_account_id', $this->patient_account_id);
+		$criteria->compare('doctor_account_id', $this->doctor_account_id);
+		$criteria->compare('booked_by_account_id', $this->booked_by_account_id);
+		$criteria->compare('schedule_datetime', $this->schedule_datetime, true);
+		$criteria->compare('appointment_status_id', $this->appointment_status_id);
+		$criteria->compare('notes', $this->notes, true);
+		$criteria->compare('cancellation_reason', $this->cancellation_reason, true);
+		$criteria->compare('date_booked', $this->date_booked, true);
+		$criteria->compare('sms_reminder_sent', $this->sms_reminder_sent);
+		$criteria->compare('email_reminder_sent', $this->email_reminder_sent);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+			'criteria' => $criteria,
 		));
 	}
 
 	/**
 	 * Returns the static model of the specified AR class.
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}
-	
+
 	// --- ADDED THIS FUNCTION TO FIX SAVING ---
 	protected function beforeSave()
 	{
-		if(parent::beforeSave())
-		{
-			if($this->isNewRecord)
-			{
+		if (parent::beforeSave()) {
+			if ($this->isNewRecord) {
 				// Automatically set the booking date to NOW
 				$this->date_booked = date('Y-m-d H:i:s');
-				
+
 				// Ensure status is set to 1 (Scheduled) if not provided
-				if(empty($this->appointment_status_id)) {
+				if (empty($this->appointment_status_id)) {
 					$this->appointment_status_id = 1;
 				}
 			}
@@ -136,4 +134,66 @@ class Appointment extends CActiveRecord
 		}
 		return false;
 	}
+
+	protected function afterSave()
+    {
+        parent::afterSave();
+
+        // --- FIX: USE ALIASES TO AVOID SQL ERROR ---
+        // We use explicit aliases ('pUser' and 'dUser') so SQL knows 
+        // which table is the patient and which is the doctor.
+        $appt = Appointment::model()->with(array(
+            'patientAccount' => array(
+                'with' => array(
+                    'user' => array('alias' => 'pUser') 
+                )
+            ),
+            'doctorAccount' => array(
+                'with' => array(
+                    'user' => array('alias' => 'dUser')
+                )
+            )
+        ))->findByPk($this->id);
+        
+        // Safety exit if data is missing
+        if(!$appt || !isset($appt->patientAccount->user) || !isset($appt->doctorAccount->user)) {
+            return; 
+        }
+
+        $patientUser = $appt->patientAccount->user;
+        $doctorUser = $appt->doctorAccount->user;
+        
+        $mobile = $patientUser->mobile_number;
+        // Add check to ensure names exist
+        $patientName = ucfirst($patientUser->firstname);
+        $doctorName = ucfirst($doctorUser->lastname);
+
+        // --- TRIGGER 1: NEW APPOINTMENT (CONFIRMATION) ---
+        if ($this->isNewRecord && !empty($mobile)) 
+        {
+            $date = date('M j, Y', strtotime($this->schedule_datetime)); // Nov 24, 2025
+            $time = date('g:i A', strtotime($this->schedule_datetime));  // 9:30 AM
+            
+            // SMS TEMPLATE
+            $msg = "Quali-Life: Hello $patientName, your appointment is CONFIRMED.\n\n"
+                 . "Dr. $doctorName\n"
+                 . "$date @ $time\n\n"
+                 . "See you soon!";
+            
+            SmsHelper::send($mobile, $msg);
+        }
+
+        // --- TRIGGER 2: CANCELLATION ---
+        if (!$this->isNewRecord && $this->appointment_status_id == 5 && !empty($mobile)) 
+        {
+            $date = date('F j', strtotime($this->schedule_datetime)); // November 24
+            $time = date('g:i A', strtotime($this->schedule_datetime));
+
+            // SMS TEMPLATE
+            $msg = "Quali-Life: Hi $patientName, your appointment with Dr. $doctorName on $date ($time) has been CANCELED.\n\n"
+                 . "Please contact us if you wish to reschedule.";
+            
+            SmsHelper::send($mobile, $msg);
+        }
+    }
 }

@@ -76,6 +76,7 @@ class SpecializationController extends Controller
 
 		$this->render('create', array(
 			'model' => $model,
+			
 		));
 	}
 
