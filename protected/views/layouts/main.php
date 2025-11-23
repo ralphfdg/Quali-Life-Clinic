@@ -238,7 +238,7 @@
                 )
             ),
 
-            array('label' => 'Generate Report', 'icon' => 'fa-chart-line', 'url' => array('/clinic/admin')),
+            array('label' => 'Generate Report', 'icon' => 'fa-chart-line', 'url' => array('/report/index')),
             array('label' => 'Audit Log', 'icon' => 'fa-clipboard-list', 'url' => array('/auditlog/admin')),
 
             // Settings

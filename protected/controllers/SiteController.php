@@ -45,80 +45,80 @@ class SiteController extends Controller
 	}
 
 	/**
-     * 🏥 SUPER ADMIN: High-level stats & charts
-     */
-    protected function renderSuperAdminDashboard()
-    {
-        // --- 1. DEFINE THE COUNTERS (This fixes the "Undefined variable" error) ---
-        $totalDoctors = Account::model()->count('account_type_id=3 AND status_id=1');
-        $totalPatients = Account::model()->count('account_type_id=4 AND status_id=1');
+	 * 🏥 SUPER ADMIN: High-level stats & charts
+	 */
+	protected function renderSuperAdminDashboard()
+	{
+		// --- 1. DEFINE THE COUNTERS (This fixes the "Undefined variable" error) ---
+		$totalDoctors = Account::model()->count('account_type_id=3 AND status_id=1');
+		$totalPatients = Account::model()->count('account_type_id=4 AND status_id=1');
 
-        // Appts this month
-        $startMonth = date('Y-m-01');
-        $endMonth = date('Y-m-t');
-        $totalApptMonth = Appointment::model()->count(
-            'schedule_datetime BETWEEN :start AND :end AND appointment_status_id != 5',
-            array(':start' => $startMonth, ':end' => $endMonth)
-        );
+		// Appts this month
+		$startMonth = date('Y-m-01');
+		$endMonth = date('Y-m-t');
+		$totalApptMonth = Appointment::model()->count(
+			'schedule_datetime BETWEEN :start AND :end AND appointment_status_id != 5',
+			array(':start' => $startMonth, ':end' => $endMonth)
+		);
 
-        // Appts Today
-        $today = date('Y-m-d');
-        $totalApptToday = Appointment::model()->count(
-            'date(schedule_datetime) = :today AND appointment_status_id != 5',
-            array(':today' => $today)
-        );
+		// Appts Today
+		$today = date('Y-m-d');
+		$totalApptToday = Appointment::model()->count(
+			'date(schedule_datetime) = :today AND appointment_status_id != 5',
+			array(':today' => $today)
+		);
 
-        // --- 2. CHART DATA: Activity (-5 days to +25 days) ---
-        $chartLabels = array();
-        $chartData = array();
-        
-        // Get timestamp for today at midnight
-        $todayTimestamp = strtotime(date('Y-m-d'));
+		// --- 2. CHART DATA: Activity (-5 days to +25 days) ---
+		$chartLabels = array();
+		$chartData = array();
 
-        // Loop from -5 (5 days ago) to 25 (25 days in the future)
-        for ($i = -5; $i <= 25; $i++) {
-            $loopDate = strtotime("$i days", $todayTimestamp);
-            $d = date('Y-m-d', $loopDate);      
-            $displayDate = date('M j', $loopDate); 
+		// Get timestamp for today at midnight
+		$todayTimestamp = strtotime(date('Y-m-d'));
 
-            $count = Appointment::model()->count(
-                'date(schedule_datetime)=:d AND appointment_status_id!=5', 
-                array(':d' => $d)
-            );
+		// Loop from -5 (5 days ago) to 25 (25 days in the future)
+		for ($i = -5; $i <= 25; $i++) {
+			$loopDate = strtotime("$i days", $todayTimestamp);
+			$d = date('Y-m-d', $loopDate);
+			$displayDate = date('M j', $loopDate);
 
-            $chartLabels[] = $displayDate;
-            $chartData[] = (int)$count;
-        }
+			$count = Appointment::model()->count(
+				'date(schedule_datetime)=:d AND appointment_status_id!=5',
+				array(':d' => $d)
+			);
 
-        // --- 3. PIE CHART: Doctor Specializations ---
-        $specs = Yii::app()->db->createCommand()
-            ->select('s.specialization_name, COUNT(u.id) as count')
-            ->from('tbl_user u')
-            ->join('tbl_specialization s', 'u.specialization_id = s.id')
-            ->join('tbl_account a', 'u.account_id = a.id')
-            ->where('a.account_type_id=3 AND a.status_id=1')
-            ->group('s.specialization_name')
-            ->queryAll();
+			$chartLabels[] = $displayDate;
+			$chartData[] = (int)$count;
+		}
 
-        $pieLabels = array();
-        $pieData = array();
-        foreach ($specs as $row) {
-            $pieLabels[] = $row['specialization_name'];
-            $pieData[] = (int)$row['count'];
-        }
+		// --- 3. PIE CHART: Doctor Specializations ---
+		$specs = Yii::app()->db->createCommand()
+			->select('s.specialization_name, COUNT(u.id) as count')
+			->from('tbl_user u')
+			->join('tbl_specialization s', 'u.specialization_id = s.id')
+			->join('tbl_account a', 'u.account_id = a.id')
+			->where('a.account_type_id=3 AND a.status_id=1')
+			->group('s.specialization_name')
+			->queryAll();
 
-        // --- 4. RENDER THE VIEW ---
-        $this->render('dashboard_superadmin', array(
-            'totalDoctors' => $totalDoctors,     // Passed here
-            'totalPatients' => $totalPatients,   // Passed here
-            'totalApptMonth' => $totalApptMonth, // Passed here
-            'totalApptToday' => $totalApptToday, // Passed here
-            'chartLabels' => CJSON::encode($chartLabels),
-            'chartData' => CJSON::encode($chartData),
-            'pieLabels' => CJSON::encode($pieLabels),
-            'pieData' => CJSON::encode($pieData),
-        ));
-    }
+		$pieLabels = array();
+		$pieData = array();
+		foreach ($specs as $row) {
+			$pieLabels[] = $row['specialization_name'];
+			$pieData[] = (int)$row['count'];
+		}
+
+		// --- 4. RENDER THE VIEW ---
+		$this->render('dashboard_superadmin', array(
+			'totalDoctors' => $totalDoctors,     // Passed here
+			'totalPatients' => $totalPatients,   // Passed here
+			'totalApptMonth' => $totalApptMonth, // Passed here
+			'totalApptToday' => $totalApptToday, // Passed here
+			'chartLabels' => CJSON::encode($chartLabels),
+			'chartData' => CJSON::encode($chartData),
+			'pieLabels' => CJSON::encode($pieLabels),
+			'pieData' => CJSON::encode($pieData),
+		));
+	}
 
 	/**
 	 * 📋 ADMIN (Secretary): Live Queue Management
@@ -261,6 +261,17 @@ class SiteController extends Controller
 	 */
 	public function actionLogout()
 	{
+		// --- LOG LOGOUT EVENT ---
+		if (!Yii::app()->user->isGuest) {
+			AuditHelper::log(
+				'LOGOUT',
+				'tbl_account',
+				Yii::app()->user->id,
+				'User logged out.'
+			);
+		}
+		// -----------------------------
+
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}

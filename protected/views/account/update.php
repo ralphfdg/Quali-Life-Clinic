@@ -3,25 +3,32 @@
 /* @var $model Account */
 /* @var $user User */
 
-$this->breadcrumbs=array(
-	'Accounts'=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
-	'Update',
+$this->breadcrumbs = array(
+    'Accounts' => array('index'),
+    $model->username => array('view', 'id' => $model->id),
+    'Update',
 );
 
-$this->menu=array(
-	array('label'=>'List Account', 'url'=>array('index')),
-	array('label'=>'Create Account', 'url'=>array('create')),
-	array('label'=>'View Account', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Account', 'url'=>array('admin')),
-);
+// Check if editing self
+$isMe = (Yii::app()->user->id == $model->id);
 ?>
 
-<h1>Update Account <?php echo $model->id; ?></h1>
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">
+        <?php echo $isMe ? 'Edit My Profile' : 'Update Account: <span class="text-primary">' . CHtml::encode($model->username) . '</span>'; ?>
+    </h1>
+    <div>
+        <?php echo CHtml::link('<i class="fas fa-eye"></i> View', array('view', 'id' => $model->id), array('class' => 'btn btn-sm btn-info shadow-sm')); ?>
 
-<?php 
+        <?php if (!$isMe): ?>
+            <?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back', array('admin'), array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
+        <?php endif; ?>
+    </div>
+</div>
+
+<?php
 $this->renderPartial('_form', array(
-    'model'=>$model, 
-    'user'=>$user // <--- Ensure this says $user
-)); 
+    'model' => $model,
+    'user' => $user
+));
 ?>

@@ -372,6 +372,17 @@ class AppointmentController extends Controller
 			$model->cancellation_reason = "Canceled by Patient";
 
 			if ($model->save()) {
+				// --- AUDIT LOG HERE ---
+				if (class_exists('AuditHelper')) {
+					AuditHelper::log(
+						'CANCEL_APPOINTMENT',
+						'tbl_appointment',
+						$model->id,
+						"Reason: " . $model->cancellation_reason
+					);
+				}
+				// --------------------------
+
 				Yii::app()->user->setFlash('success', "Appointment #$id has been canceled.");
 			} else {
 				Yii::app()->user->setFlash('error', "Could not cancel appointment.");
@@ -523,6 +534,19 @@ class AppointmentController extends Controller
 		$model->appointment_status_id = (int)$status;
 
 		if ($model->save()) {
+			// --- AUDIT LOG HERE ---
+			if (class_exists('AuditHelper')) {
+				// Get status name for readable log
+				$statusName = ($status == 2) ? 'Arrived' : (($status == 3) ? 'In Consultation' : 'Completed');
+
+				AuditHelper::log(
+					'UPDATE_STATUS',
+					'tbl_appointment',
+					$model->id,
+					"Changed status to: $statusName"
+				);
+			}
+			// --------------------------
 
 			// --- NEW LOGIC: Redirect to SOAP Note if "In Consultation" ---
 			if ((int)$status === 3) {
