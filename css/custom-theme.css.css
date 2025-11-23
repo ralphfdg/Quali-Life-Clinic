@@ -1,0 +1,36 @@
+/* Custom Color Overrides for Quali-Life Clinic */
+
+/* 1. Global Variable Overrides */
+:root {
+  /* PRIMARY COLOR: #049208 (Green) */
+  --blue: #049208 !important; 
+  --primary: #049208 !important;
+  
+  /* SECONDARY/SUCCESS COLOR: #ffe82d (Yellow) */
+  --green: #ffe82d !important;
+  --success: #ffe82d !important;
+  --warning: #ffe82d !important;
+  --yellow: #ffe82d !important; /* Ensures yellow cards use this */
+}
+
+/* 2. Force the Sidebar Gradient (Primary color) */
+.bg-gradient-primary {
+    /* Use the primary color for the base */
+    background-color: var(--primary) !important;
+    
+    /* Define the gradient: from your color to a slightly darker shade of green (#036b06) */
+    background-image: linear-gradient(180deg, var(--primary) 10%, #036b06 100%) !important;
+}
+
+/* 3. Force Primary Button Colors */
+.btn-primary {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+/* 4. Force Success/Save Button Colors */
+.btn-success {
+    background-color: var(--success) !important;
+    border-color: var(--success) !important;
+    color: #000000 !important; /* Ensures text on yellow is black for readability */
+}

@@ -37,6 +37,7 @@ class User extends CActiveRecord
 {
 
 	public $account_type_filter;
+	 public $globalSearch;
 
 	/**
 	 * @return string the associated database table name
@@ -79,6 +80,8 @@ class User extends CActiveRecord
 		);
 	}
 
+
+	
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
