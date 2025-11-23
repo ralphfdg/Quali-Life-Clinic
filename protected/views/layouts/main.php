@@ -16,6 +16,111 @@
     
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
+
+    <style>
+        /* --- PRIMARY COLOR (Green: #02700d) --- */
+        
+        /* Sidebar & Backgrounds */
+        .bg-gradient-primary {
+            background-color: #02700d;
+            background-image: linear-gradient(180deg, #02700d 10%, #025d0b 100%);
+            background-size: cover;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background-color: #02700d;
+            border-color: #02700d;
+        }
+        .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+            background-color: #025d0b !important;
+            border-color: #025d0b !important;
+        }
+        
+        /* Text & Icons */
+        .text-primary {
+            color: #02700d !important;
+        }
+        
+        /* Card Borders */
+        .border-left-primary {
+            border-left: .25rem solid #02700d !important;
+        }
+
+        /* --- SECONDARY COLOR (Gold: #d0be02) --- */
+        
+        /* Backgrounds */
+        .bg-gradient-secondary {
+            background-color: #d0be02;
+            background-image: linear-gradient(180deg, #d0be02 10%, #bba002 100%);
+        }
+        
+        /* Buttons */
+        .btn-secondary {
+            background-color: #d0be02;
+            border-color: #d0be02;
+            color: #fff; /* White text for contrast */
+        }
+        .btn-secondary:hover {
+            background-color: #bba002 !important;
+            border-color: #bba002 !important;
+        }
+        
+        /* Text */
+        .text-secondary {
+            color: #d0be02 !important;
+        }
+        
+        /* Card Borders */
+        .border-left-secondary {
+            border-left: .25rem solid #d0be02 !important;
+        }
+        
+        /* Pagination Active State */
+        .page-item.active .page-link {
+            background-color: #02700d;
+            border-color: #02700d;
+        }
+
+        /* --- DANGER (Deep Red) --- */
+        .btn-danger {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+        .btn-danger:hover {
+            background-color: #a93226 !important;
+            border-color: #a93226 !important;
+        }
+        .text-danger { color: #c0392b !important; }
+        .border-left-danger { border-left: .25rem solid #c0392b !important; }
+
+        /* --- WARNING (Burnt Orange) --- */
+        /* We use Orange here because your Secondary color is already Yellow/Gold */
+        .btn-warning {
+            background-color: #f39c12;
+            border-color: #f39c12;
+            color: #fff; /* White text for readability */
+        }
+        .btn-warning:hover {
+            background-color: #e67e22 !important;
+            border-color: #e67e22 !important;
+            color: #fff;
+        }
+        .text-warning { color: #f39c12 !important; }
+        .border-left-warning { border-left: .25rem solid #f39c12 !important; }
+
+        /* --- INFO (Medical Teal) --- */
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        .btn-info:hover {
+            background-color: #138496 !important;
+            border-color: #138496 !important;
+        }
+        .text-info { color: #17a2b8 !important; }
+        .border-left-info { border-left: .25rem solid #17a2b8 !important; }
+    </style>
 </head>
 
 <body id="page-top">
@@ -34,7 +139,7 @@
                 array('label'=>'Add Doctor', 'url'=>array('/account/create', 'type'=>3)), 
                 array('label'=>'List Doctors', 'url'=>array('/account/admin', 'type'=>3)),
             ),
-           array('label'=>'Manage Secretaries', 'url'=>array('/account/admin', 'type'=>2)),
+            array('label'=>'Manage Secretaries', 'url'=>array('/account/admin', 'type'=>2)),
             'Manage Patients' => array(
                 array('label'=>'Add Patient', 'url'=>array('/account/create', 'type'=>4)), 
                 array('label'=>'List Patients', 'url'=>array('/account/admin', 'type'=>4)),
@@ -47,10 +152,12 @@
             
             array('label'=>'My Account', 'url'=>array('/account/update', 'id'=>Yii::app()->user->id)),
             
-            // Developer/Gii links 
-            array('label'=>'Gii CRUD (Dev)', 'itemOptions'=>array('class'=>'sidebar-header'), 'url'=>false), 
-            array('label'=>'Manage Accounts', 'url'=>array('/account/admin')),
-            array('label'=>'Manage Users', 'url'=>array('/user/admin')),
+            // Developer/System Settings
+            array('label'=>'System Config', 'itemOptions'=>array('class'=>'sidebar-header'), 'url'=>false), 
+            
+            // REMOVED: 'Manage Accounts' and 'Manage Users' 
+            
+            // KEPT: These are still useful for setup
             array('label'=>'Manage Schedules', 'url'=>array('/doctorSchedule/admin')),
             array('label'=>'Manage Specializations', 'url'=>array('/specialization/admin')),
         );
