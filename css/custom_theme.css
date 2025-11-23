@@ -1,0 +1,50 @@
+/* custom_theme.css */
+
+/* Define CSS Variables for the new colors */
+:root {
+    --primary: #02700d;       /* Primary Green */
+    --primary-dark: #037a06;  /* Darker Green for hover/gradient end */
+    --secondary: #d0be02;     /* Secondary Yellow */
+}
+
+/* 1. Sidebar Background & Gradient */
+/* This overrides the .bg-gradient-primary class used in the <ul> element in main.php */
+.bg-gradient-primary {
+    background-color: var(--primary);
+    background-image: linear-gradient(180deg, var(--primary) 10%, var(--primary-dark) 100%);
+    background-size: cover;
+}
+
+/* 2. Primary Buttons (Search button, Logout modal button, Create/Save buttons) */
+.btn-primary {
+    color: #fff;
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* 3. Primary Text Color (Card Headers, certain links) */
+.text-primary {
+    color: var(--primary) !important; 
+}
+
+/* 4. Active Sidebar Link Color (for contrast on dark green background) */
+.sidebar-dark .nav-item.active .nav-link {
+    color: var(--secondary); /* Yellow text */
+}
+
+.sidebar-dark .nav-item.active .nav-link i {
+    color: var(--secondary); /* Yellow icon */
+}
+
+/* 5. Input Focus Glow (from form.css context) */
+.form-control:focus {
+    border-color: var(--secondary); 
+    box-shadow: 0 0 0 0.2rem rgba(255, 232, 45, 0.5); /* Yellow glow */
+}

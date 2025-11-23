@@ -12,7 +12,10 @@
 
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/sb-admin-2.min.css" rel="stylesheet">
+    
+    <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/custom_theme.css" rel="stylesheet">
     
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
@@ -34,7 +37,7 @@
                 array('label'=>'Add Doctor', 'url'=>array('/account/create', 'type'=>3)), 
                 array('label'=>'List Doctors', 'url'=>array('/account/admin', 'type'=>3)),
             ),
-           array('label'=>'Manage Secretaries', 'url'=>array('/account/admin', 'type'=>2)),
+            array('label'=>'Manage Sect', 'url'=>array('/account/admin', 'type'=>2)),
             'Manage Patients' => array(
                 array('label'=>'Add Patient', 'url'=>array('/account/create', 'type'=>4)), 
                 array('label'=>'List Patients', 'url'=>array('/account/admin', 'type'=>4)),
@@ -49,8 +52,6 @@
             
             // Developer/Gii links 
             array('label'=>'Gii CRUD (Dev)', 'itemOptions'=>array('class'=>'sidebar-header'), 'url'=>false), 
-            array('label'=>'Manage Accounts', 'url'=>array('/account/admin')),
-            array('label'=>'Manage Users', 'url'=>array('/user/admin')),
             array('label'=>'Manage Schedules', 'url'=>array('/doctorSchedule/admin')),
             array('label'=>'Manage Specializations', 'url'=>array('/specialization/admin')),
         );
@@ -58,18 +59,18 @@
     else if ($this->isAdmin())
     {
          $sidebarMenu = array(
-            array('label'=>'📋 Secretary Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
-            array('label'=>'Dashboard (Patient Queue)', 'url'=>array('/site/index')),
-            array('label'=>'Appointment Calendar', 'url'=>array('/appointment/calendar')), 
-            array('label'=>'Manage Patients', 'url'=>array('/user/admin', 'role'=>'patient')), 
-            array('label'=>'View Doctors', 'url'=>array('/user/admin', 'role'=>'doctor', 'viewOnly'=>true)), 
-            array('label'=>'My Account', 'url'=>array('/account/update', 'id'=>Yii::app()->user->id)),
-         );
+             array('label'=>'📋 Admin Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
+             array('label'=>'Dashboard (Patient Queue)', 'url'=>array('/site/index')),
+             array('label'=>'Appointment Calendar', 'url'=>array('/appointment/calendar')), 
+             array('label'=>'Manage Patients', 'url'=>array('/user/admin', 'role'=>'patient')), 
+             array('label'=>'View Doctors', 'url'=>array('/user/admin', 'role'=>'doctor', 'viewOnly'=>true)), 
+             array('label'=>'My Account', 'url'=>array('/account/update', 'id'=>Yii::app()->user->id)),
+           );
     }
     else if ($this->isDoctor())
     {
         $sidebarMenu = array(
-            array('label'=>'Doctor Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
+            array('label'=>'🧑‍⚕️ Doctor Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
             array('label'=>'Appointments', 'url'=>array('/appointment/myQueue')),
             array('label'=>'History & Records', 'url'=>array('/appointment/myHistory')),
             array('label'=>'My Schedule', 'url'=>array('/doctorSchedule/mySchedule')), 
@@ -79,7 +80,7 @@
     else if ($this->isPatient())
     {
         $sidebarMenu = array(
-            array('label'=>'Patient Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
+            array('label'=>'👤 Patient Menu', 'itemOptions'=>array('class'=>'sidebar-header')),
             array('label'=>'Dashboard', 'url'=>array('/site/index')),
             array('label'=>'Book Appointment', 'url'=>array('/appointment/book')), 
             array('label'=>'My Appointments', 'url'=>array('/appointment/myAppointments')), 
@@ -243,7 +244,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; <?php echo date('Y'); ?> by QualiLife. All Rights Reserved. <?php echo Yii::powered(); ?></span>
+                        <span>Copyright &copy; <?php echo date('Y'); ?> by QualiLife. All Rights Reserved. <?php echo CHtml::link('Yii Framework', 'https://www.yiiframework.com', array('target'=>'_blank')); ?></span>
                     </div>
                 </div>
             </footer>
@@ -277,7 +278,7 @@
             <?php echo $content; ?>
             <div class="clear"></div>
             <div id="footer">
-                <p class="text-center small text-muted mt-5">Copyright &copy; <?php echo date('Y'); ?> by QualiLife. All Rights Reserved. <?php echo Yii::powered(); ?></p>
+                <p class="text-center small text-muted mt-5">Copyright &copy; <?php echo date('Y'); ?> by QualiLife. All Rights Reserved. <?php echo CHtml::link('Yii Framework', 'https://www.yiiframework.com', array('target'=>'_blank')); ?></p>
             </div>
         </div>
 
