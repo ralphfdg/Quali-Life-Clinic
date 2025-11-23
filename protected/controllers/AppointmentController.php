@@ -550,7 +550,7 @@ class AppointmentController extends Controller
 		$criteria = new CDbCriteria;
 
 		$criteria->compare('t.doctor_account_id', $doctorId);
-        $criteria->compare('t.appointment_status_id', 4); // 4 = Completed
+		$criteria->compare('t.appointment_status_id', 4); // 4 = Completed
 
 		// 3. Order by Date (Newest first)
 		$criteria->order = 't.schedule_datetime DESC';
