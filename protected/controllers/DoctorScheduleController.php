@@ -2,179 +2,118 @@
 
 class DoctorScheduleController extends Controller
 {
-	/**
-	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
-	 * using two-column layout. See 'protected/views/layouts/column2.php'.
-	 */
-	public $layout = '//layouts/column2';
+    public $layout = '//layouts/column2';
 
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
+    public function filters()
+    {
+        return array(
+            'accessControl', 
+            'postOnly + delete', 
+        );
+    }
 
-	/**
-	 * Specifies the access control rules.
-	 */
-	public function accessRules()
-	{
-		return array(
-			// Admins & Super Admins: Manage Everything
-			array(
-				'allow',
-				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
-				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()', // FIX
-			),
-			// Doctors: View Own Schedule
-			array(
-				'allow',
-				'actions' => array('index', 'view', 'mySchedule'),
-				'expression' => 'Yii::app()->controller->isDoctor()', // FIX
-			),
-			array(
-				'deny',
-				'users' => array('*'),
-			),
-		);
-	}
+    public function accessRules()
+    {
+        return array(
+            array('allow',
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
+                'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
+            ),
+            array('allow',
+                'actions' => array('index', 'view', 'mySchedule'),
+                'expression' => 'Yii::app()->controller->isDoctor()',
+            ),
+            array('deny', 'users' => array('*')),
+        );
+    }
 
-	/**
-	 * Custom helper to check if user is Admin or Super Admin
-	 */
-	public function allowAdminAccess()
-	{
-		return $this->isSuperAdmin() || $this->isAdmin();
-	}
+    // ... (Keep helper functions like allowAdminAccess, loadModel, etc.) ...
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view', array(
-			'model' => $this->loadModel($id),
-		));
-	}
+    public function actionCreate()
+    {
+        $model = new DoctorSchedule;
 
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionCreate()
-	{
-		$model = new DoctorSchedule;
+        if (isset($_POST['DoctorSchedule'])) {
+            $model->attributes = $_POST['DoctorSchedule'];
+            if ($model->save()) {
+                
+                // --- AUDIT LOG ---
+                if(class_exists('AuditHelper')) {
+                    AuditHelper::log(
+                        'CREATE_SCHEDULE', 
+                        'tbl_doctor_schedule', 
+                        $model->id, 
+                        "Created schedule for Doctor ID: " . $model->doctor_account_id
+                    );
+                }
+                // -----------------
 
-		if (isset($_POST['DoctorSchedule'])) {
-			$model->attributes = $_POST['DoctorSchedule'];
-			if ($model->save())
-				$this->redirect(array('admin')); // Redirect to admin grid after create
-		}
+                $this->redirect(array('admin')); 
+            }
+        }
 
-		$this->render('create', array(
-			'model' => $model,
-		));
-	}
+        $this->render('create', array('model' => $model));
+    }
 
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionUpdate($id)
-	{
-		$model = $this->loadModel($id);
+    public function actionUpdate($id)
+    {
+        $model = $this->loadModel($id);
 
-		if (isset($_POST['DoctorSchedule'])) {
-			$model->attributes = $_POST['DoctorSchedule'];
-			if ($model->save())
-				$this->redirect(array('admin')); // Redirect to admin grid after update
-		}
+        if (isset($_POST['DoctorSchedule'])) {
+            $model->attributes = $_POST['DoctorSchedule'];
+            if ($model->save()) {
+                
+                // --- AUDIT LOG ---
+                if(class_exists('AuditHelper')) {
+                    $days = array(0=>'Sun', 1=>'Mon', 2=>'Tue', 3=>'Wed', 4=>'Thu', 5=>'Fri', 6=>'Sat');
+                    $dayName = isset($days[$model->day_of_week]) ? $days[$model->day_of_week] : $model->day_of_week;
+                    
+                    AuditHelper::log(
+                        'UPDATE_SCHEDULE', 
+                        'tbl_doctor_schedule', 
+                        $model->id, 
+                        "Updated schedule for " . $dayName
+                    );
+                }
+                // -----------------
 
-		$this->render('update', array(
-			'model' => $model,
-		));
-	}
+                $this->redirect(array('admin')); 
+            }
+        }
 
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
-	public function actionDelete($id)
-	{
-		$this->loadModel($id)->delete();
+        $this->render('update', array('model' => $model));
+    }
 
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if (!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
+    // ... (Keep actionDelete, actionAdmin, loadModel, etc.) ...
+    
+    public function actionDelete($id)
+    {
+        $this->loadModel($id)->delete();
+        
+        // Audit log for delete (Optional but recommended)
+        if(class_exists('AuditHelper')) {
+            AuditHelper::log('DELETE_SCHEDULE', 'tbl_doctor_schedule', $id, 'Deleted by Admin');
+        }
 
-	/**
-	 * Manages all models.
-	 */
-	public function actionAdmin()
-	{
-		$model = new DoctorSchedule('search');
-		$model->unsetAttributes();  // clear any default values
-		if (isset($_GET['DoctorSchedule']))
-			$model->attributes = $_GET['DoctorSchedule'];
+        if (!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+    }
 
-		$this->render('admin', array(
-			'model' => $model,
-		));
-	}
+    public function actionAdmin()
+    {
+        $model = new DoctorSchedule('search');
+        $model->unsetAttributes();
+        if (isset($_GET['DoctorSchedule']))
+            $model->attributes = $_GET['DoctorSchedule'];
 
-	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
-	 * @param integer $id the ID of the model to be loaded
-	 * @return DoctorSchedule the loaded model
-	 * @throws CHttpException
-	 */
-	public function loadModel($id)
-	{
-		$model = DoctorSchedule::model()->findByPk($id);
-		if ($model === null)
-			throw new CHttpException(404, 'The requested page does not exist.');
-		return $model;
-	}
+        $this->render('admin', array('model' => $model));
+    }
 
-	/**
-	 * Performs the AJAX validation.
-	 * @param DoctorSchedule $model the model to be validated
-	 */
-	protected function performAjaxValidation($model)
-	{
-		if (isset($_POST['ajax']) && $_POST['ajax'] === 'doctor-schedule-form') {
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
-	}
-
-	/**
-	 * Lists the schedule for the currently logged-in doctor.
-	 */
-	public function actionMySchedule()
-	{
-		$doctorId = Yii::app()->user->id;
-
-		$dataProvider = new CActiveDataProvider('DoctorSchedule', array(
-			'criteria'=>array(
-				'condition'=>'doctor_account_id=:id',
-				'params'=>array(':id'=>$doctorId),
-				'order'=>'day_of_week ASC, start_time ASC',
-			),
-		));
-
-		$this->render('mySchedule', array(
-			'dataProvider'=>$dataProvider,
-		));
-	}
+    public function loadModel($id)
+    {
+        $model = DoctorSchedule::model()->findByPk($id);
+        if ($model === null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        return $model;
+    }
 }

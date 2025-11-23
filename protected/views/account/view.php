@@ -7,15 +7,22 @@ $this->breadcrumbs = array(
 	$model->username,
 );
 
-// Status Logic
+// Check if viewing own account
+$isMe = (Yii::app()->user->id == $model->id);
+
+// Badge Logic
 $statusClass = ($model->status_id == 1) ? 'badge-success' : 'badge-danger';
 $statusLabel = ($model->status_id == 1) ? 'Active' : 'Inactive';
 
-// Type Logic & Back URL
+// Type Logic & Back Button Logic
 $typeLabel = 'User';
+// Default Back URL (for Admins viewing others)
 $backUrl = array('admin');
 
-if ($model->account_type_id == 3) {
+if ($isMe) {
+	// FIX: If viewing self, go back to Dashboard
+	$backUrl = array('/site/index');
+} elseif ($model->account_type_id == 3) {
 	$typeLabel = 'Doctor';
 	$backUrl = array('admin', 'type' => 3);
 } elseif ($model->account_type_id == 4) {
@@ -31,20 +38,23 @@ if ($model->account_type_id == 3) {
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
 	<h1 class="h3 mb-0 text-gray-800">
-		View Account: <span class="text-primary"><?php echo CHtml::encode($model->username); ?></span>
+		<?php echo $isMe ? 'My Account' : 'View Account: <span class="text-primary">' . CHtml::encode($model->username) . '</span>'; ?>
 	</h1>
 	<div>
 		<?php echo CHtml::link('<i class="fas fa-edit"></i> Edit', array('update', 'id' => $model->id), array('class' => 'btn btn-sm btn-warning shadow-sm')); ?>
-		<?php echo CHtml::link('<i class="fas fa-trash"></i> Delete', '#', array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?', 'class' => 'btn btn-sm btn-danger shadow-sm')); ?>
+
+		<?php if (!$isMe): ?>
+			<?php echo CHtml::link('<i class="fas fa-trash"></i> Delete', '#', array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?', 'class' => 'btn btn-sm btn-danger shadow-sm')); ?>
+		<?php endif; ?>
+
 		<?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back', $backUrl, array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
 	</div>
 </div>
 
 <div class="row">
-
 	<div class="col-lg-6 mb-4">
 		<div class="card shadow h-100 border-left-primary">
-			<div class="card-header py-3">
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 				<h6 class="m-0 font-weight-bold text-primary">Login Credentials</h6>
 			</div>
 			<div class="card-body">
@@ -59,14 +69,14 @@ if ($model->account_type_id == 3) {
 					</tr>
 					<tr>
 						<th class="text-gray-600">Account Type</th>
-						<td><span class="badge badge-info p-2"><?php echo $typeLabel; ?></span></td>
+						<td><span class="badge badge-info p-2" style="font-size: 0.85rem;"><?php echo $typeLabel; ?></span></td>
 					</tr>
 					<tr>
 						<th class="text-gray-600">Status</th>
-						<td><span class="badge <?php echo $statusClass; ?> p-2"><?php echo $statusLabel; ?></span></td>
+						<td><span class="badge <?php echo $statusClass; ?> p-2" style="font-size: 0.85rem;"><?php echo $statusLabel; ?></span></td>
 					</tr>
 					<tr>
-						<th class="text-gray-600">Created</th>
+						<th class="text-gray-600">Date Created</th>
 						<td class="small text-muted"><?php echo date('F j, Y - g:i A', strtotime($model->date_created)); ?></td>
 					</tr>
 				</table>
@@ -85,7 +95,6 @@ if ($model->account_type_id == 3) {
 					<div class="text-center mb-4">
 						<div class="h4 font-weight-bold text-gray-800">
 							<?php
-							// Combine Name with Qualifier (e.g. Jr.)
 							$fullName = $model->user->firstname . ' ' . $model->user->middlename . ' ' . $model->user->lastname;
 							if (!empty($model->user->qualifier)) {
 								$fullName .= ' ' . $model->user->qualifier;
@@ -125,38 +134,23 @@ if ($model->account_type_id == 3) {
 						<div class="bg-gray-100 p-3 rounded border-left-info mt-3">
 							<h6 class="text-info font-weight-bold mb-2 small text-uppercase">Professional Info</h6>
 							<ul class="list-unstyled small mb-0 text-gray-700">
-
-								<li class="mb-2"><strong>Specialization:</strong>
+								<li class="mb-1"><strong>Specialization:</strong>
 									<?php
 									if (isset($model->user->specializationInfo)) {
 										echo CHtml::encode($model->user->specializationInfo->specialization_name);
 									} else {
-										echo !empty($model->user->specialization)
-											? CHtml::encode($model->user->specialization)
-											: '<span class="text-muted">General</span>';
+										echo !empty($model->user->specialization) ? CHtml::encode($model->user->specialization) : '<span class="text-muted">General</span>';
 									}
 									?>
 								</li>
-
-								<li class="mb-1">
-									<strong>License No:</strong> <?php echo CHtml::encode($model->user->license_number); ?>
-								</li>
-
-								<li class="mb-2 text-muted">
-									<em>Expires: <?php echo !empty($model->user->license_expiration) ? date('M j, Y', strtotime($model->user->license_expiration)) : '-'; ?></em>
-								</li>
-
-								<li class="mb-1">
-									<strong>PTR No:</strong> <?php echo CHtml::encode($model->user->ptr_number); ?>
-								</li>
-
-								<li>
-									<strong>S2 No:</strong> <?php echo !empty($model->user->s2_number) ? CHtml::encode($model->user->s2_number) : '<span class="text-muted">-</span>'; ?>
-								</li>
-
+								<li class="mb-1"><strong>License No:</strong> <?php echo CHtml::encode($model->user->license_number); ?></li>
+								<li class="mb-2 text-muted"><em>Expires: <?php echo !empty($model->user->license_expiration) ? date('M j, Y', strtotime($model->user->license_expiration)) : '-'; ?></em></li>
+								<li class="mb-1"><strong>PTR No:</strong> <?php echo CHtml::encode($model->user->ptr_number); ?></li>
+								<li><strong>S2 No:</strong> <?php echo !empty($model->user->s2_number) ? CHtml::encode($model->user->s2_number) : '<span class="text-muted">-</span>'; ?></li>
 							</ul>
 						</div>
 					<?php endif; ?>
+
 					<?php if ($model->account_type_id == 4): ?>
 						<div class="bg-light-yellow p-3 rounded border-left-warning mt-3" style="background-color: #fffbe6;">
 							<h6 class="text-warning font-weight-bold mb-2 small text-uppercase">Patient Details</h6>
@@ -169,11 +163,9 @@ if ($model->account_type_id == 3) {
 									<strong>HMO No:</strong><br>
 									<?php echo !empty($model->user->maxicare_number) ? CHtml::encode($model->user->maxicare_number) : '-'; ?>
 								</div>
-
 								<div class="col-12">
 									<hr class="my-2">
 								</div>
-
 								<div class="col-6">
 									<strong>Father:</strong><br>
 									<?php echo CHtml::encode($model->user->name_of_father); ?><br>
@@ -198,5 +190,4 @@ if ($model->account_type_id == 3) {
 			</div>
 		</div>
 	</div>
-
 </div>

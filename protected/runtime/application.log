@@ -3481,3 +3481,48 @@ Stack trace:
 REQUEST_URI=/Quali-Life-Clinic/index.php?r=clinic/admin
 HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=auditlog/admin
 ---
+2025/11/23 19:34:01 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`qualilife_db`.`tbl_audit_log`, CONSTRAINT `FK_account_to_audit_log_user_id` FOREIGN KEY (`user_account_id`) REFERENCES `tbl_account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION). The SQL statement executed was: INSERT INTO `tbl_audit_log` (`user_account_id`, `action`, `target_entity`, `target_id`, `details`, `ip_address`, `timestamp`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\AuditHelper.php (26)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\UserIdentity.php (52)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\models\LoginForm.php (54)
+2025/11/23 19:34:01 [error] [application] Audit Log Error: CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`qualilife_db`.`tbl_audit_log`, CONSTRAINT `FK_account_to_audit_log_user_id` FOREIGN KEY (`user_account_id`) REFERENCES `tbl_account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION). The SQL statement executed was: INSERT INTO `tbl_audit_log` (`user_account_id`, `action`, `target_entity`, `target_id`, `details`, `ip_address`, `timestamp`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\AuditHelper.php (30)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\UserIdentity.php (52)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\models\LoginForm.php (54)
+2025/11/23 19:38:42 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`qualilife_db`.`tbl_audit_log`, CONSTRAINT `FK_account_to_audit_log_user_id` FOREIGN KEY (`user_account_id`) REFERENCES `tbl_account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION). The SQL statement executed was: INSERT INTO `tbl_audit_log` (`user_account_id`, `action`, `target_entity`, `target_id`, `details`, `ip_address`, `timestamp`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\AuditHelper.php (26)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\UserIdentity.php (52)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\models\LoginForm.php (54)
+2025/11/23 19:38:42 [error] [application] Audit Log Error: CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`qualilife_db`.`tbl_audit_log`, CONSTRAINT `FK_account_to_audit_log_user_id` FOREIGN KEY (`user_account_id`) REFERENCES `tbl_account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION). The SQL statement executed was: INSERT INTO `tbl_audit_log` (`user_account_id`, `action`, `target_entity`, `target_id`, `details`, `ip_address`, `timestamp`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\AuditHelper.php (30)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\UserIdentity.php (52)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\models\LoginForm.php (54)
+2025/11/23 19:41:36 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`qualilife_db`.`tbl_audit_log`, CONSTRAINT `FK_account_to_audit_log_user_id` FOREIGN KEY (`user_account_id`) REFERENCES `tbl_account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION). The SQL statement executed was: INSERT INTO `tbl_audit_log` (`user_account_id`, `action`, `target_entity`, `target_id`, `details`, `ip_address`, `timestamp`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\AuditHelper.php (26)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\UserIdentity.php (53)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\models\LoginForm.php (54)
+2025/11/23 19:41:36 [error] [application] Audit Log Error: CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`qualilife_db`.`tbl_audit_log`, CONSTRAINT `FK_account_to_audit_log_user_id` FOREIGN KEY (`user_account_id`) REFERENCES `tbl_account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION). The SQL statement executed was: INSERT INTO `tbl_audit_log` (`user_account_id`, `action`, `target_entity`, `target_id`, `details`, `ip_address`, `timestamp`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\AuditHelper.php (30)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\components\UserIdentity.php (53)
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\models\LoginForm.php (54)
+2025/11/23 19:55:20 [warning] [application] Failed to set unsafe attribute "globalSearch" of "DoctorSchedule".
+in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\DoctorScheduleController.php (127)
+in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/23 20:04:45 [error] [exception.CHttpException.400] CHttpException: Your request is invalid. in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php:1121
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterPostOnly(Object(CFilterChain))
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('delete')
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('doctorSchedule/...')
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#11 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php?r=doctorSchedule/delete&id=7
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php?r=doctorSchedule/admin
+---

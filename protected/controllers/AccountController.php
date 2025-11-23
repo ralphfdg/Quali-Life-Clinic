@@ -101,35 +101,73 @@ class AccountController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id);
-		$user = $model->user ? $model->user : new User; // Handle missing profile
+		// Load existing profile or create empty one if missing
+		$user = $model->user ? $model->user : new User;
+		// Ensure the new user object knows which account it belongs to
+		if ($user->isNewRecord) {
+			$user->account_id = $model->id;
+		}
 
 		if (isset($_POST['Account'], $_POST['User'])) {
 			$model->attributes = $_POST['Account'];
 			$user->attributes = $_POST['User'];
 
+			// 1. Validate first (Don't start transaction if data is bad)
 			$valid = $model->validate();
 			$valid = $user->validate() && $valid;
 
 			if ($valid) {
-				if ($model->save(false) && $user->save(false)) {
-					Yii::app()->user->setFlash('success', "Updated successfully.");
-					$this->redirect(array('view', 'id' => $model->id));
+				// 2. Start Transaction
+				$transaction = Yii::app()->db->beginTransaction();
+
+				try {
+					// 3. Attempt Saves
+					if ($model->save(false) && $user->save(false)) {
+						$transaction->commit(); // SUCCESS
+
+						// --- AUDIT LOG ---
+						if (class_exists('AuditHelper')) {
+							AuditHelper::log(
+								'UPDATE_ACCOUNT',
+								'tbl_account',
+								$model->id,
+								"Updated profile for: " . $model->username,
+								Yii::app()->user->id
+							);
+						}
+						// -----------------
+
+						Yii::app()->user->setFlash('success', "Account updated successfully.");
+						$this->redirect(array('view', 'id' => $model->id));
+					}
+
+					// If save returned false (rare case since validation passed)
+					throw new Exception('Database failed to update records.');
+				} catch (Exception $e) {
+					// 4. Rollback on Failure
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error', "Update failed: " . $e->getMessage());
+					Yii::log("Update Error: " . $e->getMessage(), 'error');
 				}
 			}
 		}
-		$this->render('update', array('model' => $model, 'user' => $user));
+
+		$this->render('update', array(
+			'model' => $model,
+			'user' => $user
+		));
 	}
 
 	public function loadModel($id)
-    {
-        // Use the NEW relation name here
-        $model = Account::model()->with('user.specializationInfo')->findByPk($id);
-        
-        if($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
-            
-        return $model;
-    }
+	{
+		// Use the NEW relation name here
+		$model = Account::model()->with('user.specializationInfo')->findByPk($id);
+
+		if ($model === null)
+			throw new CHttpException(404, 'The requested page does not exist.');
+
+		return $model;
+	}
 
 	public function actionAdmin()
 	{
