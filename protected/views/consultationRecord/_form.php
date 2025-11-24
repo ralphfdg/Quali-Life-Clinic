@@ -1,118 +1,110 @@
 <?php
 /* @var $this ConsultationRecordController */
 /* @var $model ConsultationRecord */
+/* @var $appointment Appointment */ // Passed from controller
+/* @var $prescriptionModel Prescription */ // Passed from controller
 /* @var $form CActiveForm */
 
-// --- HELPER: Get Patient Name for Display ---
-$patientNameDisplay = "";
-$isQueueBooking = !empty($model->appointment_id); // Check if this came from the Queue
-
-if ($isQueueBooking && !empty($model->patient_account_id)) {
-    $pAccount = Account::model()->with('user')->findByPk($model->patient_account_id);
-    if ($pAccount && $pAccount->user) {
-        $patientNameDisplay = $pAccount->user->firstname . " " . $pAccount->user->lastname;
-    }
-}
-// --------------------------------------------
+// Fetch patient info for header display
+$patient = isset($appointment->patientAccount->user) ? $appointment->patientAccount->user : null;
+$patientName = $patient ? $patient->firstname . ' ' . $patient->lastname : 'N/A';
+$age = $patient ? date_diff(date_create($patient->dob), date_create('today'))->y : '--';
 ?>
 
-<div class="form" style="background: #f8f9fa; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+<div class="card-body">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-    'id'=>'consultation-record-form',
-    'enableAjaxValidation'=>false,
-)); ?>
+    <?php $form = $this->beginWidget('CActiveForm', array(
+        'id' => 'consultation-record-form',
+        'enableAjaxValidation' => false,
+    )); ?>
 
-    <p class="note">Fields with <span class="required">*</span> are required.</p>
+    <?php echo $form->errorSummary(array($model, $prescriptionModel), null, null, array('class' => 'alert alert-danger small')); ?>
 
-    <?php echo $form->errorSummary($model); ?>
+    <?php if ($appointment): ?>
+        <?php echo $form->hiddenField($model, 'appointment_id'); ?>
+        <?php echo $form->hiddenField($model, 'patient_account_id'); ?>
+        <?php echo $form->hiddenField($model, 'doctor_account_id'); ?>
+        <?php echo $form->hiddenField($model, 'date_of_consultation'); ?>
+    <?php endif; ?>
 
-    <?php echo $form->hiddenField($model, 'doctor_account_id'); ?>
-    <?php echo $form->hiddenField($model, 'appointment_id'); ?>
-    <?php echo $form->hiddenField($model, 'status_id', array('value'=>1)); ?>
+    <div class="alert alert-light p-3 border mb-4">
+        <i class="fas fa-user-injured mr-2 text-success"></i>
+        <strong>Patient:</strong> <?php echo CHtml::encode($patientName); ?>
+        <span class="ml-4"><strong>Age:</strong> <?php echo $age; ?></span>
+        <?php if ($appointment): ?>
+            <span class="ml-4"><strong>Appointment:</strong> #<?php echo $appointment->id; ?></span>
+        <?php endif; ?>
+    </div>
 
-    <div class="row" style="margin-bottom: 20px; padding: 10px; background: #e9ecef; border-radius: 5px;">
-        <div style="width: 100%;">
-            <label><strong>Patient Name:</strong></label>
-            <?php 
-            if ($isQueueBooking) {
-                // If linked to appointment: Show Read-Only Name + Hidden ID
-                echo CHtml::textField('dummy_name', $patientNameDisplay, array('readonly'=>true, 'style'=>'width:300px; font-weight:bold; background:#fff;'));
-                echo $form->hiddenField($model, 'patient_account_id'); 
-            } else {
-                // Fallback: If created manually via Admin menu, show dropdown
-                echo $form->dropDownList($model, 'patient_account_id', 
-                    CHtml::listData(Account::model()->with('user')->findAll('account_type_id=4'), 'id', 'user.lastname'),
-                    array('empty'=>'Select Patient')
-                );
-            }
-            ?>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <h6 class="font-weight-bold text-success mb-1">S - Subjective</h6>
+                <span class="text-muted small d-block mb-2">(Patient's reported symptoms/history)</span>
+                <?php echo $form->textArea($model, 'subjective', array('rows' => 8, 'class' => 'form-control', 'placeholder' => 'Chief complaint, symptoms, severity...')); ?>
+                <?php echo $form->error($model, 'subjective'); ?>
+            </div>
         </div>
-        <div style="margin-top: 10px;">
-            <?php echo $form->labelEx($model,'date_of_consultation'); ?>
-            <?php echo $form->dateField($model,'date_of_consultation'); ?>
-            <?php echo $form->error($model,'date_of_consultation'); ?>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <h6 class="font-weight-bold text-info mb-1">O - Objective</h6>
+                <span class="text-muted small d-block mb-2">(Vitals, physical exam findings, test results)</span>
+                <?php echo $form->textArea($model, 'objective', array('rows' => 8, 'class' => 'form-control', 'placeholder' => 'BP, Temp, Weight, Observations...')); ?>
+                <?php echo $form->error($model, 'objective'); ?>
+            </div>
         </div>
     </div>
 
-    <hr>
-    <h3>SOAP Notes</h3>
+    <hr class="my-4">
 
     <div class="row">
-        <?php echo $form->labelEx($model,'subjective'); ?>
-        <span style="font-size: 0.9em; color: #666;">(What the patient says / Complaints)</span><br>
-        <?php echo $form->textArea($model,'subjective',array('rows'=>4, 'style'=>'width:100%; box-sizing:border-box;')); ?>
-        <?php echo $form->error($model,'subjective'); ?>
+        <div class="col-md-6">
+            <div class="form-group">
+                <h6 class="font-weight-bold text-warning mb-1">A - Assessment</h6>
+                <span class="text-muted small d-block mb-2">(Diagnosis/Differential diagnosis)</span>
+                <?php echo $form->textArea($model, 'assessment', array('rows' => 4, 'class' => 'form-control', 'placeholder' => 'Primary diagnosis (e.g., Common Cold, Sprain)...')); ?>
+                <?php echo $form->error($model, 'assessment'); ?>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <h6 class="font-weight-bold text-danger mb-1">P - Plan</h6>
+                <span class="text-muted small d-block mb-2">(Treatment, follow-up, patient education)</span>
+                <?php echo $form->textArea($model, 'plan', array('rows' => 4, 'class' => 'form-control', 'placeholder' => 'Treatment steps, referral, follow-up date...')); ?>
+                <?php echo $form->error($model, 'plan'); ?>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'objective'); ?>
-        <span style="font-size: 0.9em; color: #666;">(Vital signs, Physical Exam findings)</span><br>
-        <?php echo $form->textArea($model,'objective',array('rows'=>4, 'style'=>'width:100%; box-sizing:border-box;')); ?>
-        <?php echo $form->error($model,'objective'); ?>
+    <hr class="my-4">
+
+    <h6 class="font-weight-bold text-info mb-3"><i class="fas fa-prescription-bottle-alt mr-1"></i> Prescription (Optional)</h6>
+
+    <div class="form-group">
+        <?php echo $form->labelEx($prescriptionModel, 'prescription'); ?>
+        <span class="text-muted small d-block mb-2">(Drug name, dosage, frequency)</span>
+        <?php echo $form->textArea($prescriptionModel, 'prescription', array('rows' => 4, 'class' => 'form-control', 'placeholder' => 'e.g. Paracetamol 500mg, Take 1 tablet every 6 hours as needed.')); ?>
+        <?php echo $form->error($prescriptionModel, 'prescription'); ?>
     </div>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'assessment'); ?>
-        <span style="font-size: 0.9em; color: #666;">(Diagnosis)</span><br>
-        <?php echo $form->textArea($model,'assessment',array('rows'=>4, 'style'=>'width:100%; box-sizing:border-box;')); ?>
-        <?php echo $form->error($model,'assessment'); ?>
+    <div class="form-group" style="display:none;">
+        <?php echo $form->labelEx($model, 'notes'); ?>
+        <?php echo $form->textArea($model, 'notes', array('rows' => 2, 'class' => 'form-control')); ?>
     </div>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'plan'); ?>
-        <span style="font-size: 0.9em; color: #666;">(Treatment, Prescriptions, Lab requests)</span><br>
-        <?php echo $form->textArea($model,'plan',array('rows'=>4, 'style'=>'width:100%; box-sizing:border-box;')); ?>
-        <?php echo $form->error($model,'plan'); ?>
+    <div class="row buttons mt-4">
+        <div class="col-12 text-right">
+            <?php echo CHtml::link('Cancel', array('appointment/myQueue'), array('class' => 'btn btn-secondary mr-2')); ?>
+
+            <?php echo CHtml::submitButton('Finish Consultation & Save', array(
+                'name' => 'save_and_complete', // Name required for Controller logic
+                'class' => 'btn btn-success px-4',
+            )); ?>
+        </div>
     </div>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'notes'); ?>
-        <?php echo $form->textArea($model,'notes',array('rows'=>2, 'style'=>'width:100%; box-sizing:border-box;')); ?>
-        <?php echo $form->error($model,'notes'); ?>
-    </div>
-
-    <div class="row buttons" style="margin-top: 20px;">
-        <?php 
-        // Standard Save Button (Green)
-        echo CHtml::submitButton($model->isNewRecord ? 'Save & Finish' : 'Save Changes', array(
-            'class' => 'btn btn-success',
-            'style' => 'padding: 10px 20px; margin-right: 10px; background: #28a745; color: white; border: none;'
-        )); 
-        ?>
-
-        <?php 
-        // Save & Prescribe Button (Blue) - Only for new records
-        if ($model->isNewRecord) {
-            echo CHtml::submitButton('Save & Write Prescription', array(
-                'name'  => 'save_and_prescribe', // This name tells the Controller what to do
-                'class' => 'btn btn-primary',
-                'style' => 'padding: 10px 20px; background: #007bff; color: white; border: none;'
-            ));
-        }
-        ?>
-    </div>
-
-<?php $this->endWidget(); ?>
+    <?php $this->endWidget(); ?>
 
 </div>

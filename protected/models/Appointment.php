@@ -136,64 +136,59 @@ class Appointment extends CActiveRecord
 	}
 
 	protected function afterSave()
-    {
-        parent::afterSave();
+	{
+		parent::afterSave();
 
-        // --- FIX: USE ALIASES TO AVOID SQL ERROR ---
-        // We use explicit aliases ('pUser' and 'dUser') so SQL knows 
-        // which table is the patient and which is the doctor.
-        $appt = Appointment::model()->with(array(
-            'patientAccount' => array(
-                'with' => array(
-                    'user' => array('alias' => 'pUser') 
-                )
-            ),
-            'doctorAccount' => array(
-                'with' => array(
-                    'user' => array('alias' => 'dUser')
-                )
-            )
-        ))->findByPk($this->id);
-        
-        // Safety exit if data is missing
-        if(!$appt || !isset($appt->patientAccount->user) || !isset($appt->doctorAccount->user)) {
-            return; 
-        }
+		// --- CRITICAL FIX: Load Appt for SMS using ALIASES ---
+		$appt = Appointment::model()->with(array(
+			'patientAccount' => array(
+				'with' => array('user' => array('alias' => 'pUserS')) // Patient User Alias for SMS
+			),
+			'doctorAccount' => array(
+				'with' => array('user' => array('alias' => 'dUserS')) // Doctor User Alias for SMS
+			)
+		))->findByPk($this->id);
 
-        $patientUser = $appt->patientAccount->user;
-        $doctorUser = $appt->doctorAccount->user;
-        
-        $mobile = $patientUser->mobile_number;
-        // Add check to ensure names exist
-        $patientName = ucfirst($patientUser->firstname);
-        $doctorName = ucfirst($doctorUser->lastname);
+		// Safety exit if data is missing
+		if (!$appt || !isset($appt->patientAccount->user) || !isset($appt->doctorAccount->user)) {
+			return;
+		}
 
-        // --- TRIGGER 1: NEW APPOINTMENT (CONFIRMATION) ---
-        if ($this->isNewRecord && !empty($mobile)) 
-        {
-            $date = date('M j, Y', strtotime($this->schedule_datetime)); // Nov 24, 2025
-            $time = date('g:i A', strtotime($this->schedule_datetime));  // 9:30 AM
-            
-            // SMS TEMPLATE
-            $msg = "Quali-Life: Hello $patientName, your appointment is CONFIRMED.\n\n"
-                 . "Dr. $doctorName\n"
-                 . "$date @ $time\n\n"
-                 . "See you soon!";
-            
-            SmsHelper::send($mobile, $msg);
-        }
+		$patientUser = $appt->patientAccount->user;
+		$doctorUser = $appt->doctorAccount->user;
 
-        // --- TRIGGER 2: CANCELLATION ---
-        if (!$this->isNewRecord && $this->appointment_status_id == 5 && !empty($mobile)) 
-        {
-            $date = date('F j', strtotime($this->schedule_datetime)); // November 24
-            $time = date('g:i A', strtotime($this->schedule_datetime));
+		$mobile = $patientUser->mobile_number;
+		$patientName = ucfirst($patientUser->firstname);
+		$doctorName = ucfirst($doctorUser->lastname);
 
-            // SMS TEMPLATE
-            $msg = "Quali-Life: Hi $patientName, your appointment with Dr. $doctorName on $date ($time) has been CANCELED.\n\n"
-                 . "Please contact us if you wish to reschedule.";
-            
-            SmsHelper::send($mobile, $msg);
-        }
-    }
+		// --- WRAP SMS LOGIC IN TRY/CATCH TO PREVENT DATABASE ROLLBACK ---
+		try {
+			// --- TRIGGER 1: NEW APPOINTMENT (CONFIRMATION) ---
+			if ($this->isNewRecord && !empty($mobile)) {
+				$date = date('M j, Y', strtotime($this->schedule_datetime));
+				$time = date('g:i A', strtotime($this->schedule_datetime));
+
+				$msg = "Quali-Life: Hello $patientName, your appointment is CONFIRMED.\n\n"
+					. "Dr. $doctorName\n"
+					. "$date @ $time\n\n"
+					. "See you soon!";
+
+				SmsHelper::send($mobile, $msg);
+			}
+
+			// --- TRIGGER 2: CANCELLATION ---
+			if (!$this->isNewRecord && $this->appointment_status_id == 5 && !empty($mobile)) {
+				$date = date('F j', strtotime($this->schedule_datetime));
+				$time = date('g:i A', strtotime($this->schedule_datetime));
+
+				$msg = "Quali-Life: Hi $patientName, your appointment with Dr. $doctorName on $date ($time) has been CANCELED.\n\n"
+					. "Please contact us if you wish to reschedule.";
+
+				SmsHelper::send($mobile, $msg);
+			}
+		} catch (Exception $e) {
+			// Log the error but allow the transaction to commit
+			Yii::log("SMS send failed in afterSave: " . $e->getMessage(), 'error', 'application.sms');
+		}
+	}
 }

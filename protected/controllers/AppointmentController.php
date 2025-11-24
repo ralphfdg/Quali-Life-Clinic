@@ -25,37 +25,37 @@ class AppointmentController extends Controller
 	 * @return array access control rules
 	 */
 	public function accessRules()
-    {
-        return array(
-            // 1. Allow Patients (Booking helpers, viewing own data)
-            array(
-                'allow',
-                'actions' => array('book', 'myAppointments', 'view', 'create', 'dynamicDoctors', 'getAvailableSlots', 'cancel', 'calendarEvents'),
-                'expression' => 'Yii::app()->controller->isPatient()',
-            ),
-            
-            // 2. Allow Doctors (Queue management, viewing history)
-            array(
-                'allow',
-                'actions' => array('index', 'view', 'updateStatus', 'myQueue', 'calendarEvents', 'myHistory', 'dynamicDoctors', 'getAvailableSlots'),
-                'expression' => 'Yii::app()->controller->isDoctor()',
-            ),
-            
-            // 3. Allow Admins & Super Admins (Full access)
-            array(
-                'allow',
-                // CRITICAL FIX: Ensure 'calendarEvents' is here!
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'calendar', 'cancel', 'updateStatus', 'book', 'dynamicDoctors', 'getAvailableSlots', 'calendarEvents'),
-                'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
-            ),
-            
-            // 4. Deny everyone else
-            array(
-                'deny',
-                'users' => array('*'),
-            ),
-        );
-    }
+	{
+		return array(
+			// 1. Allow Patients (Booking helpers, viewing own data)
+			array(
+				'allow',
+				'actions' => array('book', 'myAppointments', 'view', 'create', 'dynamicDoctors', 'getAvailableSlots', 'cancel', 'calendarEvents'),
+				'expression' => 'Yii::app()->controller->isPatient()',
+			),
+
+			// 2. Allow Doctors (Queue management, viewing history)
+			array(
+				'allow',
+				'actions' => array('index', 'view', 'updateStatus', 'myQueue', 'calendarEvents', 'myHistory', 'dynamicDoctors', 'getAvailableSlots'),
+				'expression' => 'Yii::app()->controller->isDoctor()',
+			),
+
+			// 3. Allow Admins & Super Admins (Full access)
+			array(
+				'allow',
+				// CRITICAL FIX: Ensure 'calendarEvents' is here!
+				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'calendar', 'cancel', 'updateStatus', 'book', 'dynamicDoctors', 'getAvailableSlots', 'calendarEvents'),
+				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
+			),
+
+			// 4. Deny everyone else
+			array(
+				'deny',
+				'users' => array('*'),
+			),
+		);
+	}
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -209,69 +209,69 @@ class AppointmentController extends Controller
 	}
 
 	public function actionBook()
-    {
-        $model = new Appointment;
-        $isAdminOrSuperAdmin = Yii::app()->user->isAdmin() || Yii::app()->user->isSuperAdmin();
-        $patientList = array();
-        
-        // --- DEFINITIVE SCOPE FIX: Initialize variables used in rendering ---
-        $patientId = Yii::app()->user->isPatient() ? Yii::app()->user->id : 0; 
-        // ------------------------------------------------------------------
+	{
+		$model = new Appointment;
+		$isAdminOrSuperAdmin = Yii::app()->user->isAdmin() || Yii::app()->user->isSuperAdmin();
+		$patientList = array();
 
-        if ($isAdminOrSuperAdmin) {
-            $patients = Account::model()->with('user')->findAll('account_type_id=4 AND status_id=1');
-            $patientList = CHtml::listData($patients, 'id', function($p) {
-                return (isset($p->user) ? $p->user->lastname . ', ' . $p->user->firstname : $p->username);
-            });
-        }
-        
-        // --- Handle Save Logic ---
-        if (isset($_POST['Appointment'])) {
-            $model->attributes = $_POST['Appointment'];
-            
-            // 1. Determine the Patient ID
-            if ($isAdminOrSuperAdmin) {
-                $patientId = (int) $_POST['selected_patient_id'];
-            } else {
-                // PatientId is already set from the initialization above if user is Patient
-            }
-            
-            // ... (rest of the save logic using $patientId) ...
-            
-            if (isset($_POST['selected_time']) && !empty($_POST['selected_time'])) {
-                
-                if ($patientId === 0) {
-                    $model->addError('patient_account_id', 'Please select a patient before confirming.');
-                    goto render;
-                }
+		// --- DEFINITIVE SCOPE FIX: Initialize variables used in rendering ---
+		$patientId = Yii::app()->user->isPatient() ? Yii::app()->user->id : 0;
+		// ------------------------------------------------------------------
 
-                $fullDateTime = $model->schedule_datetime . ' ' . $_POST['selected_time'];
-                $model->schedule_datetime = $fullDateTime;
-                $model->patient_account_id = $patientId; 
-                $model->booked_by_account_id = Yii::app()->user->id;
-                $model->appointment_status_id = 1;
+		if ($isAdminOrSuperAdmin) {
+			$patients = Account::model()->with('user')->findAll('account_type_id=4 AND status_id=1');
+			$patientList = CHtml::listData($patients, 'id', function ($p) {
+				return (isset($p->user) ? $p->user->lastname . ', ' . $p->user->firstname : $p->username);
+			});
+		}
 
-                if ($model->save()) {
-                    if(class_exists('AuditHelper')) {
-                        AuditHelper::log('CREATE_APPOINTMENT', 'tbl_appointment', $model->id, "Booked for Patient ID: " . $patientId);
-                    }
-                    
-                    Yii::app()->user->setFlash('success', "Appointment successfully booked!");
-                    $this->redirect(array('site/index'));
-                }
-            } else {
-                $model->addError('schedule_datetime', 'Please select a valid time slot.');
-            }
-        }
+		// --- Handle Save Logic ---
+		if (isset($_POST['Appointment'])) {
+			$model->attributes = $_POST['Appointment'];
 
-        render: 
-        $this->render('book', array(
-            'model' => $model,
-            'patientList' => $patientList,
-            'isAdminOrSuperAdmin' => $isAdminOrSuperAdmin,
-            'patientId' => $patientId, // Pass the now-guaranteed variable
-        ));
-    }
+			// 1. Determine the Patient ID
+			if ($isAdminOrSuperAdmin) {
+				$patientId = (int) $_POST['selected_patient_id'];
+			} else {
+				// PatientId is already set from the initialization above if user is Patient
+			}
+
+			// ... (rest of the save logic using $patientId) ...
+
+			if (isset($_POST['selected_time']) && !empty($_POST['selected_time'])) {
+
+				if ($patientId === 0) {
+					$model->addError('patient_account_id', 'Please select a patient before confirming.');
+					goto render;
+				}
+
+				$fullDateTime = $model->schedule_datetime . ' ' . $_POST['selected_time'];
+				$model->schedule_datetime = $fullDateTime;
+				$model->patient_account_id = $patientId;
+				$model->booked_by_account_id = Yii::app()->user->id;
+				$model->appointment_status_id = 1;
+
+				if ($model->save()) {
+					if (class_exists('AuditHelper')) {
+						AuditHelper::log('CREATE_APPOINTMENT', 'tbl_appointment', $model->id, "Booked for Patient ID: " . $patientId);
+					}
+
+					Yii::app()->user->setFlash('success', "Appointment successfully booked!");
+					$this->redirect(array('site/index'));
+				}
+			} else {
+				$model->addError('schedule_datetime', 'Please select a valid time slot.');
+			}
+		}
+
+		render:
+		$this->render('book', array(
+			'model' => $model,
+			'patientList' => $patientList,
+			'isAdminOrSuperAdmin' => $isAdminOrSuperAdmin,
+			'patientId' => $patientId, // Pass the now-guaranteed variable
+		));
+	}
 	/**
 	 * AJAX Helper: Returns <option> tags for doctors based on specialization_id
 	 */
@@ -382,19 +382,36 @@ class AppointmentController extends Controller
 	}
 
 	/**
-	 * List the logged-in Patient's appointments
+	 * List the logged-in Patient's UPCOMING appointments
+	 */
+	/**
+	 * List the logged-in Patient's OR Doctor's UPCOMING appointments
 	 */
 	public function actionMyAppointments()
 	{
-		$patientId = Yii::app()->user->id;
+		$userId = Yii::app()->user->id;
+
+		$criteria = new CDbCriteria;
+
+		// 1. General Filter: Today or Later, exclude Canceled
+		$criteria->addCondition('t.schedule_datetime >= NOW()');
+		$criteria->compare('t.appointment_status_id', '<>5');
+
+		// 2. Role-Based Filtering
+		if (Yii::app()->controller->isDoctor()) {
+			// Doctor sees their assigned appointments
+			$criteria->compare('t.doctor_account_id', $userId);
+			$criteria->with = array('patientAccount.user', 'appointmentStatus'); // Load Patient data
+		} else {
+			// Patient sees their own appointments (default)
+			$criteria->compare('t.patient_account_id', $userId);
+			$criteria->with = array('doctorAccount.user', 'appointmentStatus'); // Load Doctor data
+		}
+
+		$criteria->order = 'schedule_datetime ASC'; // Earliest appointment first
 
 		$dataProvider = new CActiveDataProvider('Appointment', array(
-			'criteria' => array(
-				'condition' => 'patient_account_id = :pid',
-				'params' => array(':pid' => $patientId),
-				'with' => array('doctorAccount.user', 'appointmentStatus'),
-				'order' => 'schedule_datetime ASC', // Upcoming first
-			),
+			'criteria' => $criteria,
 			'pagination' => array(
 				'pageSize' => 10,
 			),
@@ -404,7 +421,6 @@ class AppointmentController extends Controller
 			'dataProvider' => $dataProvider,
 		));
 	}
-
 	/**
 	 * Allow Patient to Cancel their own appointment
 	 */
@@ -448,104 +464,109 @@ class AppointmentController extends Controller
 	}
 
 	public function actionCalendarEvents()
-    {
-        $start = null;
-        $end = null;
-        
-        $startParam = isset($_GET['start']) ? $_GET['start'] : date('Y-m-01');
-        $endParam  = isset($_GET['end'])  ? $_GET['end']  : date('Y-m-t');
+	{
+		$start = null;
+		$end = null;
 
-        // Convert timestamps to MySQL format
-        if (ctype_digit((string)$startParam)) {
-            $start = date('Y-m-d H:i:s', $startParam);
-            $end  = date('Y-m-d H:i:s', $endParam);
-        } else {
-            $start = date('Y-m-d H:i:s', strtotime($startParam));
-            $end  = date('Y-m-d H:i:s', strtotime($endParam));
-        }
+		$startParam = isset($_GET['start']) ? $_GET['start'] : date('Y-m-01');
+		$endParam  = isset($_GET['end'])  ? $_GET['end']  : date('Y-m-t');
 
-        $criteria = new CDbCriteria;
-        $criteria->addBetweenCondition('t.schedule_datetime', $start, $end);
-        $criteria->compare('t.appointment_status_id', '<>5'); // 5 = Canceled
+		// Convert timestamps to MySQL format
+		if (ctype_digit((string)$startParam)) {
+			$start = date('Y-m-d H:i:s', $startParam);
+			$end  = date('Y-m-d H:i:s', $endParam);
+		} else {
+			$start = date('Y-m-d H:i:s', strtotime($startParam));
+			$end  = date('Y-m-d H:i:s', strtotime($endParam));
+		}
 
-        // --- CRITICAL FIX: FORCE LEFT OUTER JOIN ---
-        // This ensures the query returns appointments even if Patient or Doctor profile is missing.
-        $criteria->with = array(
-            'appointmentStatus',
-            'patientAccount' => array(
-                'joinType'=>'LEFT OUTER JOIN', // Ensures rows are NOT dropped if relation fails
-                'with' => array(
-                    'user' => array('alias' => 'patientUser')
-                )
-            ),
-            'doctorAccount' => array(
-                'joinType'=>'LEFT OUTER JOIN', // Ensures rows are NOT dropped
-                'with' => array(
-                    'user' => array('alias' => 'doctorUser')
-                )
-            ),
-        );
-        // ------------------------------------------
-        
-        $appointments = Appointment::model()->findAll($criteria);
-        $events = array();
-        
-        // --- Crash Prevention Logic (Use try/catch and null checks) ---
-        foreach ($appointments as $appt) {
-            try {
-                $pUser = isset($appt->patientAccount->user) ? $appt->patientAccount->user : null;
-                $patientName = $pUser ? $pUser->firstname . ' ' . $pUser->lastname : "Unknown Patient";
+		$criteria = new CDbCriteria;
+		$criteria->addBetweenCondition('t.schedule_datetime', $start, $end);
+		$criteria->compare('t.appointment_status_id', '<>5'); // 5 = Canceled
 
-                $dUser = isset($appt->doctorAccount->user) ? $appt->doctorAccount->user : null;
-                $doctorName = $dUser ? $dUser->lastname : "Unassigned";
+		// --- CRITICAL FIX: FORCE LEFT OUTER JOIN ---
+		// This ensures the query returns appointments even if Patient or Doctor profile is missing.
+		$criteria->with = array(
+			'appointmentStatus',
+			'patientAccount' => array(
+				'joinType' => 'LEFT OUTER JOIN', // Ensures rows are NOT dropped if relation fails
+				'with' => array(
+					'user' => array('alias' => 'patientUser')
+				)
+			),
+			'doctorAccount' => array(
+				'joinType' => 'LEFT OUTER JOIN', // Ensures rows are NOT dropped
+				'with' => array(
+					'user' => array('alias' => 'doctorUser')
+				)
+			),
+		);
+		// ------------------------------------------
 
-                $statusName = isset($appt->appointmentStatus) ? $appt->appointmentStatus->status_name : "Unknown";
-                $color = '#3788d8'; // Scheduled
-                if ($appt->appointment_status_id == 2) $color = '#28a745'; 
-                if ($appt->appointment_status_id == 3) $color = '#e0a800'; 
-                if ($appt->appointment_status_id == 4) $color = '#6c757d'; 
-                
-                $events[] = array(
-                    'id' => $appt->id,
-                    'title' => "Dr. " . $doctorName . " - " . $patientName,
-                    'start' => date('Y-m-d\TH:i:s', strtotime($appt->schedule_datetime)),
-                    'color' => $color,
-                    'extendedProps' => array(
-                        'patientName' => $patientName,
-                        'status' => $statusName
-                    ),
-                    'url'  => $this->createUrl('view', array('id' => $appt->id)),
-                );
-            } catch (\Exception $e) {
-                Yii::log("Calendar Event Crash on Appt ID {$appt->id}: " . $e->getMessage(), 'error', 'application.calendar');
-                continue;
-            }
-        }
+		$appointments = Appointment::model()->findAll($criteria);
+		$events = array();
 
-        header('Content-type: application/json');
-        echo CJSON::encode($events);
-        Yii::app()->end();
-    }
+		// --- Crash Prevention Logic (Use try/catch and null checks) ---
+		foreach ($appointments as $appt) {
+			try {
+				$pUser = isset($appt->patientAccount->user) ? $appt->patientAccount->user : null;
+				$patientName = $pUser ? $pUser->firstname . ' ' . $pUser->lastname : "Unknown Patient";
+
+				$dUser = isset($appt->doctorAccount->user) ? $appt->doctorAccount->user : null;
+				$doctorName = $dUser ? $dUser->lastname : "Unassigned";
+
+				$statusName = isset($appt->appointmentStatus) ? $appt->appointmentStatus->status_name : "Unknown";
+				$color = '#3788d8'; // Scheduled
+				if ($appt->appointment_status_id == 2) $color = '#28a745';
+				if ($appt->appointment_status_id == 3) $color = '#e0a800';
+				if ($appt->appointment_status_id == 4) $color = '#6c757d';
+
+				$events[] = array(
+					'id' => $appt->id,
+					'title' => "Dr. " . $doctorName . " - " . $patientName,
+					'start' => date('Y-m-d\TH:i:s', strtotime($appt->schedule_datetime)),
+					'color' => $color,
+					'extendedProps' => array(
+						'patientName' => $patientName,
+						'status' => $statusName
+					),
+					'url'  => $this->createUrl('view', array('id' => $appt->id)),
+				);
+			} catch (\Exception $e) {
+				Yii::log("Calendar Event Crash on Appt ID {$appt->id}: " . $e->getMessage(), 'error', 'application.calendar');
+				continue;
+			}
+		}
+
+		header('Content-type: application/json');
+		echo CJSON::encode($events);
+		Yii::app()->end();
+	}
 
 	/**
 	 * Doctor's Dashboard: Shows ONLY today's appointments for the logged-in doctor.
 	 */
+	/**
+	 * Doctor's Dashboard: Shows ONLY TODAY's appointments for the logged-in doctor.
+	 */
 	public function actionMyQueue()
 	{
 		$doctorId = Yii::app()->user->id;
-		$today = date('Y-m-d');
+		$today = date('Y-m-d'); // Define today's date
 
 		$criteria = new CDbCriteria;
 
-		// 1. Filter by Current Doctor AND Today's Date
-		$criteria->compare('doctor_account_id', $doctorId);
-		//$criteria->addCondition("date(t.schedule_datetime) = :today");
-		//$criteria->params[':today'] = $today;
+		// 1. Filter by Doctor, Today's Date, AND exclude Canceled (ID 5)
+		$criteria->addCondition('t.doctor_account_id = :docId');
+		$criteria->addCondition('date(t.schedule_datetime) = :today');
+		$criteria->compare('t.appointment_status_id', '<>5');
+		$criteria->params[':docId'] = $doctorId;
+		$criteria->params[':today'] = $today;
 
 		// 2. Order by time (earliest first)
 		$criteria->order = 't.schedule_datetime ASC';
 
-		// 3. Load Patient info (using the alias fix we learned earlier!)
+		// 3. Load Patient info 
 		$criteria->with = array(
 			'appointmentStatus',
 			'patientAccount' => array(
@@ -564,7 +585,6 @@ class AppointmentController extends Controller
 			'dataProvider' => $dataProvider,
 		));
 	}
-
 	/**
 	 * Action to change status (e.g., Mark as Arrived, Start Consult, Complete)
 	 */
@@ -618,34 +638,30 @@ class AppointmentController extends Controller
 	}
 
 	/**
-	 * Shows completed appointments and links to their SOAP notes.
+	 * Shows ALL appointments (past and future) for the logged-in doctor, excluding Canceled ones.
 	 */
 	public function actionMyHistory()
-	{
-		$doctorId = Yii::app()->user->id;
+    {
+        $doctorId = Yii::app()->user->id;
+        $criteria = new CDbCriteria;
 
-		$criteria = new CDbCriteria;
+        // 1. Filter by Current Doctor (Show ALL records assigned to them)
+        $criteria->compare('t.doctor_account_id', $doctorId);
+        
+        // 2. Order by Date (Newest first)
+        $criteria->order = 't.schedule_datetime DESC'; 
 
-		$criteria->compare('t.doctor_account_id', $doctorId);
-		$criteria->compare('t.appointment_status_id', 4); // 4 = Completed
+        // 3. Load Relations
+        $criteria->with = array(
+            'patientAccount.user' => array('alias' => 'patientUser'),
+            'consultationRecords'
+        );
 
-		// 3. Order by Date (Newest first)
-		$criteria->order = 't.schedule_datetime DESC';
+        $dataProvider = new CActiveDataProvider('Appointment', array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => 20),
+        ));
 
-		// 4. Load Relations (Including the Consultation Record!)
-		// Note: We need 'consultationRecords' to find the ID of the SOAP note to view.
-		$criteria->with = array(
-			'patientAccount.user' => array('alias' => 'patientUser'),
-			'consultationRecords'
-		);
-
-		$dataProvider = new CActiveDataProvider('Appointment', array(
-			'criteria' => $criteria,
-			'pagination' => array('pageSize' => 20),
-		));
-
-		$this->render('myHistory', array(
-			'dataProvider' => $dataProvider,
-		));
-	}
+        $this->render('myHistory', array('dataProvider' => $dataProvider));
+    }
 }

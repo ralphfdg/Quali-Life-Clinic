@@ -7,27 +7,32 @@ class DoctorScheduleController extends Controller
     public function filters()
     {
         return array(
-            'accessControl', 
-            'postOnly + delete', 
+            'accessControl',
+            'postOnly + delete',
         );
     }
 
     public function accessRules()
     {
         return array(
-            array('allow',
+            // 1. Admins/Super Admins: Full CRUD
+            array(
+                'allow',
                 'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
-                'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
+                'expression' => '$user->isSuperAdmin() || $user->isAdmin()', // Using fixed syntax
             ),
-            array('allow',
-                'actions' => array('index', 'view', 'mySchedule'),
-                'expression' => 'Yii::app()->controller->isDoctor()',
+
+            // 2. Doctors: View, Create, and Update ONLY their OWN Schedule
+            array(
+                'allow',
+                'actions' => array('index', 'view', 'mySchedule', 'create', 'update'), // Doctor can now 'create' and 'update'
+                'expression' => '$user->isDoctor()', // Using fixed syntax
             ),
+
             array('deny', 'users' => array('*')),
         );
     }
 
-    // ... (Keep helper functions like allowAdminAccess, loadModel, etc.) ...
 
     public function actionCreate()
     {
@@ -35,20 +40,19 @@ class DoctorScheduleController extends Controller
 
         if (isset($_POST['DoctorSchedule'])) {
             $model->attributes = $_POST['DoctorSchedule'];
-            if ($model->save()) {
-                
-                // --- AUDIT LOG ---
-                if(class_exists('AuditHelper')) {
-                    AuditHelper::log(
-                        'CREATE_SCHEDULE', 
-                        'tbl_doctor_schedule', 
-                        $model->id, 
-                        "Created schedule for Doctor ID: " . $model->doctor_account_id
-                    );
-                }
-                // -----------------
 
-                $this->redirect(array('admin')); 
+            // SECURITY FIX: If Doctor is logged in, auto-assign their ID, ignoring the form's dropdown (if visible)
+            if (Yii::app()->user->isDoctor()) {
+                $model->doctor_account_id = Yii::app()->user->id;
+            }
+
+            if ($model->save()) {
+                // --- AUDIT LOG ---
+                if (class_exists('AuditHelper')) {
+                    AuditHelper::log('CREATE_SCHEDULE', 'tbl_doctor_schedule', $model->id, "Created schedule for Doctor ID: " . $model->doctor_account_id);
+                }
+                // --- Redirect to their personal schedule view ---
+                $this->redirect(array('mySchedule'));
             }
         }
 
@@ -59,39 +63,38 @@ class DoctorScheduleController extends Controller
     {
         $model = $this->loadModel($id);
 
+        // SECURITY FIX: Deny non-admin users from editing schedules that are not their own
+        if (Yii::app()->user->isDoctor() && $model->doctor_account_id != Yii::app()->user->id) {
+            throw new CHttpException(403, 'You are not authorized to edit this schedule.');
+        }
+
         if (isset($_POST['DoctorSchedule'])) {
             $model->attributes = $_POST['DoctorSchedule'];
             if ($model->save()) {
-                
-                // --- AUDIT LOG ---
-                if(class_exists('AuditHelper')) {
-                    $days = array(0=>'Sun', 1=>'Mon', 2=>'Tue', 3=>'Wed', 4=>'Thu', 5=>'Fri', 6=>'Sat');
-                    $dayName = isset($days[$model->day_of_week]) ? $days[$model->day_of_week] : $model->day_of_week;
-                    
-                    AuditHelper::log(
-                        'UPDATE_SCHEDULE', 
-                        'tbl_doctor_schedule', 
-                        $model->id, 
-                        "Updated schedule for " . $dayName
-                    );
-                }
-                // -----------------
 
-                $this->redirect(array('admin')); 
+                // --- AUDIT LOG ---
+                if (class_exists('AuditHelper')) {
+                    $days = array(0 => 'Sun', 1 => 'Mon', 2 => 'Tue', 3 => 'Wed', 4 => 'Thu', 5 => 'Fri', 6 => 'Sat');
+                    $dayName = isset($days[$model->day_of_week]) ? $days[$model->day_of_week] : $model->day_of_week;
+
+                    AuditHelper::log('UPDATE_SCHEDULE', 'tbl_doctor_schedule', $model->id, "Updated schedule for " . $dayName);
+                }
+                // --- Redirect to their personal schedule view ---
+                $this->redirect(array('mySchedule'));
             }
         }
 
         $this->render('update', array('model' => $model));
     }
 
-    // ... (Keep actionDelete, actionAdmin, loadModel, etc.) ...
-    
+
+
     public function actionDelete($id)
     {
         $this->loadModel($id)->delete();
-        
+
         // Audit log for delete (Optional but recommended)
-        if(class_exists('AuditHelper')) {
+        if (class_exists('AuditHelper')) {
             AuditHelper::log('DELETE_SCHEDULE', 'tbl_doctor_schedule', $id, 'Deleted by Admin');
         }
 
@@ -111,9 +114,12 @@ class DoctorScheduleController extends Controller
 
     public function loadModel($id)
     {
-        $model = DoctorSchedule::model()->findByPk($id);
+        // FIX: EAGER LOAD doctorAccount.user
+        $model = DoctorSchedule::model()->with('doctorAccount.user')->findByPk($id);
+
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
+
         return $model;
     }
 
@@ -122,15 +128,15 @@ class DoctorScheduleController extends Controller
      */
     public function actionMySchedule()
     {
-        // Get the ID of the currently logged-in doctor
         $doctorId = Yii::app()->user->id;
 
         $criteria = new CDbCriteria;
-        // Filter: Only show records for this doctor
+
+        // CRITICAL FIX: The security check using $model is REMOVED, as filtering is done here.
+        // We ensure the doctor only sees their own records.
         $criteria->compare('doctor_account_id', $doctorId);
-        
-        // Order: Sunday (0) to Saturday (6), then by Start Time
-        $criteria->order = 'day_of_week ASC, start_time ASC';
+
+        $criteria->order = 'day_of_week ASC, start_time ASC'; // Sort for readability
 
         $dataProvider = new CActiveDataProvider('DoctorSchedule', array(
             'criteria' => $criteria,
@@ -141,4 +147,6 @@ class DoctorScheduleController extends Controller
             'dataProvider' => $dataProvider,
         ));
     }
+
+
 }
