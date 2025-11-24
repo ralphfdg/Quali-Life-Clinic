@@ -54,7 +54,7 @@ class AuditLog extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'userAccount' => array(self::BELONGS_TO, 'Account', 'user_account_id'),
+			'account' => array(self::BELONGS_TO, 'Account', 'user_account_id'),
 		);
 	}
 
@@ -88,24 +88,31 @@ class AuditLog extends CActiveRecord
 	 * based on the search/filter conditions.
 	 */
 	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+    {
+        $criteria=new CDbCriteria;
 
-		$criteria=new CDbCriteria;
+        $criteria->compare('id',$this->id);
+        $criteria->compare('user_account_id',$this->user_account_id);
+        $criteria->compare('action',$this->action,true);
+        $criteria->compare('target_entity',$this->target_entity,true);
+        $criteria->compare('target_id',$this->target_id);
+        $criteria->compare('details',$this->details,true);
+        $criteria->compare('ip_address',$this->ip_address,true);
+        $criteria->compare('timestamp',$this->timestamp,true);
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('user_account_id',$this->user_account_id);
-		$criteria->compare('action',$this->action,true);
-		$criteria->compare('target_entity',$this->target_entity,true);
-		$criteria->compare('target_id',$this->target_id);
-		$criteria->compare('details',$this->details,true);
-		$criteria->compare('ip_address',$this->ip_address,true);
-		$criteria->compare('timestamp',$this->timestamp,true);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            
+            // --- ADD THIS SORTING RULE ---
+            'sort'=>array(
+                'defaultOrder'=>'timestamp DESC', // Newest first
+            ),
+            
+            'pagination'=>array(
+                'pageSize'=>20, // Optional: Show 20 logs per page
+            ),
+        ));
+    }
 
 	/**
 	 * Returns the static model of the specified AR class.

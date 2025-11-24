@@ -2,210 +2,193 @@
 
 class AccountController extends Controller
 {
-    public $layout='//layouts/column2';
+	public $layout = '//layouts/column2';
 
-    public function filters()
-    {
-        return array(
-            'accessControl', 
-            'postOnly + delete', 
-        );
-    }
+	public function filters()
+	{
+		return array(
+			'accessControl',
+			'postOnly + delete',
+		);
+	}
 
-    public function accessRules()
-    {
-        return array(
-            // Admins & Super Admins: Full Control
-            array('allow',
-                'actions'=>array('index','view','create','update','admin','delete'),
-                'expression'=>'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()', 
-            ),
-            // Users: Edit Own Account Only
-            array('allow',
-                'actions'=>array('update', 'view'),
-                'users'=>array('@'),
-                'expression'=>'$user->id == $_GET["id"]',
-            ),
-            array('deny',
-                'users'=>array('*'),
-            ),
-        );
-    }
+	public function accessRules()
+	{
+		return array(
+			array(
+				'allow',
+				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
+				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
+			),
+			array(
+				'allow',
+				'actions' => array('update', 'view'),
+				'users' => array('@'),
+				'expression' => '$user->id == $_GET["id"]',
+			),
+			array(
+				'deny',
+				'users' => array('*'),
+			),
+		);
+	}
 
-    public function actionView($id)
-    {
-        $this->render('view',array(
-            'model'=>$this->loadModel($id),
-        ));
-    }
+	public function actionCreate()
+	{
+		$model = new Account;
+		$user = new User;
 
-    /**
-     * Creates a new model (Doctor, Patient, or Admin).
-     * Logic adapted from OldAccountController for better security.
-     */
-    public function actionCreate()
-    {
-        $model = new Account;
-        $user = new User;
+		// Auto-select type from URL (e.g. ?type=3 for Doctor)
+		$typeId = isset($_GET['type']) ? (int)$_GET['type'] : 0;
+		if ($typeId > 0) {
+			$model->account_type_id = $typeId;
+		}
 
-        // 1. Determine Scenario based on URL Type
-        $typeId = isset($_GET['type']) ? (int)$_GET['type'] : 0;
-        $scenario = 'createNewUser'; // Default
-        if ($typeId == 3) $scenario = 'createNewDoctor';
-        if ($typeId == 4) $scenario = 'createNewPatient';
+		// NOTE: We rely on the default 'insert' scenario here.
+		// This matches the rules in Account.php we just updated.
 
-        // Apply scenarios to models so specific validation rules trigger
-        $model->setScenario($scenario);
-        // $user->setScenario($scenario); // Only if User model has scenarios defined
+		if (isset($_POST['Account'], $_POST['User'])) {
+			$model->attributes = $_POST['Account'];
+			$user->attributes = $_POST['User'];
 
-        if (isset($_POST['Account'], $_POST['User'])) 
-        {
-            $model->attributes = $_POST['Account'];
-            $user->attributes = $_POST['User'];
-            
-            // Enforce type from URL if present
-            if ($typeId > 0) {
-                $model->account_type_id = $typeId;
-            }
+			// FIX: Assign dummy ID to User so it passes "required" check
+			$user->account_id = 0;
 
-            // 2. VALIDATE BOTH MODELS FIRST
-            $valid = $model->validate();
-            $valid = $user->validate() && $valid; 
+			// --- TRIGGER VALIDATION MANUALLY ---
+			$valid = $model->validate();
+			$valid = $user->validate() && $valid;
+			// -----------------------------------
 
-            if ($valid) 
-            {
-                // 3. TRANSACTION START
-                $transaction = Yii::app()->db->beginTransaction();
-                try {
-                    if ($model->save(false)) // False because we already validated above
-                    {
-                        $user->account_id = $model->id; 
-                        
-                        if ($user->save(false)) 
-                        {
-                            $transaction->commit(); // Success!
-                            
-                            // --- AUDIT LOG ---
-                            if(class_exists('AuditHelper')) {
-                                AuditHelper::log('CREATE_ACCOUNT', 'tbl_account', $model->id, "Created user: " . $model->username);
-                            }
-                            
-                            Yii::app()->user->setFlash('success', "Account successfully created!");
-                            $this->redirect(array('view', 'id' => $model->id));
-                        }
-                    }
-                    // If we reach here, something failed but didn't throw exception
-                    throw new Exception('Failed to save User record.');
+			if ($valid) {
+				$transaction = Yii::app()->db->beginTransaction();
+				try {
+					// 1. Save Account
+					if ($model->save(false)) {
+						// 2. Assign Real ID to User
+						$user->account_id = $model->id;
 
-                } catch (Exception $e) {
-                    $transaction->rollback();
-                    Yii::app()->user->setFlash('error', "Error creating account: " . $e->getMessage());
-                    Yii::log("Create Account Error: " . $e->getMessage(), 'error');
-                }
-            }
-        }
+						// 3. Save User
+						if ($user->save(false)) {
+							$transaction->commit();
 
-        $this->render('create', array(
-            'model' => $model,
-            'user' => $user,
-        ));
-    }
+							// Optional Audit Log
+							if (class_exists('AuditHelper')) {
+								AuditHelper::log('CREATE_ACCOUNT', 'tbl_account', $model->id, "Created: " . $model->username);
+							}
 
-    public function actionUpdate($id)
-    {
-        $model = $this->loadModel($id);
-        $user = $model->user;
-        
-        // Fallback if User profile is missing
-        if($user === null) {
-            $user = new User;
-            $user->account_id = $model->id;
-        }
+							Yii::app()->user->setFlash('success', "Account created successfully!");
+							$this->redirect(array('view', 'id' => $model->id));
+						}
+					}
+					// If save returns false despite validation passing (rare DB error)
+					throw new Exception('Database error: Failed to save records.');
+				} catch (Exception $e) {
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error', "Error: " . $e->getMessage());
+				}
+			}
+		}
 
-        if(isset($_POST['Account'], $_POST['User']))
-        {
-            $model->attributes = $_POST['Account'];
-            $user->attributes = $_POST['User'];
-            
-            // Password handling is done in Account::beforeSave() automatically
-            
-            $valid = $model->validate();
-            $valid = $user->validate() && $valid;
+		$this->render('create', array(
+			'model' => $model,
+			'user' => $user,
+		));
+	}
 
-            if($valid) {
-                $transaction = Yii::app()->db->beginTransaction();
-                try {
-                    if($model->save(false) && $user->save(false)) {
-                        $transaction->commit();
-                        Yii::app()->user->setFlash('success', "Account updated.");
-                        $this->redirect(array('view','id'=>$model->id));
-                    }
-                } catch(Exception $e) {
-                    $transaction->rollback();
-                    Yii::app()->user->setFlash('error', "Update failed: " . $e->getMessage());
-                }
-            }
-        }
+	// ... (Keep actionUpdate, actionDelete, actionAdmin, etc. unchanged) ...
+	// (Paste the rest of your controller methods here)
 
-        $this->render('update',array(
-            'model'=>$model,
-            'user'=>$user,
-        ));
-    }
+	public function actionUpdate($id)
+	{
+		$model = $this->loadModel($id);
+		// Load existing profile or create empty one if missing
+		$user = $model->user ? $model->user : new User;
+		// Ensure the new user object knows which account it belongs to
+		if ($user->isNewRecord) {
+			$user->account_id = $model->id;
+		}
 
-    public function actionDelete($id)
-    {
-        $model = $this->loadModel($id);
-        // Soft Delete is safer (Set status to 2 = Inactive)
-        $model->status_id = 2; 
-        $model->save(false);
+		if (isset($_POST['Account'], $_POST['User'])) {
+			$model->attributes = $_POST['Account'];
+			$user->attributes = $_POST['User'];
 
-        // If request via AJAX, no redirect needed
-        if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-    }
+			// 1. Validate first (Don't start transaction if data is bad)
+			$valid = $model->validate();
+			$valid = $user->validate() && $valid;
 
-    public function actionIndex()
-    {
-        $dataProvider=new CActiveDataProvider('Account');
-        $this->render('index',array(
-            'dataProvider'=>$dataProvider,
-        ));
-    }
+			if ($valid) {
+				// 2. Start Transaction
+				$transaction = Yii::app()->db->beginTransaction();
 
-    public function actionAdmin()
-    {
-        $model=new Account('search');
-        $model->unsetAttributes(); 
-        
-        if(isset($_GET['Account']))
-            $model->attributes=$_GET['Account'];
+				try {
+					// 3. Attempt Saves
+					if ($model->save(false) && $user->save(false)) {
+						$transaction->commit(); // SUCCESS
 
-        // Filter by type from URL (e.g. admin?type=3 for Doctors)
-        if(isset($_GET['type']))
-        {
-            $model->account_type_id = (int)$_GET['type'];
-        }
+						// --- AUDIT LOG ---
+						if (class_exists('AuditHelper')) {
+							AuditHelper::log(
+								'UPDATE_ACCOUNT',
+								'tbl_account',
+								$model->id,
+								"Updated profile for: " . $model->username,
+								Yii::app()->user->id
+							);
+						}
+						// -----------------
 
-        $this->render('admin',array(
-            'model'=>$model,
-        ));
-    }
+						Yii::app()->user->setFlash('success', "Account updated successfully.");
+						$this->redirect(array('view', 'id' => $model->id));
+					}
 
-    public function loadModel($id)
-    {
-        $model=Account::model()->with('user')->findByPk($id);
-        if($model===null)
-            throw new CHttpException(404,'The requested page does not exist.');
-        return $model;
-    }
+					// If save returned false (rare case since validation passed)
+					throw new Exception('Database failed to update records.');
+				} catch (Exception $e) {
+					// 4. Rollback on Failure
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error', "Update failed: " . $e->getMessage());
+					Yii::log("Update Error: " . $e->getMessage(), 'error');
+				}
+			}
+		}
 
-    protected function performAjaxValidation($model)
-    {
-        if(isset($_POST['ajax']) && $_POST['ajax']==='account-form')
-        {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
-    }
+		$this->render('update', array(
+			'model' => $model,
+			'user' => $user
+		));
+	}
+
+	public function loadModel($id)
+	{
+		// Use the NEW relation name here
+		$model = Account::model()->with('user.specializationInfo')->findByPk($id);
+
+		if ($model === null)
+			throw new CHttpException(404, 'The requested page does not exist.');
+
+		return $model;
+	}
+
+	public function actionAdmin()
+	{
+		$model = new Account('search');
+		$model->unsetAttributes();
+		if (isset($_GET['Account'])) $model->attributes = $_GET['Account'];
+		if (isset($_GET['type'])) $model->account_type_id = (int)$_GET['type'];
+		$this->render('admin', array('model' => $model));
+	}
+
+	public function actionView($id)
+	{
+		// We use loadModel() to fetch the data securely
+		$this->render('view', array(
+			'model' => $this->loadModel($id),
+		));
+	}
+
+	public function actionDelete($id)
+	{
+		$this->loadModel($id)->delete(); // Or soft delete logic
+		if (!isset($_GET['ajax'])) $this->redirect(array('admin'));
+	}
 }
