@@ -297,7 +297,7 @@ class AppointmentController extends Controller
 		}
 	}
 
-	public function actionGetAvailableSlots()
+public function actionGetAvailableSlots()
 	{
 		if (!isset($_POST['doctor_id']) || !isset($_POST['date'])) {
 			// ... (error handling) ...
@@ -356,14 +356,27 @@ class AppointmentController extends Controller
 
 		$slotsFound = false;
 
+		// --- ADDED: Check if the selected date is today ---
+		$isToday = ($date === date('Y-m-d'));
+		$currentTime = time();
+		// --------------------------------------------------
+
 		for ($time = $startTime; $time < $endTime; $time += $interval) {
 			$currentTimeSlot = date('H:i', $time);
 			$displayTime = date('g:i A', $time);
 
-			// Style: Red if booked, Green if available
+			// Check if slot is in the past (only if booking for today)
+			// Note: $time is generated using today's date by default in strtotime logic if not specified, 
+			// so we can compare directly with time().
+			$isPast = ($isToday && $time < $currentTime);
+
+			// Style: Red if booked, Gray if passed, Green if available
 			if (in_array($currentTimeSlot, $bookedTimes)) {
 				// Booked - Show as disabled
 				echo "<button type='button' class='slot-btn disabled' disabled style='margin:5px; background-color:#ccc; border:1px solid #999; color:#666;'>$displayTime (Taken)</button>";
+			} elseif ($isPast) {
+				// --- ADDED: Past Time Handler ---
+				echo "<button type='button' class='slot-btn disabled' disabled style='margin:5px; background-color:#eee; border:1px solid #ddd; color:#aaa;'>$displayTime (Passed)</button>";
 			} else {
 				// Available - Clickable
 				// We use a small JS onclick to put the value into the hidden field
@@ -394,7 +407,8 @@ class AppointmentController extends Controller
 		$criteria = new CDbCriteria;
 
 		// 1. General Filter: Today or Later, exclude Canceled
-		$criteria->addCondition('t.schedule_datetime >= NOW()');
+		// FIX: Use CURDATE() instead of NOW() so appointments earlier today are still visible
+		$criteria->addCondition('t.schedule_datetime >= CURDATE()');
 		$criteria->compare('t.appointment_status_id', '<>5');
 
 		// 2. Role-Based Filtering
