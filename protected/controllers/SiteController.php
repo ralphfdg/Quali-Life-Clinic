@@ -18,6 +18,28 @@ class SiteController extends Controller
 		);
 	}
 
+	public function accessRules()
+    {
+        return array(
+            // 1. Allow Guests (*) to access the Landing Page, Login, and Error page
+            array('allow', 
+                'actions' => array('index', 'login', 'error'),
+                'users' => array('*'), // * means ALL users (including guests)
+            ),
+            
+            // 2. Authenticated Users (@) can access logout
+            array('allow',
+                'actions' => array('logout'),
+                'users' => array('@'), // @ means authenticated (logged-in) users
+            ),
+            
+            // 3. Deny ALL other actions for guests and unknown users
+            array('deny', 
+                'users' => array('*'),
+            ),
+        );
+    }
+
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.

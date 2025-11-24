@@ -255,11 +255,22 @@
     // 2. ADMIN (SECRETARY) MENU
     else if ($this->isAdmin()) {
         $sidebarMenu = array(
-            array('label' => 'Secretary Menu', 'itemOptions' => array('class' => 'sidebar-header')),
-            array('label' => 'Dashboard', 'icon' => 'fa-tachometer-alt', 'url' => array('/site/index')),
-            array('label' => 'Calendar', 'icon' => 'fa-calendar-check', 'url' => array('/appointment/calendar')),
-            array('label' => 'Manage Patients', 'icon' => 'fa-users', 'url' => array('/user/admin', 'role' => 'patient')),
-            array('label' => 'View Doctors', 'icon' => 'fa-user-md', 'url' => array('/user/admin', 'role' => 'doctor', 'viewOnly' => true)),
+            array('label' => 'Secretary Controls', 'itemOptions' => array('class' => 'sidebar-header')),
+            array('label' => 'Appointment Calendar', 'icon' => 'fa-calendar-check', 'url' => array('/appointment/calendar')),
+            'Manage Doctors' => array(
+                'icon' => 'fa-user-md', // Doctor Icon
+                'items' => array(
+                    array('label' => 'Add Doctor', 'url' => array('/account/create', 'type' => 3)),
+                    array('label' => 'List Doctors', 'url' => array('/account/admin', 'type' => 3)),
+                )
+            ),
+            'Manage Patients' => array(
+                'icon' => 'fa-users', // Users Group Icon
+                'items' => array(
+                    array('label' => 'Add Patient', 'url' => array('/account/create', 'type' => 4)),
+                    array('label' => 'List Patients', 'url' => array('/account/admin', 'type' => 4)),
+                )
+            ),
             array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
         );
     }
@@ -398,7 +409,7 @@
                         </ul>
                     </nav>
                     <div class="container-fluid">
-                        
+
 
                         <?php
                         foreach (Yii::app()->user->getFlashes() as $key => $message) {
