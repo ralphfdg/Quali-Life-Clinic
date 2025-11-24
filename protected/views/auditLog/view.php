@@ -11,7 +11,7 @@ $this->menu=array(
 	array('label'=>'List AuditLog', 'url'=>array('index')),
 	array('label'=>'Create AuditLog', 'url'=>array('create')),
 	array('label'=>'Update AuditLog', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete AuditLog', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	//array('label'=>'Delete AuditLog', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage AuditLog', 'url'=>array('admin')),
 );
 ?>

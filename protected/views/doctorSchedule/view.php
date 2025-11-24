@@ -11,7 +11,7 @@ $this->menu=array(
 	array('label'=>'List DoctorSchedule', 'url'=>array('index')),
 	array('label'=>'Create DoctorSchedule', 'url'=>array('create')),
 	array('label'=>'Update DoctorSchedule', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete DoctorSchedule', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	//array('label'=>'Delete DoctorSchedule', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage DoctorSchedule', 'url'=>array('admin')),
 );
 ?>

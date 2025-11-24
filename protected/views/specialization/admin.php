@@ -81,16 +81,6 @@ $this->breadcrumbs = array(
                                     ).
                                     // Divider
                                     \'<div class="dropdown-divider"></div>\'.
-                                    // Delete
-                                    CHtml::link(\'<i class="fas fa-trash fa-sm fa-fw mr-2 text-danger"></i> Delete\', 
-                                        "#", 
-                                        array(
-                                            "class"=>"dropdown-item text-danger",
-                                            "submit"=>array("delete","id"=>$data->id),
-                                            "confirm"=>"Are you sure you want to delete this item?",
-                                            "csrf"=>true
-                                        )
-                                    ).
                                 \'</div>\'.
                             \'</div>\'
                         ',
