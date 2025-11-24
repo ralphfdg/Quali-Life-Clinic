@@ -24,19 +24,19 @@ class PrescriptionController extends Controller
     public function accessRules()
     {
         return array(
-            // 1. Allow Patients to view their own list and details
+            // 1. Allow Patients to view and PRINT their own list and details
             array('allow',
-                'actions'=>array('myPrescriptions', 'view'),
+                'actions'=>array('myPrescriptions', 'view', 'print'), // ADDED 'print'
                 'expression'=>'Yii::app()->controller->isPatient()',
             ),
-            // 2. Allow Doctors to Create, Update, and View
+            // 2. Allow Doctors to Create, Update, View, and PRINT
             array('allow',
-                'actions'=>array('create', 'update', 'index', 'view'),
+                'actions'=>array('create', 'update', 'index', 'view', 'print'), // ADDED 'print'
                 'expression'=>'Yii::app()->controller->isDoctor()',
             ),
             // 3. Allow Admins & Super Admins to Manage
             array('allow',
-                'actions'=>array('admin', 'delete', 'index', 'view', 'create', 'update'),
+                'actions'=>array('admin', 'delete', 'index', 'view', 'create', 'update', 'print'), // ADDED 'print'
                 'expression'=>'Yii::app()->controller->isAdmin() || Yii::app()->controller->isSuperAdmin()',
             ),
             // Deny everyone else
@@ -44,6 +44,26 @@ class PrescriptionController extends Controller
                 'users'=>array('*'),
             ),
         );
+    }
+
+    /**
+     * NEW ACTION: Print Prescription (Opens in separate tab with print layout)
+     */
+    public function actionPrint($id)
+    {
+        $model = $this->loadModel($id);
+
+        // Security: If Patient, ensure they own this prescription
+        if (Yii::app()->controller->isPatient() && $model->patient_account_id != Yii::app()->user->id) {
+             throw new CHttpException(403, 'You are not authorized to print this prescription.');
+        }
+
+        // Use the dedicated Print Layout
+        $this->layout = '//layouts/print';
+        
+        $this->render('print',array(
+            'model'=>$model,
+        ));
     }
 
     /**
