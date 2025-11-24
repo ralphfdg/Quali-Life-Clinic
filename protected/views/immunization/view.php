@@ -17,9 +17,18 @@ $statusClass = ($model->status_id == 1) ? 'badge-success' : 'badge-danger';
 		View Vaccine: <span class="text-primary"><?php echo CHtml::encode($model->immunization); ?></span>
 	</h1>
 	<div>
-		<?php echo CHtml::link('<i class="fas fa-edit"></i> Update', array('update', 'id' => $model->id), array('class' => 'btn btn-sm btn-warning shadow-sm')); ?>
-		<?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back to List', array('patientRecord/view'), array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
-	</div>
+		<?php
+		// 1. Retrieve the Patient ID passed from the Patient Record view.
+		$patientID = Yii::app()->request->getQuery('patient_id');
+
+		// 2. Set the destination URL. If for some reason the ID is missing (which shouldn't happen 
+		//    if links are correctly built), it will throw the standard 'Your request is invalid' error, 
+		//    which is better than silently redirecting to an irrelevant admin page.
+		$backUrl = array('patientRecord/view', 'id' => $patientID);
+		$buttonText = '<i class="fas fa-arrow-left"></i> Back';
+
+		echo CHtml::link($buttonText, $backUrl, array('class' => 'btn btn-sm btn-secondary shadow-sm'));
+		?> </div>
 </div>
 
 <div class="card shadow mb-4">

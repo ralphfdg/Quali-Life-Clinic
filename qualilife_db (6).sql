@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2025 at 10:05 PM
+-- Generation Time: Nov 24, 2025 at 10:27 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,79 +45,79 @@ CREATE TABLE `tbl_account` (
 --
 
 INSERT INTO `tbl_account` (`id`, `username`, `password`, `email_address`, `salt`, `account_type_id`, `status_id`, `date_created`, `date_updated`, `expiration_date`) VALUES
-(1, 'superadmin', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'superadmin@qualilife.com', '1700000000', 1, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(2, 'admin_jane', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'jane@qualilife.com', '1700000000', 2, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(3, 'admin_john', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'john@qualilife.com', '1700000000', 2, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(4, 'dr_house', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.house@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(5, 'dr_grey', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.grey@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(6, 'dr_lim', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.lim@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(7, 'dr_addison', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.addison@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(8, 'dr_murphy', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.murphy@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(9, 'dr_shepherd', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.shepherd@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(10, 'dr_karev', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.karev@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(11, 'dr_torres', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.torres@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(12, 'dr_webber', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.webber@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(13, 'dr_yang', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.yang@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(14, 'dr_reid', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.reid@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(15, 'dr_cox', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.cox@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(16, 'dr_turk', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.turk@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(17, 'dr_elliot', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.elliot@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(18, 'dr_finch', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.finch@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(19, 'dr_becker', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.becker@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(20, 'dr_luke', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.luke@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(21, 'dr_leia', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.leia@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(22, 'dr_han', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.han@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(23, 'dr_chewie', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'dr.chewie@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(24, 'pat_alice', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'alice@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(25, 'pat_bob', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'bob@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(26, 'pat_cathy', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'cathy@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(27, 'pat_david', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'david@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(28, 'pat_emily', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'emily@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(29, 'pat_frank', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'frank@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(30, 'pat_grace', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'grace@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(31, 'pat_harry', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'harry@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(32, 'pat_irene', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'irene@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(33, 'pat_jacob', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'jacob@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(34, 'pat_kelly', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'kelly@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(35, 'pat_leo', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'leo@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(36, 'pat_mia', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'mia@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(37, 'pat_nora', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'nora@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(38, 'pat_oscar', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'oscar@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(39, 'pat_penny', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'penny@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(40, 'pat_quinn', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'quinn@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(41, 'pat_ryan', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'ryan@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(42, 'pat_sara', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'sara@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(43, 'pat_tom', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'tom@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(44, 'pat_uma', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'uma@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(45, 'pat_victor', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'victor@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(46, 'pat_wendy', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'wendy@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(47, 'pat_xavier', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'xavier@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(48, 'pat_yara', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'yara@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(49, 'pat_zane', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'zane@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(50, 'pat_ann', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'ann@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(51, 'pat_ben', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'ben@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(52, 'pat_chloe', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'chloe@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(53, 'pat_drake', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'drake@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(54, 'pat_ella', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'ella@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(55, 'pat_finn', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'finn@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(56, 'pat_gigi', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'gigi@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(57, 'pat_henry', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'henry@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(58, 'pat_ivy', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'ivy@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(59, 'pat_jake', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'jake@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(60, 'pat_karen', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'karen@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(61, 'pat_liam', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'liam@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(62, 'pat_maya', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'maya@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(63, 'pat_noah', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'noah@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(64, 'pat_olivia', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'olivia@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(65, 'pat_peter', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'peter@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(66, 'pat_queenie', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'queenie@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(67, 'pat_russell', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'russell@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(68, 'pat_susan', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'susan@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(69, 'pat_theo', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'theo@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(70, 'pat_ursula', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'ursula@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(71, 'pat_vince', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'vince@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(72, 'pat_will', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'will@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL),
-(73, 'pat_xena', '6a9c9dfa2d35f7e91f49634f9544d7353d7d8ed6', 'xena@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:00:54', NULL);
+(1, 'superadmin', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'superadmin@qualilife.com', '1700000000', 1, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(2, 'admin_jane', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'jane@qualilife.com', '1700000000', 2, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(3, 'admin_john', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'john@qualilife.com', '1700000000', 2, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(4, 'dr_house', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.house@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(5, 'dr_grey', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.grey@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(6, 'dr_lim', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.lim@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(7, 'dr_addison', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.addison@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(8, 'dr_murphy', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.murphy@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(9, 'dr_shepherd', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.shepherd@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(10, 'dr_karev', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.karev@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(11, 'dr_torres', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.torres@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(12, 'dr_webber', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.webber@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(13, 'dr_yang', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.yang@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(14, 'dr_reid', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.reid@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(15, 'dr_cox', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.cox@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(16, 'dr_turk', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.turk@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(17, 'dr_elliot', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.elliot@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(18, 'dr_finch', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.finch@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(19, 'dr_becker', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.becker@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(20, 'dr_luke', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.luke@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(21, 'dr_leia', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.leia@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(22, 'dr_han', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.han@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(23, 'dr_chewie', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'dr.chewie@clinic.com', '1700000000', 3, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(24, 'pat_alice', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'alice@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(25, 'pat_bob', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'bob@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(26, 'pat_cathy', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'cathy@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(27, 'pat_david', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'david@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(28, 'pat_emily', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'emily@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(29, 'pat_frank', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'frank@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(30, 'pat_grace', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'grace@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(31, 'pat_harry', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'harry@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(32, 'pat_irene', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'irene@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(33, 'pat_jacob', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'jacob@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(34, 'pat_kelly', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'kelly@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(35, 'pat_leo', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'leo@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(36, 'pat_mia', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'mia@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(37, 'pat_nora', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'nora@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(38, 'pat_oscar', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'oscar@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(39, 'pat_penny', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'penny@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(40, 'pat_quinn', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'quinn@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(41, 'pat_ryan', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'ryan@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(42, 'pat_sara', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'sara@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(43, 'pat_tom', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'tom@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(44, 'pat_uma', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'uma@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(45, 'pat_victor', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'victor@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(46, 'pat_wendy', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'wendy@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(47, 'pat_xavier', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'xavier@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(48, 'pat_yara', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'yara@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(49, 'pat_zane', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'zane@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(50, 'pat_ann', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'ann@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(51, 'pat_ben', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'ben@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(52, 'pat_chloe', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'chloe@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(53, 'pat_drake', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'drake@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(54, 'pat_ella', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'ella@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(55, 'pat_finn', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'finn@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(56, 'pat_gigi', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'gigi@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(57, 'pat_henry', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'henry@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(58, 'pat_ivy', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'ivy@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(59, 'pat_jake', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'jake@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(60, 'pat_karen', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'karen@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(61, 'pat_liam', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'liam@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(62, 'pat_maya', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'maya@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(63, 'pat_noah', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'noah@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(64, 'pat_olivia', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'olivia@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(65, 'pat_peter', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'peter@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(66, 'pat_queenie', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'queenie@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(67, 'pat_russell', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'russell@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(68, 'pat_susan', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'susan@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(69, 'pat_theo', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'theo@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(70, 'pat_ursula', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'ursula@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(71, 'pat_vince', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'vince@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(72, 'pat_will', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'will@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL),
+(73, 'pat_xena', '0f7a4797b7f9dbeb342cea76ea99422d3c7b359e', 'xena@pat.com', '1700000000', 4, 1, '2025-11-25 05:00:54', '2025-11-25 05:17:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -184,7 +184,37 @@ INSERT INTO `tbl_appointment` (`id`, `patient_account_id`, `doctor_account_id`, 
 (17, 40, 4, 40, '2025-11-24 10:00:00', 5, 'Patient Canceled.', NULL, '2025-11-22 10:00:00', 0, 0),
 (18, 41, 5, 41, '2025-11-24 11:00:00', 4, 'Completed checkup.', NULL, '2025-11-22 11:00:00', 0, 0),
 (19, 42, 4, 42, '2025-11-27 14:00:00', 1, NULL, NULL, '2025-11-25 14:00:00', 0, 0),
-(20, 43, 6, 2, '2025-11-28 09:00:00', 1, NULL, NULL, '2025-11-26 09:00:00', 0, 0);
+(20, 43, 6, 2, '2025-11-28 09:00:00', 1, NULL, NULL, '2025-11-26 09:00:00', 0, 0),
+(21, 44, 4, 44, '2025-11-25 06:00:00', 4, 'Annual health screen completed.', NULL, '2025-11-25 08:30:00', 0, 0),
+(22, 45, 5, 2, '2025-11-25 06:15:00', 4, 'ECG analysis completed.', NULL, '2025-11-25 08:30:00', 0, 0),
+(23, 46, 6, 46, '2025-11-25 06:30:00', 4, 'Immunization completed.', NULL, '2025-11-25 08:30:00', 0, 0),
+(24, 47, 7, 2, '2025-11-25 06:45:00', 4, 'Post-delivery follow-up.', NULL, '2025-11-25 08:30:00', 0, 0),
+(25, 48, 8, 48, '2025-11-25 07:00:00', 4, 'Neuro exam normal, consultation finished.', NULL, '2025-11-25 08:30:00', 0, 0),
+(26, 49, 9, 2, '2025-11-25 07:15:00', 3, 'Post-op checkup.', NULL, '2025-11-25 08:30:00', 0, 0),
+(27, 50, 10, 50, '2025-11-25 07:30:00', 3, 'Vaccine booster administered.', NULL, '2025-11-25 08:30:00', 0, 0),
+(28, 51, 11, 2, '2025-11-25 07:45:00', 3, 'Physical therapy review.', NULL, '2025-11-25 08:30:00', 0, 0),
+(29, 52, 12, 52, '2025-11-25 08:00:00', 3, 'Blood work review.', NULL, '2025-11-25 08:30:00', 0, 0),
+(30, 53, 13, 2, '2025-11-25 08:15:00', 3, 'New cardiology patient intake.', NULL, '2025-11-25 08:30:00', 0, 0),
+(31, 54, 14, 54, '2025-11-25 08:30:00', 2, 'First time therapy session.', NULL, '2025-11-25 08:30:00', 0, 0),
+(32, 55, 15, 2, '2025-11-25 08:45:00', 2, 'General checkup and flu shot.', NULL, '2025-11-25 08:30:00', 0, 0),
+(33, 56, 16, 56, '2025-11-25 09:00:00', 2, 'Wrist fracture follow-up.', NULL, '2025-11-25 08:30:00', 0, 0),
+(34, 57, 17, 2, '2025-11-25 09:15:00', 2, 'Psoriasis consultation.', NULL, '2025-11-25 08:30:00', 0, 0),
+(35, 58, 18, 58, '2025-11-25 09:30:00', 2, 'Routine eye exam.', NULL, '2025-11-25 08:30:00', 0, 0),
+(36, 59, 19, 2, '2025-11-25 09:45:00', 2, 'Chemo planning session.', NULL, '2025-11-25 08:30:00', 0, 0),
+(37, 60, 20, 60, '2025-11-25 10:00:00', 1, 'General consultation.', NULL, '2025-11-25 08:30:00', 0, 0),
+(38, 61, 21, 2, '2025-11-25 10:15:00', 1, 'Maternity check-in.', NULL, '2025-11-25 08:30:00', 0, 0),
+(39, 62, 22, 62, '2025-11-25 10:30:00', 1, 'Eczema flare-up.', NULL, '2025-11-25 08:30:00', 0, 0),
+(40, 63, 23, 2, '2025-11-25 10:45:00', 1, 'Follow-up cough.', NULL, '2025-11-25 08:30:00', 0, 0),
+(41, 64, 4, 64, '2025-11-25 11:00:00', 1, 'New patient intake.', NULL, '2025-11-25 08:30:00', 0, 0),
+(42, 65, 5, 2, '2025-11-25 11:15:00', 1, 'Heart stress test booking.', NULL, '2025-11-25 08:30:00', 0, 0),
+(43, 66, 6, 66, '2025-11-25 11:30:00', 1, 'Infant wellness check.', NULL, '2025-11-25 08:30:00', 0, 0),
+(44, 67, 7, 2, '2025-11-25 11:45:00', 1, 'Post-c-section exam.', NULL, '2025-11-25 08:30:00', 0, 0),
+(45, 68, 8, 68, '2025-11-25 04:30:00', 5, NULL, 'Patient felt better in the morning.', '2025-11-25 08:30:00', 0, 0),
+(46, 69, 9, 2, '2025-11-25 04:45:00', 6, 'Patient did not respond to calls.', NULL, '2025-11-25 08:30:00', 0, 0),
+(47, 70, 10, 70, '2025-11-25 05:00:00', 5, NULL, 'Canceled due to scheduling conflict.', '2025-11-25 08:30:00', 0, 0),
+(48, 71, 11, 2, '2025-11-25 05:15:00', 6, 'No call, no show.', NULL, '2025-11-25 08:30:00', 0, 0),
+(49, 72, 12, 72, '2025-11-25 05:30:00', 5, NULL, 'Canceled by patient online.', '2025-11-25 08:30:00', 0, 0),
+(50, 73, 13, 2, '2025-11-25 05:45:00', 6, 'No call, no show.', NULL, '2025-11-25 08:30:00', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -238,7 +268,15 @@ INSERT INTO `tbl_audit_log` (`id`, `user_account_id`, `action`, `target_entity`,
 (4, 24, 'LOGIN', 'tbl_account', 24, 'User logged in successfully.', NULL, '2025-11-25 08:15:00'),
 (5, 4, 'CREATE_CONSULTATION', 'tbl_consultation_record', 10, 'SOAP Note created for walk-in', NULL, '2025-11-25 09:00:00'),
 (6, 5, 'UPDATE_STATUS', 'tbl_appointment', 11, 'Changed status to: Arrived', NULL, '2025-11-25 09:15:00'),
-(7, 1, 'CREATE_SPECIALIZATION', 'tbl_specialization', 11, 'Added: Podiatry', NULL, '2025-11-25 10:00:00');
+(7, 1, 'CREATE_SPECIALIZATION', 'tbl_specialization', 11, 'Added: Podiatry', NULL, '2025-11-25 10:00:00'),
+(8, 4, 'LOGOUT', 'tbl_account', 4, 'User logged out.', '::1', '2025-11-24 22:07:01'),
+(9, 1, 'LOGIN', 'tbl_account', 1, 'User logged in successfully.', '::1', '2025-11-24 22:10:40'),
+(10, 1, 'LOGOUT', 'tbl_account', 1, 'User logged out.', '::1', '2025-11-24 22:12:44'),
+(11, 2, 'LOGIN', 'tbl_account', 2, 'User logged in successfully.', '::1', '2025-11-24 22:12:54'),
+(12, 2, 'LOGOUT', 'tbl_account', 2, 'User logged out.', '::1', '2025-11-24 22:17:19'),
+(13, 4, 'LOGIN', 'tbl_account', 4, 'User logged in successfully.', '::1', '2025-11-24 22:17:30'),
+(14, 4, 'LOGOUT', 'tbl_account', 4, 'User logged out.', '::1', '2025-11-24 22:22:16'),
+(15, 2, 'LOGIN', 'tbl_account', 2, 'User logged in successfully.', '::1', '2025-11-24 22:22:24');
 
 -- --------------------------------------------------------
 
@@ -314,7 +352,12 @@ INSERT INTO `tbl_consultation_record` (`id`, `patient_account_id`, `doctor_accou
 (12, 26, 6, NULL, 'Injury from minor fall 1 hour ago. (Urgent care)', 'Small laceration on the knee, needs stitches.', 'Laceration, knee.', '4 stitches applied. Tetanus status reviewed.', NULL, '2025-11-25', 1),
 (13, 28, 4, NULL, 'Follow-up on rash.', 'Rash significantly improved.', 'Contact Dermatitis, resolving.', 'Taper topical medication.', NULL, '2025-11-25', 1),
 (14, 29, 5, NULL, 'Follow-up on labs from Consultation ID 5.', 'FBC shows mild iron-deficiency anemia.', 'Iron-Deficiency Anemia.', 'Prescribed oral iron supplements.', NULL, '2025-11-25', 1),
-(15, 30, 4, 7, 'Infant with fever and irritability.', 'Tympanic temperature 39.0C. Mild ear drum redness.', 'Otitis Media (Ear Infection).', 'Prescribed Amoxicillin.', NULL, '2025-11-25', 1);
+(15, 30, 4, 7, 'Infant with fever and irritability.', 'Tympanic temperature 39.0C. Mild ear drum redness.', 'Otitis Media (Ear Infection).', 'Prescribed Amoxicillin.', NULL, '2025-11-25', 1),
+(16, 44, 4, 21, 'Routine screen, no complaints.', 'Vitals stable, BMI normal.', 'Well-woman examination.', 'Follow-up next year. Recommended dental checkup.', NULL, '2025-11-25', 1),
+(17, 45, 5, 22, 'Checked for chest tightness after exercise.', 'ECG results confirm minor arrhythmia.', 'Cardiac Arrhythmia, managed.', 'Continue Beta-Blockers. Lifestyle modifications reviewed.', NULL, '2025-11-25', 1),
+(18, 46, 6, 23, 'Infant for scheduled vaccine.', 'Weight 6.5 kg. No signs of fever.', 'Routine Immunization.', 'Administered Hepatitis B and BCG. Schedule next vaccine in 2 months.', NULL, '2025-11-25', 1),
+(19, 47, 7, 24, '6 weeks post-delivery check.', 'Slight abdominal tenderness, no fever.', 'Postpartum check, recovering well.', 'Prescribed iron supplements. Return in 3 months.', NULL, '2025-11-25', 1),
+(20, 48, 8, 25, 'Reports minor tremors in left hand.', 'Neurological exam normal. MRI scheduled next week.', 'Essential Tremor (Rule out Neuropathy).', 'Ordered an MRI scan. Prescribed low dose Propranolol.', NULL, '2025-11-25', 1);
 
 -- --------------------------------------------------------
 
@@ -525,7 +568,11 @@ INSERT INTO `tbl_prescription` (`id`, `patient_account_id`, `doctor_account_id`,
 (7, 29, 5, 14, 'Ferrous Sulfate 325mg daily. QTY: 60.', '2025-11-25', 1),
 (8, 30, 4, 15, 'Amoxicillin 250mg/5mL, 5mL BID for 10 days.', '2025-11-25', 1),
 (9, 25, 5, 2, 'Aspirin 81mg daily, Plavix 75mg daily.', '2025-11-20', 1),
-(10, 28, 4, 13, 'Taper off Hydrocortisone Cream 1%.', '2025-11-25', 1);
+(10, 28, 4, 13, 'Taper off Hydrocortisone Cream 1%.', '2025-11-25', 1),
+(11, 44, 4, 16, 'No medication prescribed, advised vitamins.', '2025-11-25', 1),
+(12, 45, 5, 17, 'Metoprolol 25mg daily. QTY: 30.', '2025-11-25', 1),
+(13, 47, 7, 19, 'Ferrous Fumarate 325mg daily. QTY: 60.', '2025-11-25', 1),
+(14, 48, 8, 20, 'Propranolol 10mg PRN for tremor.', '2025-11-25', 1);
 
 -- --------------------------------------------------------
 
@@ -820,7 +867,7 @@ ALTER TABLE `tbl_account_type`
 -- AUTO_INCREMENT for table `tbl_appointment`
 --
 ALTER TABLE `tbl_appointment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `tbl_appointment_status`
@@ -832,7 +879,7 @@ ALTER TABLE `tbl_appointment_status`
 -- AUTO_INCREMENT for table `tbl_audit_log`
 --
 ALTER TABLE `tbl_audit_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `tbl_birth_history`
@@ -844,7 +891,7 @@ ALTER TABLE `tbl_birth_history`
 -- AUTO_INCREMENT for table `tbl_consultation_record`
 --
 ALTER TABLE `tbl_consultation_record`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tbl_doctor_schedule`
@@ -868,7 +915,7 @@ ALTER TABLE `tbl_immunization_record`
 -- AUTO_INCREMENT for table `tbl_prescription`
 --
 ALTER TABLE `tbl_prescription`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `tbl_specialization`

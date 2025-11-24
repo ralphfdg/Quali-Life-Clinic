@@ -75,8 +75,7 @@ $this->menu = array(
 
             <?php if (isset($immunizationTypesDataProvider)): ?>
                 <div class="tab-pane fade" id="vaccines" role="tabpanel" aria-labelledby="vaccines-tab">
-                    <?php $this->renderPartial('_immunization_types', array('dataProvider' => $immunizationTypesDataProvider)); ?>
-                </div>
+                    <?php $this->renderPartial('_immunization_types', array('dataProvider' => $immunizationTypesDataProvider, 'patientID' => $patientID)); ?> </div>
             <?php endif; ?>
 
         </div>
