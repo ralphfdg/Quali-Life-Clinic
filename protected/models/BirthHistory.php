@@ -20,6 +20,41 @@
  */
 class BirthHistory extends CActiveRecord
 {
+
+	// --- NEW: Define Blood Type Constants and Labels ---
+    const BLOOD_TYPE_A_POS = 1;
+    const BLOOD_TYPE_A_NEG = 2;
+    const BLOOD_TYPE_B_POS = 3;
+    const BLOOD_TYPE_B_NEG = 4;
+    const BLOOD_TYPE_AB_POS = 5;
+    const BLOOD_TYPE_AB_NEG = 6;
+    const BLOOD_TYPE_O_POS = 7;
+    const BLOOD_TYPE_O_NEG = 8;
+    
+    // Static map for all blood type names
+    public static function getBloodTypeOptions()
+    {
+        return array(
+            self::BLOOD_TYPE_A_POS => 'A+',
+            self::BLOOD_TYPE_A_NEG => 'A-',
+            self::BLOOD_TYPE_B_POS => 'B+',
+            self::BLOOD_TYPE_B_NEG => 'B-',
+            self::BLOOD_TYPE_AB_POS => 'AB+',
+            self::BLOOD_TYPE_AB_NEG => 'AB-',
+            self::BLOOD_TYPE_O_POS => 'O+',
+            self::BLOOD_TYPE_O_NEG => 'O-',
+        );
+    }
+
+	/**
+     * Helper function to get the string label from the integer code.
+     */
+    public function getBloodTypeLabel()
+    {
+        $options = self::getBloodTypeOptions();
+        return isset($options[$this->blood_type]) ? $options[$this->blood_type] : 'N/A';
+    }
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -120,4 +155,63 @@ class BirthHistory extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public static function getTermOptions()
+    {
+        return array(
+            1 => 'Full Term', 
+            2 => 'Pre-term', 
+            3 => 'Post-term'
+        );
+    }
+    public function getTermLabel()
+    {
+        $options = self::getTermOptions();
+        return isset($options[$this->term]) ? $options[$this->term] : 'N/A';
+    }
+
+    public static function getDeliveryTypeOptions()
+    {
+        return array(
+            1 => 'NSVD (Normal Spontaneous)', 
+            2 => 'CS (Cesarean Section)', 
+            3 => 'Assisted (Vacuum/Forceps)'
+        );
+    }
+    public function getDeliveryTypeLabel()
+    {
+        $options = self::getDeliveryTypeOptions();
+        return isset($options[$this->type_of_delivery]) ? $options[$this->type_of_delivery] : 'N/A';
+    }
+
+    // --- Measurement Formatters (Add Units) ---
+    private function formatMeasurement($value, $unit)
+    {
+        return empty($value) ? 'N/A' : $value . ' ' . $unit;
+    }
+
+    public function getFormattedWeight()
+    {
+        return $this->formatMeasurement($this->birth_weight, 'kg');
+    }
+
+    public function getFormattedLength()
+    {
+        return $this->formatMeasurement($this->birth_length, 'cm');
+    }
+    
+    public function getFormattedHeadCircumference()
+    {
+        return $this->formatMeasurement($this->birth_head_circumference, 'cm');
+    }
+
+    public function getFormattedChestCircumference()
+    {
+        return $this->formatMeasurement($this->birth_chest_circumference, 'cm');
+    }
+    
+    public function getFormattedAbdominalCircumference()
+    {
+        return $this->formatMeasurement($this->birth_abdominal_circumference, 'cm');
+    }
 }
