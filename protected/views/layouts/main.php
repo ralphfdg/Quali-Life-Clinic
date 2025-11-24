@@ -243,7 +243,7 @@
 
             // Settings
             array('label' => 'Settings', 'divider' => true),
-            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
+            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/view', 'id' => Yii::app()->user->id)),
 
             // Config
             array('label' => 'System Config', 'itemOptions' => array('class' => 'sidebar-header'), 'url' => false),
@@ -271,7 +271,7 @@
                     array('label' => 'List Patients', 'url' => array('/account/admin', 'type' => 4)),
                 )
             ),
-            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
+            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/view', 'id' => Yii::app()->user->id)),
         );
     }
 
@@ -300,7 +300,7 @@
             array('label' => 'Book Now', 'icon' => 'fa-calendar-plus', 'url' => array('/appointment/book')),
             array('label' => 'My Appointments', 'icon' => 'fa-calendar-alt', 'url' => array('/appointment/myAppointments')),
             array('label' => 'Prescriptions', 'icon' => 'fa-file-prescription', 'url' => array('/prescription/myPrescriptions')),
-            array('label' => 'My Profile', 'icon' => 'fa-user', 'url' => array('/user/myProfile')),
+            array('label' => 'My Account', 'icon' => 'fa-user', 'url' => array('/account/view', 'id' => Yii::app()->user->id)),
         );
     }
 
