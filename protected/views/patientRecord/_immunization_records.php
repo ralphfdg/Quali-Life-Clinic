@@ -1,43 +1,52 @@
 <?php
-/* @var $this PatientRecordController */
 /* @var $dataProvider CActiveDataProvider */
+/* @var $patientID integer */
 ?>
 
-<div class="mb-3 text-right">
-    <?php echo CHtml::link('<i class="fas fa-plus"></i> Create New Immunization Type', array('/immunization/create'), array('class' => 'btn btn-sm btn-success', 'target'=>'_blank')); ?>
-</div>
+<div class="p-3">
+    <?php
+    echo CHtml::link(
+        '<i class="fas fa-plus-circle"></i> Add New Immunization Record',
+        array('/immunizationRecord/create', 'account_id' => $patientID),
+        array('class' => 'btn btn-sm btn-success shadow-sm mb-3')
+    );
+    ?>
 
-<p class="small text-muted mb-2">These are the available vaccine types in the system.</p>
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'immunization-types-grid',
-    'dataProvider' => $dataProvider,
-    'itemsCssClass' => 'table table-bordered table-hover',
-    'summaryCssClass' => 'dataTables_info',
-    'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',
-    'columns' => array(
-        array(
-            'name' => 'immunization',
-            'header' => 'Vaccine Name',
-        ),
-        array(
-            'name' => 'description',
-            'header' => 'Description',
-        ),
-        array(
-            'class' => 'CButtonColumn',
-            'header' => 'Actions',
-            'template' => '{view} {update}', // View and Update only
-            'viewButtonUrl' => 'Yii::app()->createUrl("/immunization/view", array("id"=>$data->id))',
-            'updateButtonUrl' => 'Yii::app()->createUrl("/immunization/update", array("id"=>$data->id))',
-            'buttons' => array(
-                'view' => array(
-                    'options' => array('target' => '_blank'), // Open in new tab to not lose patient view
+    <div class="table-responsive">
+        <?php $this->widget('zii.widgets.grid.CGridView', array(
+            'id' => 'immunization-record-grid',
+            'dataProvider' => $dataProvider,
+            'template' => '{items}{pager}',
+            'itemsCssClass' => 'table table-bordered table-hover',
+            'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',
+            'summaryCssClass' => 'dataTables_info',
+            'columns' => array(
+                array(
+                    'name' => 'immunization_id',
+                    'value' => '$data->immunization->immunization',
+                    'header' => 'Immunization',
+                    'htmlOptions' => array('width' => '30%'),
                 ),
-                'update' => array(
-                    'options' => array('target' => '_blank'),
+                'date',
+                'remarks',
+                // START: NEW ACTIONS COLUMN (Dropdown)
+                array(
+                    'header' => 'Actions',
+                    'type' => 'raw',
+                    'htmlOptions' => array('style' => 'width: 60px; text-align: center; overflow:visible;'),
+                    'value' => '
+                        \'<div class="dropdown no-arrow">\'.
+                        \'<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\'.
+                            \'<i class="fas fa-cog"></i>\'.
+                        \'</button>\'.
+                        \'<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">\'.
+                            CHtml::link(\'<i class="fas fa-edit fa-sm fa-fw mr-2 text-gray-400"></i> Edit\', Yii::app()->createUrl("/immunizationRecord/update", array("id"=>$data->id)), array("class"=>"dropdown-item")).
+                        \'</div>\'.
+                        \'</div>\'
+                    ',
                 ),
+                // END: NEW ACTIONS COLUMN
             ),
-        ),
-    ),
-)); ?>
+        )); ?>
+    </div>
+</div>
