@@ -33,11 +33,12 @@ class ImmunizationController extends Controller
 				'actions' => array('index', 'view'),
 				'users' => array('@'),
 			),
-			// Allow Admins/Super Admins to Manage (Add/Edit/Delete)
+			// Allow Admins/Super Admins AND Doctors to Manage (Add/Edit/Delete)
 			array(
 				'allow',
 				'actions' => array('create', 'update', 'admin', 'delete'),
-				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
+				// ADDED: || Yii::app()->controller->isDoctor()
+				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin() || Yii::app()->controller->isDoctor()',
 			),
 			// Deny everyone else
 			array(

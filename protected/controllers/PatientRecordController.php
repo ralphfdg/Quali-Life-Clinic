@@ -60,11 +60,18 @@ class PatientRecordController extends Controller
             'pagination' => array('pageSize' => 10),
         ));
 
+        // --- NEW: Data Provider for Immunization Types (Definition List) ---
+        $immunizationTypesDataProvider = new CActiveDataProvider('Immunization', array(
+            'pagination' => array('pageSize' => 10),
+            // 'criteria' => array('order' => 'immunization ASC'), // Optional sorting
+        ));
+
         $this->render('view', array(
             'account' => $account,
             'birthHistory' => $birthHistory,
             'immunizationDataProvider' => $immunizationDataProvider,
             'consultationDataProvider' => $consultationDataProvider,
+            'immunizationTypesDataProvider' => $immunizationTypesDataProvider, // Pass the new data provider
         ));
     }
 }
