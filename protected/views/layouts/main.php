@@ -243,7 +243,7 @@
 
             // Settings
             array('label' => 'Settings', 'divider' => true),
-            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
+            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/view', 'id' => Yii::app()->user->id)),
 
             // Config
             array('label' => 'System Config', 'itemOptions' => array('class' => 'sidebar-header'), 'url' => false),
@@ -271,7 +271,7 @@
                     array('label' => 'List Patients', 'url' => array('/account/admin', 'type' => 4)),
                 )
             ),
-            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
+            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/view', 'id' => Yii::app()->user->id)),
         );
     }
 
@@ -300,7 +300,7 @@
             array('label' => 'Book Now', 'icon' => 'fa-calendar-plus', 'url' => array('/appointment/book')),
             array('label' => 'My Appointments', 'icon' => 'fa-calendar-alt', 'url' => array('/appointment/myAppointments')),
             array('label' => 'Prescriptions', 'icon' => 'fa-file-prescription', 'url' => array('/prescription/myPrescriptions')),
-            array('label' => 'My Profile', 'icon' => 'fa-user', 'url' => array('/user/myProfile')),
+            array('label' => 'My Account', 'icon' => 'fa-user', 'url' => array('/account/view', 'id' => Yii::app()->user->id)),
         );
     }
 
@@ -406,7 +406,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                     <?php
-                                    echo CHtml::link('<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> My Account', array('/account/update', 'id' => Yii::app()->user->id), array('class' => 'dropdown-item'));
+                                    echo CHtml::link('<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> My Account', array('/account/view', 'id' => Yii::app()->user->id), array('class' => 'dropdown-item'));
                                     echo '<div class="dropdown-divider"></div>';
                                     echo CHtml::link('<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout', '#logoutModal', array('class' => 'dropdown-item', 'data-toggle' => 'modal', 'data-target' => '#logoutModal'));
                                     ?>
