@@ -105,4 +105,9 @@ class Immunization extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function __toString()
+    {
+        return $this->immunization;
+    }
 }

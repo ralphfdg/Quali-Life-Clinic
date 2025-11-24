@@ -11,11 +11,12 @@
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'immunization-types-grid',
-    'dataProvider' => $dataProvider,
+    'dataProvider' => $dataProvider, // This gets $immunizationTypesDataProvider from the parent view
     'itemsCssClass' => 'table table-bordered table-hover',
     'summaryCssClass' => 'dataTables_info',
     'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',
     'columns' => array(
+        'id',
         array(
             'name' => 'immunization',
             'header' => 'Vaccine Name',
@@ -27,16 +28,12 @@
         array(
             'class' => 'CButtonColumn',
             'header' => 'Actions',
-            'template' => '{view} {update}', // View and Update only
+            'template' => '{view} {update}',
             'viewButtonUrl' => 'Yii::app()->createUrl("/immunization/view", array("id"=>$data->id))',
             'updateButtonUrl' => 'Yii::app()->createUrl("/immunization/update", array("id"=>$data->id))',
             'buttons' => array(
-                'view' => array(
-                    'options' => array('target' => '_blank'), // Open in new tab to not lose patient view
-                ),
-                'update' => array(
-                    'options' => array('target' => '_blank'),
-                ),
+                'view' => array('options' => array('target' => '_blank')),
+                'update' => array('options' => array('target' => '_blank')),
             ),
         ),
     ),

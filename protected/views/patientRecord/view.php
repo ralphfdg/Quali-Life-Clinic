@@ -4,8 +4,9 @@
 /* @var $birthHistory BirthHistory */
 /* @var $immunizationDataProvider CActiveDataProvider */
 /* @var $consultationDataProvider CActiveDataProvider */
+/* @var $immunizationTypesDataProvider CActiveDataProvider */ // Added var doc
 
-$patientName = $account->user ? $account->user->getFullName() : $account->username; // Assuming getFullName exists or use manual concat
+$patientName = $account->user ? $account->user->getFullName() : $account->username; 
 $patientID = $account->id;
 
 $this->breadcrumbs=array(
@@ -37,12 +38,43 @@ $tabs['birthHistory'] = array(
     'active' => true,
 );
 
-// Immunization Records Tab
-$immunizationContent = $this->renderPartial('_immunization_records', array('dataProvider' => $immunizationDataProvider, 'patientID' => $patientID), true);
+// ... existing code ...
+
+// 1. Immunization Records Tab (Patient's History)
+// MUST use $immunizationDataProvider (from ImmunizationRecord model)
+$immunizationContent = $this->renderPartial('_immunization_records', array(
+    'dataProvider' => $immunizationDataProvider, 
+    'patientID' => $patientID
+), true);
+
 $tabs['immunizationRecords'] = array(
     'title' => 'Immunizations (' . $immunizationDataProvider->totalItemCount . ')',
     'content' => $immunizationContent,
 );
+
+// 2. Immunization Types Tab (Manage Vaccine List)
+// MUST use $immunizationTypesDataProvider (from Immunization model)
+// If you use $immunizationDataProvider here by mistake, IT WILL CRASH with your error.
+$immunizationTypesContent = $this->renderPartial('_immunization_types', array(
+    'dataProvider' => $immunizationTypesDataProvider
+), true);
+
+$tabs['immunizationTypes'] = array(
+    'title' => 'Immunization Types', 
+    'content' => $immunizationTypesContent,
+);
+
+// ... rest of code ...
+// --------------------------------------------------------
+
+
+if (isset($immunizationTypesDataProvider)) {
+    $immunizationTypesContent = $this->renderPartial('_immunization_types', array('dataProvider' => $immunizationTypesDataProvider), true);
+    $tabs['immunizationTypes'] = array(
+        'title' => 'Immunization Types', 
+        'content' => $immunizationTypesContent,
+    );
+}
 
 // Consultation Records Tab
 $consultationContent = $this->renderPartial('_consultation_records', array('dataProvider' => $consultationDataProvider, 'patientID' => $patientID), true);
