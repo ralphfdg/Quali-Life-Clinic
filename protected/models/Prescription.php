@@ -31,18 +31,24 @@ class Prescription extends CActiveRecord
 	/**
 	 * @return array validation rules for model attributes.
 	 */
+	// Inside Prescription.php
 	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('patient_account_id, doctor_account_id, consultation_id, prescription, date_of_prescription, status_id', 'required'),
-			array('patient_account_id, doctor_account_id, consultation_id, status_id', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, patient_account_id, doctor_account_id, consultation_id, prescription, date_of_prescription, status_id', 'safe', 'on'=>'search'),
-		);
-	}
+    {
+        return array(
+            // 1. Prescription Text Required on Insert/Update
+            array('prescription', 'required', 'on' => 'insert, update'), 
+            
+            // 2. Foreign Keys (IDs) must allow empty values during validation 
+            // as the Controller assigns them *after* validation.
+            array('patient_account_id, doctor_account_id, consultation_id, status_id', 'numerical', 'integerOnly'=>true, 'allowEmpty'=>true),
+            
+            // 3. System Assigned Date is Safe
+            array('date_of_prescription', 'safe'), 
+
+            // Search
+            array('id, patient_account_id, doctor_account_id, consultation_id, prescription, date_of_prescription, status_id', 'safe', 'on'=>'search'),
+        );
+    }
 
 	/**
 	 * @return array relational rules.
@@ -91,18 +97,18 @@ class Prescription extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('patient_account_id',$this->patient_account_id);
-		$criteria->compare('doctor_account_id',$this->doctor_account_id);
-		$criteria->compare('consultation_id',$this->consultation_id);
-		$criteria->compare('prescription',$this->prescription,true);
-		$criteria->compare('date_of_prescription',$this->date_of_prescription,true);
-		$criteria->compare('status_id',$this->status_id);
+		$criteria->compare('id', $this->id);
+		$criteria->compare('patient_account_id', $this->patient_account_id);
+		$criteria->compare('doctor_account_id', $this->doctor_account_id);
+		$criteria->compare('consultation_id', $this->consultation_id);
+		$criteria->compare('prescription', $this->prescription, true);
+		$criteria->compare('date_of_prescription', $this->date_of_prescription, true);
+		$criteria->compare('status_id', $this->status_id);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+			'criteria' => $criteria,
 		));
 	}
 
@@ -112,7 +118,7 @@ class Prescription extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return Prescription the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}

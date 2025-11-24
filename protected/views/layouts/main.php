@@ -289,6 +289,8 @@
                     array('label' => 'List Patients', 'url' => array('/account/admin', 'type' => 4)),
                 )
             ),
+            array('label' => 'My Account', 'icon' => 'fa-user-circle', 'url' => array('/account/update', 'id' => Yii::app()->user->id)),
+
         );
     }
 
