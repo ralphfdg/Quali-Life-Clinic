@@ -18,7 +18,7 @@ $this->menu = array(
 	<h1 class="h3 mb-0 text-gray-800">Update Immunization Type: <span class="text-warning"><?php echo CHtml::encode($model->immunization); ?></span></h1>
 	<div>
 		<?php echo CHtml::link('<i class="fas fa-eye"></i> View Details', array('view', 'id' => $model->id), array('class' => 'btn btn-sm btn-info shadow-sm')); ?>
-		<?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back to List', array('admin'), array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
+		<?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back to List', array('patientRecord/view'), array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
 	</div>
 </div>
 

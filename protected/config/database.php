@@ -10,4 +10,8 @@ return array(
 	'password' => '',
 	'charset' => 'utf8',
 	'tablePrefix' => 'tbl_',
+
+	// 3. Disable database profiling/logging for performance
+    'enableProfiling' => false,
+    'enableParamLogging' => false,
 );

@@ -16,6 +16,8 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'enableCsrfValidation'=>true,
+		'csrfTokenName'=>'csrf_qualilife_token',
 	),
 
 	'modules'=>array(

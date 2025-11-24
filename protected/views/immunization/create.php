@@ -18,7 +18,7 @@ $this->menu = array(
 		<?php 
 		// Check if a returnUrl was passed; otherwise default to 'admin'
 		$returnUrl = Yii::app()->request->getQuery('returnUrl');
-		$cancelUrl = $returnUrl ? $returnUrl : array('admin');
+		$cancelUrl = $returnUrl ? $returnUrl : array('patientRecord/view');
 		
 		echo CHtml::link('<i class="fas fa-arrow-left"></i> Back', $cancelUrl, array('class' => 'btn btn-sm btn-secondary shadow-sm')); 
 		?>

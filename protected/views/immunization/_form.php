@@ -11,6 +11,7 @@
 		'enableAjaxValidation' => false,
 		'htmlOptions' => array('class' => 'col-lg-8'), // Constrain width for better look
 	)); ?>
+	
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
