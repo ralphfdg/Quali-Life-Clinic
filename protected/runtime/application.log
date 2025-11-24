@@ -5698,3 +5698,23 @@ Stack trace:
 REQUEST_URI=/Quali-Life-Clinic/index.php/appointment/calendar
 HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/site/login
 ---
+2025/11/24 07:51:22 [error] [application.sms] SMS Failed (0): 
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\components\SmsHelper.php (51)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\models\Appointment.php (176)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\controllers\AppointmentController.php (254)
+2025/11/24 07:51:43 [error] [application.sms] SMS Failed (0): 
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\components\SmsHelper.php (51)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\models\Appointment.php (176)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\controllers\AppointmentController.php (254)
+2025/11/24 07:52:04 [error] [application.sms] SMS Failed (0): 
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\components\SmsHelper.php (51)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\models\Appointment.php (176)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\controllers\AppointmentController.php (254)
+2025/11/24 08:04:30 [error] [application.sms] SMS Failed (0): 
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\components\SmsHelper.php (51)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\models\Appointment.php (176)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\controllers\AppointmentController.php (254)
+2025/11/24 08:07:28 [error] [application.sms] SMS Failed (0): 
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\components\SmsHelper.php (51)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\models\Appointment.php (176)
+in C:\xampp\htdocs\quali-life_clinic-repo\Quali-Life-Clinic\protected\controllers\AppointmentController.php (254)
