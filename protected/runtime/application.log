@@ -5969,3 +5969,79 @@ Stack trace:
 REQUEST_URI=/Quali-Life-Clinic/index.php/birthHistory/create?account_id=9
 HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/patientRecord/9
 ---
+2025/11/24 12:18:52 [error] [exception.CHttpException.403] CHttpException: You are not authorized to perform this action. in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php:183
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php(145): CAccessControlFilter->accessDenied(Object(WebUser), 'You are not aut...')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('consultationRec...')
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php/consultationRecord/create?patient_account_id=9
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/patientRecord/9
+---
+2025/11/24 12:19:27 [error] [exception.CException] CException: ImmunizationRecordController cannot find the requested view "create". in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php:881
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('create', Array, true)
+#1 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\ImmunizationRecordController.php(47): CController->render('create', Array)
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): ImmunizationRecordController->actionCreate()
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('immunizationRec...')
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#14 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#15 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php/immunizationRecord/create?account_id=9
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/patientRecord/9
+---
+2025/11/24 12:19:30 [error] [exception.CException] CException: BirthHistoryController cannot find the requested view "create". in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php:881
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(785): CController->renderPartial('create', Array, true)
+#1 C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\BirthHistoryController.php(59): CController->render('create', Array)
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\actions\CInlineAction.php(49): BirthHistoryController->actionCreate()
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#12 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('birthHistory/cr...')
+#13 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#14 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#15 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php/birthHistory/create?account_id=9
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/patientRecord/9
+---
+2025/11/24 12:34:41 [error] [exception.CHttpException.403] CHttpException: You are not authorized to perform this action. in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php:183
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php(145): CAccessControlFilter->accessDenied(Object(WebUser), 'You are not aut...')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('create')
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('consultationRec...')
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php/consultationRecord/create?patient_account_id=9
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/patientRecord/9
+---
