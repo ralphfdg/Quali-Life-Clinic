@@ -4,19 +4,19 @@
 /* @var $birthHistory BirthHistory */
 /* @var $immunizationDataProvider CActiveDataProvider */
 /* @var $consultationDataProvider CActiveDataProvider */
-/* @var $immunizationTypesDataProvider CActiveDataProvider */ // Added var doc
+/* @var $immunizationTypesDataProvider CActiveDataProvider */
 
-$patientName = $account->user ? $account->user->getFullName() : $account->username; 
+$patientName = $account->user ? $account->user->getFullName() : $account->username;
 $patientID = $account->id;
 
-$this->breadcrumbs=array(
-    'Patients'=>array('/account/admin', 'type'=>4),
+$this->breadcrumbs = array(
+    'Patients' => array('/account/admin', 'type' => 4),
     $patientName,
     'Records',
 );
 
-$this->menu=array(
-    array('label'=>'Back to Profile', 'url'=>array('/account/view', 'id'=>$patientID)),
+$this->menu = array(
+    array('label' => 'Back to Profile', 'url' => array('/account/view', 'id' => $patientID)),
 );
 ?>
 
@@ -24,71 +24,61 @@ $this->menu=array(
     <h1 class="h3 mb-0 text-gray-800">
         Patient Records: <span class="text-primary"><?php echo CHtml::encode($patientName); ?></span>
     </h1>
+    <div>
+        <?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back to Profile', array('/account/view', 'id' => $patientID), array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
+    </div>
 </div>
 
-<?php 
-// 1. Setup Tab Structure
-$tabs = array();
+<div class="card shadow mb-4">
 
-// Birth History Tab
-$birthHistoryContent = $this->renderPartial('_birth_history', array('model' => $birthHistory, 'patientID' => $patientID), true);
-$tabs['birthHistory'] = array(
-    'title' => 'Birth History',
-    'content' => $birthHistoryContent,
-    'active' => true,
-);
+    <div class="card-header py-0 border-bottom-0">
+        <ul class="nav nav-tabs card-header-tabs" id="recordsTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="birth-tab" data-toggle="tab" href="#birth" role="tab" aria-controls="birth" aria-selected="true">
+                    <i class="fas fa-baby mr-1"></i> Birth History
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="immunization-tab" data-toggle="tab" href="#immunization" role="tab" aria-controls="immunization" aria-selected="false">
+                    <i class="fas fa-syringe mr-1"></i> Immunizations (<?php echo $immunizationDataProvider->totalItemCount; ?>)
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="consultation-tab" data-toggle="tab" href="#consultation" role="tab" aria-controls="consultation" aria-selected="false">
+                    <i class="fas fa-notes-medical mr-1"></i> Consultations (<?php echo $consultationDataProvider->totalItemCount; ?>)
+                </a>
+            </li>
+            <?php if (isset($immunizationTypesDataProvider)): ?>
+                <li class="nav-item">
+                    <a class="nav-link" id="vaccines-tab" data-toggle="tab" href="#vaccines" role="tab" aria-controls="vaccines" aria-selected="false">
+                        <i class="fas fa-vial mr-1"></i> Vaccine Master List
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </div>
 
-// ... existing code ...
+    <div class="card-body">
+        <div class="tab-content" id="recordsTabContent">
 
-// 1. Immunization Records Tab (Patient's History)
-// MUST use $immunizationDataProvider (from ImmunizationRecord model)
-$immunizationContent = $this->renderPartial('_immunization_records', array(
-    'dataProvider' => $immunizationDataProvider, 
-    'patientID' => $patientID
-), true);
+            <div class="tab-pane fade show active" id="birth" role="tabpanel" aria-labelledby="birth-tab">
+                <?php $this->renderPartial('_birth_history', array('model' => $birthHistory, 'patientID' => $patientID)); ?>
+            </div>
 
-$tabs['immunizationRecords'] = array(
-    'title' => 'Immunizations (' . $immunizationDataProvider->totalItemCount . ')',
-    'content' => $immunizationContent,
-);
+            <div class="tab-pane fade" id="immunization" role="tabpanel" aria-labelledby="immunization-tab">
+                <?php $this->renderPartial('_immunization_records', array('dataProvider' => $immunizationDataProvider, 'patientID' => $patientID)); ?>
+            </div>
 
-// 2. Immunization Types Tab (Manage Vaccine List)
-// MUST use $immunizationTypesDataProvider (from Immunization model)
-// If you use $immunizationDataProvider here by mistake, IT WILL CRASH with your error.
-$immunizationTypesContent = $this->renderPartial('_immunization_types', array(
-    'dataProvider' => $immunizationTypesDataProvider
-), true);
+            <div class="tab-pane fade" id="consultation" role="tabpanel" aria-labelledby="consultation-tab">
+                <?php $this->renderPartial('_consultation_records', array('dataProvider' => $consultationDataProvider, 'patientID' => $patientID)); ?>
+            </div>
 
-$tabs['immunizationTypes'] = array(
-    'title' => 'Immunization Types', 
-    'content' => $immunizationTypesContent,
-);
+            <?php if (isset($immunizationTypesDataProvider)): ?>
+                <div class="tab-pane fade" id="vaccines" role="tabpanel" aria-labelledby="vaccines-tab">
+                    <?php $this->renderPartial('_immunization_types', array('dataProvider' => $immunizationTypesDataProvider)); ?>
+                </div>
+            <?php endif; ?>
 
-// ... rest of code ...
-// --------------------------------------------------------
-
-
-if (isset($immunizationTypesDataProvider)) {
-    $immunizationTypesContent = $this->renderPartial('_immunization_types', array('dataProvider' => $immunizationTypesDataProvider), true);
-    $tabs['immunizationTypes'] = array(
-        'title' => 'Immunization Types', 
-        'content' => $immunizationTypesContent,
-    );
-}
-
-// Consultation Records Tab
-$consultationContent = $this->renderPartial('_consultation_records', array('dataProvider' => $consultationDataProvider, 'patientID' => $patientID), true);
-$tabs['consultationRecords'] = array(
-    'title' => 'Consultations (' . $consultationDataProvider->totalItemCount . ')',
-    'content' => $consultationContent,
-);
-
-// 2. Render Tabs
-$this->widget('zii.widgets.jui.CJuiTabs', array(
-    'tabs' => $tabs,
-    'options' => array(
-        'collapsible' => false,
-    ),
-    'htmlOptions' => array('class' => 'shadow mb-4'),
-));
-?>
+        </div>
+    </div>
+</div>

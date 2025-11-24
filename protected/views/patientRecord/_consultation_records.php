@@ -10,7 +10,7 @@
             'id' => 'consultation-record-grid',
             'dataProvider' => $dataProvider,
             'template' => '{items}{pager}',
-            'itemsCssClass' => 'table table-bordered table-hover', // ADDED STYLING
+            'itemsCssClass' => 'table table-bordered table-hover',
             'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',
             'summaryCssClass' => 'dataTables_info',
             'columns' => array(
@@ -21,17 +21,24 @@
                 'subjective',
                 'assessment',
                 'plan',
+                // START: NEW ACTIONS COLUMN (Dropdown - View Only)
                 array(
-                    'class' => 'CButtonColumn',
-                    'template' => '{view}{update}',
-                    'viewButtonUrl' => 'Yii::app()->createUrl("/consultationRecord/view", array("id"=>$data->id))',
-                    'updateButtonUrl' => 'Yii::app()->createUrl("/consultationRecord/update", array("id"=>$data->id))',
-                    'buttons' => array(
-                        'view' => array('options' => array('class' => 'btn btn-sm btn-info mr-1')),
-                        'update' => array('options' => array('class' => 'btn btn-sm btn-warning')),
-                    ),
-                    'htmlOptions' => array('width' => '100px', 'class' => 'button-column'),
+                    'header' => 'Actions',
+                    'type' => 'raw',
+                    'htmlOptions' => array('style' => 'width: 60px; text-align: center; overflow:visible;'),
+                    'value' => '
+                        \'<div class="dropdown no-arrow">\'.
+                        \'<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\'.
+                            \'<i class="fas fa-cog"></i>\'.
+                        \'</button>\'.
+                        \'<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">\'.
+                            // Only include the View link, as requested
+                            CHtml::link(\'<i class="fas fa-eye fa-sm fa-fw mr-2 text-gray-400"></i> View\', Yii::app()->createUrl("/consultationRecord/view", array("id"=>$data->id)), array("class"=>"dropdown-item")).
+                        \'</div>\'.
+                        \'</div>\'
+                    ',
                 ),
+                // END: NEW ACTIONS COLUMN
             ),
         )); ?>
     </div>
