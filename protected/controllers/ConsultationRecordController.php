@@ -29,7 +29,7 @@ class ConsultationRecordController extends Controller
         return array(
             // Allow Doctors ONLY to create/update
             array('allow', 
-                'actions'=>array('create', 'update'),
+                'actions'=>array('create', 'update', 'view'),
                 'expression'=>'Yii::app()->controller->isDoctor()', // <--- CRITICAL FIX
             ),
             // Allow Admins to manage/delete

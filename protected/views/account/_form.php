@@ -42,12 +42,25 @@ $model->account_type_id = $typeId;
                         <?php echo $form->error($model, 'username'); ?>
                     </div>
 
-                    <div class="form-group">
-                        <?php echo $form->labelEx($model, 'password'); ?>
-                        <?php echo $form->passwordField($model, 'password', array('class' => 'form-control')); ?>
-                        <?php if (!$model->isNewRecord): ?><small class="text-muted">Leave blank to keep current.</small><?php endif; ?>
-                        <?php echo $form->error($model, 'password'); ?>
-                    </div>
+                    <?php 
+                    // FIX: Show password field ONLY if:
+                    // 1. It is a New Record (creating account)
+                    // OR
+                    // 2. The logged-in user is editing their OWN account (ID matches).
+                    if ($model->isNewRecord || (Yii::app()->user->id == $model->id)): 
+                    ?>
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'password'); ?>
+                            <?php echo $form->passwordField($model, 'password', array('class' => 'form-control')); ?>
+                            <?php if (!$model->isNewRecord): ?><small class="text-muted"></small><?php endif; ?>
+                            <?php echo $form->error($model, 'password'); ?>
+                        </div>
+                        
+                        <?php 
+                        // Optional: You can also show the retype field here if you want consistency,
+                        // but your current Model validation rules only check retype on 'insert' (create).
+                        ?>
+                    <?php endif; ?>
 
                     <?php if ($model->isNewRecord): ?>
                         <div class="form-group">

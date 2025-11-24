@@ -21,6 +21,11 @@ class AccountController extends Controller
 				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
 			),
 			array(
+            'allow',
+            'actions' => array('create', 'admin', 'view', 'update'),
+            'expression' => 'Yii::app()->controller->isDoctor()',
+        	),
+			array(
 				'allow',
 				'actions' => array('update', 'view'),
 				'users' => array('@'),
