@@ -37,28 +37,24 @@ class PatientRecordController extends Controller
             throw new CHttpException(404, 'The requested patient record does not exist or is not a patient.');
         }
 
-        // 2. Load the Records (or CActiveDataProviders for lists)
         // Birth History is typically a single record
         $birthHistory = BirthHistory::model()->findByAttributes(array('account_id' => $id));
 
-        // Immunization Records (list)
+        // Immunization Records (list) - NO status filter
         $immunizationDataProvider = new CActiveDataProvider('ImmunizationRecord', array(
             'criteria' => array(
-                'condition' => 'account_id = :accountID',
+                'condition' => 'account_id = :accountID', // NO status filter
                 'params' => array(':accountID' => $id),
                 'order' => 'date DESC',
             ),
             'pagination' => array('pageSize' => 10),
         ));
 
-        // CORRECTED for your ConsultationRecord model
-        // Consultation Records (list)
+        // Consultation Records (list) - NO status filter (Uses your patient_account_id field)
         $consultationDataProvider = new CActiveDataProvider('ConsultationRecord', array(
             'criteria' => array(
-                // FIXED: Use the correct column name from your model
-                'condition' => 'patient_account_id = :accountID',
+                'condition' => 'patient_account_id = :accountID', // NO status filter
                 'params' => array(':accountID' => $id),
-                // FIXED: Use the correct date column from your model
                 'order' => 'date_of_consultation DESC',
             ),
             'pagination' => array('pageSize' => 10),

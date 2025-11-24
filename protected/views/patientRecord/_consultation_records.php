@@ -4,26 +4,35 @@
 ?>
 
 <div class="p-3">
-    <?php echo CHtml::link('<i class="fas fa-plus-circle"></i> Add New Consultation Record', 
-        array('/consultationRecord/create', 'patient_account_id' => $patientID), // FIXED: Uses patient_account_id
-        array('class' => 'btn btn-sm btn-info mb-3')); 
-    ?>
-    
-    <?php $this->widget('zii.widgets.grid.CGridView', array(
-        'id' => 'consultation-record-grid',
-        'dataProvider' => $dataProvider,
-        'template' => '{items}{pager}',
-        'columns' => array(
-            'date_of_consultation', // FIXED: Correct column name
-            'subjective',           // Showing key SOAP fields
-            'assessment',           
-            'plan',                 
-            array(
-                'class' => 'CButtonColumn',
-                'template' => '{view}{update}',
-                'viewButtonUrl' => 'Yii::app()->createUrl("/consultationRecord/view", array("id"=>$data->id))',
-                'updateButtonUrl' => 'Yii::app()->createUrl("/consultationRecord/update", array("id"=>$data->id))',
+
+    <div class="table-responsive">
+        <?php $this->widget('zii.widgets.grid.CGridView', array(
+            'id' => 'consultation-record-grid',
+            'dataProvider' => $dataProvider,
+            'template' => '{items}{pager}',
+            'itemsCssClass' => 'table table-bordered table-hover', // ADDED STYLING
+            'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',
+            'summaryCssClass' => 'dataTables_info',
+            'columns' => array(
+                array(
+                    'name' => 'date_of_consultation',
+                    'htmlOptions' => array('width' => '15%'),
+                ),
+                'subjective',
+                'assessment',
+                'plan',
+                array(
+                    'class' => 'CButtonColumn',
+                    'template' => '{view}{update}',
+                    'viewButtonUrl' => 'Yii::app()->createUrl("/consultationRecord/view", array("id"=>$data->id))',
+                    'updateButtonUrl' => 'Yii::app()->createUrl("/consultationRecord/update", array("id"=>$data->id))',
+                    'buttons' => array(
+                        'view' => array('options' => array('class' => 'btn btn-sm btn-info mr-1')),
+                        'update' => array('options' => array('class' => 'btn btn-sm btn-warning')),
+                    ),
+                    'htmlOptions' => array('width' => '100px', 'class' => 'button-column'),
+                ),
             ),
-        ),
-    )); ?>
+        )); ?>
+    </div>
 </div>

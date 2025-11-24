@@ -8,17 +8,16 @@ class BirthHistoryController extends Controller
     {
         return array(
             'accessControl',
-            'postOnly + delete',
         );
     }
 
     public function accessRules()
     {
         return array(
-            // Allow Admin/SuperAdmin/Doctor to Create, View, Update, and Delete patient records.
+            // Allow Admin/SuperAdmin/Doctor to Create, View, and Update.
             array(
                 'allow',
-                'actions' => array('create', 'view', 'update', 'delete', 'admin'),
+                'actions' => array('create', 'view', 'update', 'admin'), 
                 'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin() || Yii::app()->controller->isDoctor()',
             ),
             array(
@@ -40,13 +39,12 @@ class BirthHistoryController extends Controller
     }
 
     /**
-     * Creates a new model. Accepts patient account_id via GET.
+     * Creates a new model.
      */
     public function actionCreate()
     {
         $model = new BirthHistory;
 
-        // Automatically link the record to the patient if account_id is passed in the URL
         if (isset($_GET['account_id'])) {
             $model->account_id = (int)$_GET['account_id'];
         }
@@ -54,12 +52,11 @@ class BirthHistoryController extends Controller
         if (isset($_POST['BirthHistory'])) {
             $model->attributes = $_POST['BirthHistory'];
             if ($model->save())
-                $this->redirect(array('/patientRecord/view', 'id' => $model->account_id)); // Redirect back to the consolidated view
+                // Redirect back to the patient's consolidated records view
+                $this->redirect(array('/patientRecord/view', 'id' => $model->account_id)); 
         }
 
-        $this->render('create', array(
-            'model' => $model,
-        ));
+        $this->render('create', array('model' => $model));
     }
 
     /**
@@ -73,19 +70,13 @@ class BirthHistoryController extends Controller
         if (isset($_POST['BirthHistory'])) {
             $model->attributes = $_POST['BirthHistory'];
             if ($model->save())
-                $this->redirect(array('/patientRecord/view', 'id' => $model->account_id)); // Redirect back to the consolidated view
+                // Redirect back to the patient's consolidated records view
+                $this->redirect(array('/patientRecord/view', 'id' => $model->account_id)); 
         }
 
-        $this->render('update', array(
-            'model' => $model,
-        ));
+        $this->render('update', array('model' => $model));
     }
 
-    /**
-     * Returns the data model based on the primary key given.
-     * Use this when navigating *directly* to the BirthHistory record ID.
-     * @throws CHttpException
-     */
     public function loadModel($id)
     {
         $model = BirthHistory::model()->findByPk($id);
@@ -93,19 +84,6 @@ class BirthHistoryController extends Controller
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
     }
-    
-    /**
-     * Manages all models (useful if you want a filterable list view).
-     */
-    public function actionAdmin()
-    {
-        $model = new BirthHistory('search');
-        $model->unsetAttributes();
-        if (isset($_GET['BirthHistory']))
-            $model->attributes = $_GET['BirthHistory'];
 
-        $this->render('admin', array(
-            'model' => $model,
-        ));
-    }
+    // actionAdmin and performAjaxValidation methods would also be included here if used.
 }
