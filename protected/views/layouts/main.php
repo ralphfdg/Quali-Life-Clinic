@@ -17,7 +17,7 @@
 
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
-
+    <link rel="icon" href="<?php echo Yii::app()->request->baseUrl; ?>/img/logo.png" type="image/png">
     <style>
         /* ... existing Primary/Secondary colors ... */
 
@@ -202,6 +202,8 @@
             border-left: .25rem solid #17a2b8 !important;
         }
     </style>
+
+
 </head>
 
 <body id="page-top">

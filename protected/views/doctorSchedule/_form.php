@@ -28,6 +28,8 @@ while ($start <= $end) {
 // Helper flags
 $isDoctor = Yii::app()->user->isDoctor();
 $isManager = Yii::app()->user->isSuperAdmin() || Yii::app()->user->isAdmin();
+
+$backUrl = $isDoctor ? array('mySchedule') : array('admin');
 ?>
 
 <div class="container-fluid">
@@ -82,7 +84,7 @@ $isManager = Yii::app()->user->isSuperAdmin() || Yii::app()->user->isAdmin();
                 <?php echo $form->dropDownList($model, 'status_id', array(1 => 'Active', 2 => 'Inactive'), array('class' => 'form-control')); ?>
             </div>
             <div class="form-group mt-4 text-right">
-                <?php echo CHtml::link('Cancel', array('mySchedule'), array('class' => 'btn btn-secondary mr-2')); ?>
+                <?php echo CHtml::link('Cancel', $backUrl, array('class' => 'btn btn-secondary mr-2')); ?>
                 <?php echo CHtml::submitButton($model->isNewRecord ? 'Create Schedule' : 'Save Changes', array('class' => 'btn btn-primary px-4')); ?>
             </div>
             <?php $this->endWidget(); ?>

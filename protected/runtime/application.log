@@ -5613,3 +5613,88 @@ REQUEST_URI=/Quali-Life-Clinic/index.php?r=doctorSchedule/mySchedule
 in C:\xampp\htdocs\Quali-Life-Clinic\protected\views\doctorSchedule\mySchedule.php (39)
 in C:\xampp\htdocs\Quali-Life-Clinic\protected\controllers\DoctorScheduleController.php (146)
 in C:\xampp\htdocs\Quali-Life-Clinic\index.php (13)
+2025/11/24 06:59:07 [error] [exception.CHttpException.403] CHttpException: You are not authorized to perform this action. in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php:183
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php(145): CAccessControlFilter->accessDenied(Object(WebUser), 'You are not aut...')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('mySchedule')
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('doctorSchedule/...')
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php/doctorSchedule/mySchedule
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/doctorSchedule/create
+---
+2025/11/24 06:59:11 [error] [exception.CHttpException.403] CHttpException: You are not authorized to perform this action. in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php:183
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php(145): CAccessControlFilter->accessDenied(Object(WebUser), 'You are not aut...')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('mySchedule')
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('doctorSchedule/...')
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php/doctorSchedule/mySchedule
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/doctorSchedule/create
+---
+2025/11/24 07:00:15 [error] [exception.CHttpException.403] CHttpException: You are not authorized to perform this action. in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php:183
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php(145): CAccessControlFilter->accessDenied(Object(WebUser), 'You are not aut...')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('mySchedule')
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('doctorSchedule/...')
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php/doctorSchedule/mySchedule
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/doctorSchedule/create
+---
+2025/11/24 07:04:37 [error] [exception.CHttpException.403] CHttpException: You are not authorized to perform this action. in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php:183
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php(145): CAccessControlFilter->accessDenied(Object(WebUser), 'You are not aut...')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('mySchedule')
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('doctorSchedule/...')
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php/doctorSchedule/mySchedule
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/doctorSchedule/create
+---
+2025/11/24 07:11:21 [error] [exception.CHttpException.403] CHttpException: You are not authorized to perform this action. in C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php:183
+Stack trace:
+#0 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\auth\CAccessControlFilter.php(145): CAccessControlFilter->accessDenied(Object(WebUser), 'You are not aut...')
+#1 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(1148): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\filters\CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(282): CController->run('calendar')
+#8 C:\xampp\htdocs\Quali-Life-Clinic\framework\web\CWebApplication.php(141): CWebApplication->runController('appointment/cal...')
+#9 C:\xampp\htdocs\Quali-Life-Clinic\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\Quali-Life-Clinic\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/Quali-Life-Clinic/index.php/appointment/calendar
+HTTP_REFERER=http://localhost/Quali-Life-Clinic/index.php/site/login
+---
