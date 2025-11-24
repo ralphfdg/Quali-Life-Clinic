@@ -37,8 +37,8 @@ class User extends CActiveRecord
 	{
 		return array(
 			'account' => array(self::BELONGS_TO, 'Account', 'account_id'),
-			
-            'specializationInfo' => array(self::BELONGS_TO, 'Specialization', 'specialization_id'),
+
+			'specializationInfo' => array(self::BELONGS_TO, 'Specialization', 'specialization_id'),
 		);
 	}
 
@@ -120,35 +120,79 @@ class User extends CActiveRecord
 	}
 
 	/**
-     * Normalize Name Capitalization before saving to DB
-     */
-   /**
-     * Normalize Name Capitalization before saving to DB
-     */
-    protected function beforeSave()
-    {
-        if(parent::beforeSave())
-        {
-            // 1. Standardize User's Name (e.g. "john doe" -> "John Doe")
-            $this->firstname = ucwords(strtolower($this->firstname));
-            $this->lastname = ucwords(strtolower($this->lastname));
-            $this->middlename = ucwords(strtolower($this->middlename));
-            
-            // 2. Standardize Qualifier (e.g. "jr." -> "Jr.")
-            if(!empty($this->qualifier)) {
-                $this->qualifier = ucfirst(strtolower($this->qualifier));
-            }
+	 * Normalize Name Capitalization before saving to DB
+	 */
+	/**
+	 * Normalize Name Capitalization before saving to DB
+	 */
+	protected function beforeSave()
+	{
+		if (parent::beforeSave()) {
+			// 1. Standardize User's Name (e.g. "john doe" -> "John Doe")
+			$this->firstname = ucwords(strtolower($this->firstname));
+			$this->lastname = ucwords(strtolower($this->lastname));
+			$this->middlename = ucwords(strtolower($this->middlename));
 
-            // 3. Standardize Parents' Names (NEW)
-            if(!empty($this->name_of_father)) {
-                $this->name_of_father = ucwords(strtolower($this->name_of_father));
-            }
-            if(!empty($this->name_of_mother)) {
-                $this->name_of_mother = ucwords(strtolower($this->name_of_mother));
-            }
-            
-            return true;
-        }
-        return false;
-    }
+			// 2. Standardize Qualifier (e.g. "jr." -> "Jr.")
+			if (!empty($this->qualifier)) {
+				$this->qualifier = ucfirst(strtolower($this->qualifier));
+			}
+
+			// 3. Standardize Parents' Names (NEW)
+			if (!empty($this->name_of_father)) {
+				$this->name_of_father = ucwords(strtolower($this->name_of_father));
+			}
+			if (!empty($this->name_of_mother)) {
+				$this->name_of_mother = ucwords(strtolower($this->name_of_mother));
+			}
+
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the full name of the user, including the qualifier (e.g., Jr., Sr.).
+	 * @return string
+	 */
+	public function getFullName()
+	{
+		$nameParts = array();
+
+		if (!empty($this->firstname)) {
+			$nameParts[] = $this->firstname;
+		}
+
+		// Middle name is optional and only used if it exists
+		if (!empty($this->middlename)) {
+			$nameParts[] = $this->middlename;
+		}
+
+		if (!empty($this->lastname)) {
+			$nameParts[] = $this->lastname;
+		}
+
+		// Qualifier (e.g., Jr., Sr.) is optional
+		if (!empty($this->qualifier)) {
+			$nameParts[] = $this->qualifier;
+		}
+
+		return implode(' ', $nameParts);
+	}
+
+	/**
+	 * Returns the full name in Last Name, First Name format.
+	 * @return string
+	 */
+	public function getFormalName()
+	{
+		$fullName = $this->lastname . ', ' . $this->firstname;
+		if (!empty($this->middlename)) {
+			$fullName .= ' ' . $this->middlename[0] . '.'; // Use middle initial
+		}
+		if (!empty($this->qualifier)) {
+			$fullName .= ' ' . $this->qualifier;
+		}
+		return $fullName;
+	}
 }

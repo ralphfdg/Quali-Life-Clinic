@@ -17,14 +17,14 @@ class AccountController extends Controller
 		return array(
 			array(
 				'allow',
-				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
+				'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'patientRecords'),
 				'expression' => 'Yii::app()->controller->isSuperAdmin() || Yii::app()->controller->isAdmin()',
 			),
 			array(
-            'allow',
-            'actions' => array('create', 'admin', 'view', 'update'),
-            'expression' => 'Yii::app()->controller->isDoctor()',
-        	),
+				'allow',
+				'actions' => array('create', 'admin', 'view', 'update', 'patientRecords'),
+				'expression' => 'Yii::app()->controller->isDoctor()',
+			),
 			array(
 				'allow',
 				'actions' => array('update', 'view'),
@@ -195,5 +195,24 @@ class AccountController extends Controller
 	{
 		$this->loadModel($id)->delete(); // Or soft delete logic
 		if (!isset($_GET['ajax'])) $this->redirect(array('admin'));
+	}
+
+	/**
+	 * Displays the patient's medical records hub.
+	 * @param integer $id the ID of the Account (Patient)
+	 */
+	public function actionPatientRecords($id)
+	{
+		$model = $this->loadModel($id);
+
+		// Security check: Only patients (account_type_id=4) should have a records view
+		// based on the logic in your view.php
+		if ($model->account_type_id != 4) {
+			throw new CHttpException(403, 'Access denied. This feature is only available for Patient accounts.');
+		}
+
+		$this->render('patientRecords', array(
+			'model' => $model,
+		));
 	}
 }
