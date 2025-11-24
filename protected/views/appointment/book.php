@@ -115,13 +115,13 @@ function clearSlots() {
 				'attribute' => 'schedule_datetime',
 				'options' => array(
 					'dateFormat' => 'yy-mm-dd',
-					'minDate' => 1, // Must be at least tomorrow
+					'minDate' => 0, // Must be at least tomorrow
 					'onSelect' => 'js:function(selectedDate) {
     var doctorId = $("#Appointment_doctor_account_id").val();
     var finalPatientId = ' . $patientId . '; // Use the PHP variable initialized in controller
 
     // Override finalPatientId if Admin is booking for someone else
-    if (' . $isAdminOrSuperAdmin . ') {
+    if (' . ($isAdminOrSuperAdmin ? 'true' : 'false') . ') {
         finalPatientId = $("#selected_patient_id").val();
     }
 
