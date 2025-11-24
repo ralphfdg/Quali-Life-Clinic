@@ -15,7 +15,9 @@ $this->breadcrumbs = array('Reports');
             </div>
             <div class="card-body">
 
-                <form method="GET" action="<?php echo $this->createUrl('generate'); ?>" target="_blank">
+                <form method="GET" action="<?php echo Yii::app()->request->baseUrl; ?>/index.php" target="_blank">
+                    
+                    <input type="hidden" name="r" value="report/generate">
 
                     <div class="form-group">
                         <label>Date Range</label>
@@ -67,7 +69,7 @@ $this->breadcrumbs = array('Reports');
                     <li>Leaving "Patient" blank will show a summary of <strong>all</strong> clinic visits.</li>
                     <li>The report will open in a new tab.</li>
                     <li>Your browser's <strong>Print Dialog</strong> will open automatically.</li>
-                    <li>Select <strong>"Save as PDF"</strong> as the destination to download a file.</li>
+                    <li>Select <strong>"Save as PDF"</strong> in the printer destination options to download the file.</li>
                 </ul>
             </div>
         </div>
