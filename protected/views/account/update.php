@@ -11,6 +11,9 @@ $this->breadcrumbs = array(
 
 // Check if editing self
 $isMe = (Yii::app()->user->id == $model->id);
+
+// This ensures the back button goes to Manage Doctors, Manage Patients, etc.
+$backUrl = array('admin', 'type' => $model->account_type_id);
 ?>
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -21,7 +24,7 @@ $isMe = (Yii::app()->user->id == $model->id);
         <?php echo CHtml::link('<i class="fas fa-eye"></i> View', array('view', 'id' => $model->id), array('class' => 'btn btn-sm btn-info shadow-sm')); ?>
 
         <?php if (!$isMe): ?>
-            <?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back', array('admin'), array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
+            <?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back', $backUrl, array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
         <?php endif; ?>
     </div>
 </div>
