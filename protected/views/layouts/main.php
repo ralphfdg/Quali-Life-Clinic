@@ -406,7 +406,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                     <?php
-                                    echo CHtml::link('<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> My Account', array('/account/update', 'id' => Yii::app()->user->id), array('class' => 'dropdown-item'));
+                                    echo CHtml::link('<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> My Account', array('/account/view', 'id' => Yii::app()->user->id), array('class' => 'dropdown-item'));
                                     echo '<div class="dropdown-divider"></div>';
                                     echo CHtml::link('<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout', '#logoutModal', array('class' => 'dropdown-item', 'data-toggle' => 'modal', 'data-target' => '#logoutModal'));
                                     ?>
