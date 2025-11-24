@@ -17,7 +17,7 @@ if (Yii::app()->user->isDoctor() || Yii::app()->user->isAdmin() || Yii::app()->u
         array('label' => 'List Prescription', 'url' => array('index')),
         array('label' => 'Create Prescription', 'url' => array('create')),
         array('label' => 'Update Prescription', 'url' => array('update', 'id' => $model->id)),
-        array('label' => 'Delete Prescription', 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?')),
+        //array('label' => 'Delete Prescription', 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?')),
         array('label' => 'Manage Prescription', 'url' => array('admin')),
     );
 }

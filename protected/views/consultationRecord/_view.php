@@ -11,7 +11,7 @@ $this->menu=array(
 	array('label'=>'List ConsultationRecord', 'url'=>array('index')),
 	array('label'=>'Create ConsultationRecord', 'url'=>array('create')),
 	array('label'=>'Update ConsultationRecord', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete ConsultationRecord', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	//array('label'=>'Delete ConsultationRecord', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage ConsultationRecord', 'url'=>array('admin')),
 );
 ?>

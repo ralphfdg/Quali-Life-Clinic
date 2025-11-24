@@ -11,7 +11,7 @@ $this->menu=array(
 	array('label'=>'List Specialization', 'url'=>array('index')),
 	array('label'=>'Create Specialization', 'url'=>array('create')),
 	array('label'=>'Update Specialization', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Specialization', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	//array('label'=>'Delete Specialization', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Specialization', 'url'=>array('admin')),
 );
 ?>

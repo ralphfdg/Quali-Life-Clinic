@@ -120,7 +120,6 @@ $this->breadcrumbs = array('Accounts' => array('index'), 'Manage');
                                     CHtml::link(\'<i class="fas fa-eye fa-sm fa-fw mr-2 text-gray-400"></i> View\', Yii::app()->createUrl("account/view", array("id"=>$data->id)), array("class"=>"dropdown-item")).
                                     CHtml::link(\'<i class="fas fa-edit fa-sm fa-fw mr-2 text-gray-400"></i> Edit\', Yii::app()->createUrl("account/update", array("id"=>$data->id)), array("class"=>"dropdown-item")).
                                     \'<div class="dropdown-divider"></div>\'.
-                                    CHtml::link(\'<i class="fas fa-trash fa-sm fa-fw mr-2 text-danger"></i> Delete\', "#", array("class"=>"dropdown-item text-danger", "submit"=>array("delete","id"=>$data->id), "confirm"=>"Are you sure?", "csrf"=>true)).
                                 \'</div>\'.
                             \'</div>\'
                         ',

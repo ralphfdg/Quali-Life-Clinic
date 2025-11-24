@@ -127,15 +127,6 @@ $('.global-search-form form').submit(function(){
                                             array("class"=>"dropdown-item")
                                         ).
                                         \'<div class="dropdown-divider"></div>\'.
-                                        CHtml::link(\'<i class="fas fa-trash fa-sm fa-fw mr-2 text-gray-400"></i> Delete\', 
-                                            Yii::app()->createUrl("user/delete", array("id"=>$data->id)), 
-                                            array(
-                                                "class"=>"dropdown-item text-danger",
-                                                "submit"=>array("delete","id"=>$data->id),
-                                                "confirm"=>"Are you sure you want to delete this item?",
-                                                "csrf"=>true
-                                            )
-                                        ).
                                     \'</div>\'.
                                 \'</div>\'
                             ',
