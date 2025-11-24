@@ -116,4 +116,29 @@ class DoctorScheduleController extends Controller
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
     }
+
+    /**
+     * Displays the logged-in doctor's own schedule.
+     */
+    public function actionMySchedule()
+    {
+        // Get the ID of the currently logged-in doctor
+        $doctorId = Yii::app()->user->id;
+
+        $criteria = new CDbCriteria;
+        // Filter: Only show records for this doctor
+        $criteria->compare('doctor_account_id', $doctorId);
+        
+        // Order: Sunday (0) to Saturday (6), then by Start Time
+        $criteria->order = 'day_of_week ASC, start_time ASC';
+
+        $dataProvider = new CActiveDataProvider('DoctorSchedule', array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => 20),
+        ));
+
+        $this->render('mySchedule', array(
+            'dataProvider' => $dataProvider,
+        ));
+    }
 }

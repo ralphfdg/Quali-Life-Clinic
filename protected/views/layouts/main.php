@@ -271,7 +271,13 @@
             array('label' => 'Appointments', 'icon' => 'fa-list-alt', 'url' => array('/appointment/myQueue')),
             array('label' => 'History', 'icon' => 'fa-history', 'url' => array('/appointment/myHistory')),
             array('label' => 'My Schedule', 'icon' => 'fa-clock', 'url' => array('/doctorSchedule/mySchedule')),
-            array('label' => 'Patient List', 'icon' => 'fa-users', 'url' => array('/user/admin', 'role' => 'patient')),
+            'Manage Patients' => array(
+                'icon' => 'fa-users', // Users Group Icon
+                'items' => array(
+                    array('label' => 'Add Patient', 'url' => array('/account/create', 'type' => 4)),
+                    array('label' => 'List Patients', 'url' => array('/account/admin', 'type' => 4)),
+                )
+            ),
         );
     }
 
