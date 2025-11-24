@@ -43,9 +43,15 @@ if ($isMe) {
 	<div>
 		<?php echo CHtml::link('<i class="fas fa-edit"></i> Edit', array('update', 'id' => $model->id), array('class' => 'btn btn-sm btn-warning shadow-sm')); ?>
 
-		<?php if (!$isMe): ?>
-			<?php echo CHtml::link('<i class="fas fa-trash"></i> Delete', '#', array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?', 'class' => 'btn btn-sm btn-danger shadow-sm')); ?>
-		<?php endif; ?>
+		<?php if ($model->account_type_id == 4 && !$isMe): // Only show for non-self patient view ?>
+            <?php 
+                echo CHtml::link(
+                    '<i class="fas fa-notes-medical"></i> Patient Records', 
+                    array('/patientRecord/view', 'id' => $model->id), // UPDATED LINK
+                    array('class' => 'btn btn-sm btn-primary shadow-sm')
+                ); 
+            ?>
+        <?php endif; ?>
 
 		<?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back', $backUrl, array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
 	</div>
