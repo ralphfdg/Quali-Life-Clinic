@@ -15,7 +15,13 @@ $this->menu = array(
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
 	<h1 class="h3 mb-0 text-gray-800">Create New Immunization Type</h1>
 	<div>
-		<?php echo CHtml::link('<i class="fas fa-arrow-left"></i> Back to List', array('admin'), array('class' => 'btn btn-sm btn-secondary shadow-sm')); ?>
+		<?php 
+		// Check if a returnUrl was passed; otherwise default to 'admin'
+		$returnUrl = Yii::app()->request->getQuery('returnUrl');
+		$cancelUrl = $returnUrl ? $returnUrl : array('admin');
+		
+		echo CHtml::link('<i class="fas fa-arrow-left"></i> Back', $cancelUrl, array('class' => 'btn btn-sm btn-secondary shadow-sm')); 
+		?>
 	</div>
 </div>
 

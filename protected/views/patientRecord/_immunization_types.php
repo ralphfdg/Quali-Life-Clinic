@@ -9,7 +9,8 @@
         <?php
         echo CHtml::link(
             '<i class="fas fa-plus"></i> Create New Immunization Type',
-            array('/immunization/create'),
+            // Pass the current page URL as 'returnUrl'
+            array('/immunization/create', 'returnUrl' => Yii::app()->request->url),
             // REMOVED: target="_blank"
             array('class' => 'btn btn-sm btn-success shadow-sm')
         );
