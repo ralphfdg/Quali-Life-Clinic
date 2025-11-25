@@ -15,10 +15,8 @@ $this->breadcrumbs = array('Reports');
             </div>
             <div class="card-body">
 
-                <form method="GET" action="<?php echo Yii::app()->request->baseUrl; ?>/index.php" target="_blank">
+                <form method="GET" action="<?php echo $this->createUrl('report/generate'); ?>" target="_blank">
                     
-                    <input type="hidden" name="r" value="report/generate">
-
                     <div class="form-group">
                         <label>Date Range</label>
                         <div class="input-group">

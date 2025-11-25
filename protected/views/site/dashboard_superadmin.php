@@ -95,6 +95,28 @@ $this->pageTitle = Yii::app()->name . ' - Clinic Overview';
     var pieLabels = <?php echo $pieLabels; ?>;
     var pieData = <?php echo $pieData; ?>;
 
+    /**
+     * Helper function to generate colors.
+     * It uses your theme colors first. If there are more data items than 
+     * theme colors, it generates new ones automatically.
+     */
+    function generateColors(dataLength) {
+        // Your existing theme colors (Primary, Success, Info, Warning, Danger)
+        const baseColors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'];
+        
+        let colors = [...baseColors]; // Copy the base colors
+
+        // If we have more data than colors, generate new ones
+        if (dataLength > baseColors.length) {
+            for (let i = baseColors.length; i < dataLength; i++) {
+                // Calculate a unique hue for the new color
+                let hue = (i * 360) / dataLength;
+                colors.push(`hsl(${hue}, 70%, 60%)`);
+            }
+        }
+        return colors.slice(0, dataLength);
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
         // Line Chart
         new Chart(document.getElementById("myAreaChart"), {
@@ -119,14 +141,16 @@ $this->pageTitle = Yii::app()->name . ' - Clinic Overview';
             }
         });
 
-        // Pie Chart
+        var dynamicBackgrounds = generateColors(pieData.length);
+
         new Chart(document.getElementById("myPieChart"), {
             type: 'doughnut',
             data: {
                 labels: pieLabels,
                 datasets: [{
                     data: pieData,
-                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],
+                    // 2. Use the dynamic variable here
+                    backgroundColor: dynamicBackgrounds, 
                 }],
             },
             options: {
