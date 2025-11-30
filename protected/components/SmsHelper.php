@@ -4,10 +4,10 @@ class SmsHelper
 {
     // --- CONFIGURATION (Copy from your test_sms.php) ---
     // Example URL: 'http://192.168.1.5:8082' or your public IP
-    const GATEWAY_URL = 'http://172.20.10.8:8082'; 
+    const GATEWAY_URL = ''; 
     
     // Example Token: 'your-api-token-here' (Leave empty if you turned off auth)
-    const API_TOKEN = 'aac80488-fb35-4cdb-ac37-5cd3adf0b79e'; 
+    const API_TOKEN = ''; 
     // ---------------------------------------------------
 
     /**
